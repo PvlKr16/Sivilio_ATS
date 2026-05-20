@@ -1,0 +1,254 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}{{ company.name }} — HR Platform{% endblock %}
+{% block page_title %}{{ company.name }}{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'companies:index' %}">Companies</a>
+<span class="sep">/</span>
+<span class="current">{{ company.name }}</span>
+{% endblock %}
+
+{% block topbar_actions %}
+<div class="btn-group">
+  {% if perms.companies.change_company %}
+  <a href="{% url 'companies:edit' company.pk %}" class="btn btn-primary btn-sm">
+    <i class="fas fa-pen"></i> Edit
+  </a>
+  {% endif %}
+  {% if perms.companies.delete_company %}
+  <a href="{% url 'companies:delete' company.pk %}"
+     class="btn btn-outline-danger btn-sm"
+     data-confirm="Delete {{ company.name }}? This cannot be undone.">
+    <i class="fas fa-trash"></i> Delete
+  </a>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div style="display:grid;grid-template-columns:280px 1fr;gap:var(--space-lg);align-items:start;">
+
+  <!-- ── Left: company card ── -->
+  <div style="display:flex;flex-direction:column;gap:var(--space-lg);">
+
+    <div class="card" style="text-align:center;">
+      <div class="card-body">
+        <div style="display:flex;justify-content:center;margin-bottom:var(--space-md);">
+          <div class="avatar avatar-xl avatar-square">
+            {% if company.logo %}
+              <img src="{{ company.logo.url }}" alt="{{ company.name }}">
+            {% else %}
+              {{ company.initials }}
+            {% endif %}
+          </div>
+        </div>
+
+        <h2 style="font-size:var(--font-size-xl);margin-bottom:var(--space-sm);">{{ company.name }}</h2>
+
+        <div style="display:flex;justify-content:center;gap:var(--space-sm);flex-wrap:wrap;">
+          {% if company.pays_vat %}
+          <span class="badge badge-success">VAT Payer</span>
+          {% endif %}
+          {% if company.is_tenant %}
+          <span class="badge badge-info">Tenant</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Contact links -->
+      {% if company.email or company.phone or company.fax %}
+      <div class="card-footer" style="display:flex;flex-direction:column;gap:6px;">
+        {% if company.email %}
+        <a href="mailto:{{ company.email }}" style="font-size:var(--font-size-sm);display:flex;align-items:center;gap:6px;color:var(--text-secondary);">
+          <i class="fas fa-envelope" style="width:14px;color:var(--color-primary);"></i>{{ company.email }}
+        </a>
+        {% endif %}
+        {% if company.phone %}
+        <a href="tel:{{ company.phone }}" style="font-size:var(--font-size-sm);display:flex;align-items:center;gap:6px;color:var(--text-secondary);">
+          <i class="fas fa-phone" style="width:14px;color:var(--color-primary);"></i>{{ company.phone }}
+        </a>
+        {% endif %}
+        {% if company.fax %}
+        <span style="font-size:var(--font-size-sm);display:flex;align-items:center;gap:6px;color:var(--text-secondary);">
+          <i class="fas fa-fax" style="width:14px;color:var(--color-primary);"></i>{{ company.fax }}
+        </span>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Banking -->
+    {% if company.bank or company.bank_account %}
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Banking</h3></div>
+      <div class="card-body">
+        <div class="detail-fields">
+          {% if company.bank %}
+          <div class="detail-field">
+            <span class="detail-label">Bank</span>
+            <span class="detail-value">{{ company.bank }}</span>
+          </div>
+          {% endif %}
+          {% if company.bank_account %}
+          <div class="detail-field">
+            <span class="detail-label">Account</span>
+            <span class="detail-value" style="font-family:var(--font-mono);font-size:var(--font-size-xs);">{{ company.bank_account }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Audit info -->
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Record Info</h3></div>
+      <div class="card-body">
+        <div class="detail-fields">
+          <div class="detail-field">
+            <span class="detail-label">Created</span>
+            <span class="detail-value">
+              {{ company.created_at|date:"d M Y" }}
+              {% if company.created_by %}<br><span class="text-muted text-xs">by {{ company.created_by.display_name }}</span>{% endif %}
+            </span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Updated</span>
+            <span class="detail-value">
+              {{ company.updated_at|date:"d M Y" }}
+              {% if company.updated_by %}<br><span class="text-muted text-xs">by {{ company.updated_by.display_name }}</span>{% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.left -->
+
+  <!-- ── Right: tabs ── -->
+  <div>
+    <div class="card">
+      <div class="card-body" style="padding-bottom:0;">
+        <nav class="tab-nav">
+          <a class="tab-link" data-tab-target="tab-info">
+            <i class="fas fa-building"></i> Details
+          </a>
+          <a class="tab-link" data-tab-target="tab-people">
+            <i class="fas fa-user-group"></i> People
+            {% if people %}<span class="sidebar-badge" style="background:var(--bg-body);color:var(--text-secondary);">{{ people|length }}</span>{% endif %}
+          </a>
+        </nav>
+      </div>
+
+      <!-- ─── Tab: Details ─── -->
+      <div class="tab-pane" id="tab-info">
+        <div class="card-body">
+          <div class="detail-fields">
+            {% if company.mandatary %}
+            <div class="detail-field">
+              <span class="detail-label">Mandatary</span>
+              <span class="detail-value">
+                <a href="{{ company.mandatary.get_absolute_url }}">{{ company.mandatary.full_name }}</a>
+              </span>
+            </div>
+            {% endif %}
+            <div class="detail-field">
+              <span class="detail-label">Pays VAT</span>
+              <span class="detail-value">
+                {% if company.pays_vat %}<span class="badge badge-success">Yes</span>{% else %}<span class="badge badge-secondary">No</span>{% endif %}
+              </span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Is Tenant</span>
+              <span class="detail-value">
+                {% if company.is_tenant %}<span class="badge badge-info">Yes</span>{% else %}<span class="badge badge-secondary">No</span>{% endif %}
+              </span>
+            </div>
+            {% if company.obs %}
+            <div class="detail-field">
+              <span class="detail-label">Observations</span>
+              <span class="detail-value" style="white-space:pre-wrap;">{{ company.obs }}</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Tab: People ─── -->
+      <div class="tab-pane" id="tab-people">
+        {% if people %}
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Contact</th>
+                <th>Status</th>
+                <th style="width:60px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for person in people %}
+              <tr data-href="{{ person.get_absolute_url }}">
+                <td>
+                  <div class="entity-row">
+                    <div class="avatar avatar-sm">
+                      {% if person.avatar %}<img src="{{ person.avatar.url }}" alt="{{ person.name }}">
+                      {% else %}{{ person.initials }}{% endif %}
+                    </div>
+                    <div class="entity-row-info">
+                      <div class="entity-row-name">
+                        <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-sm">{{ person.position|default:"—"|truncatechars:35 }}</td>
+                <td class="text-sm">
+                  {% if person.email %}
+                  <a href="mailto:{{ person.email }}" style="color:var(--text-secondary);">{{ person.email|truncatechars:28 }}</a>
+                  {% elif person.phone %}
+                  <span style="color:var(--text-secondary);">{{ person.phone }}</span>
+                  {% else %}—{% endif %}
+                </td>
+                <td>
+                  {% if person.status %}
+                  <span class="badge badge-{{ person.status.color }}">{{ person.status.name }}</span>
+                  {% else %}—{% endif %}
+                </td>
+                <td>
+                  <a href="{{ person.get_absolute_url }}" class="btn btn-sm btn-outline-secondary" title="View">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="empty-state" style="padding:var(--space-xl);">
+          <div class="empty-state-icon"><i class="fas fa-user-group"></i></div>
+          <div class="empty-state-title">No people linked</div>
+          <div class="empty-state-text">Assign people to this company from their profile pages.</div>
+          {% if perms.people.add_person %}
+          <a href="{% url 'people:create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Person
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+
+    </div><!-- /.card -->
+  </div><!-- /.right -->
+
+</div><!-- /.grid -->
+
+{% endblock %}

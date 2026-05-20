@@ -1,0 +1,155 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}{{ action }} Person — HR Platform{% endblock %}
+{% block page_title %}{{ action }} Person{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'people:index' %}">People</a>
+<span class="sep">/</span>
+{% if object %}
+<a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+<span class="sep">/</span>
+{% endif %}
+<span class="current">{{ action }}</span>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:780px;">
+  <form method="post" enctype="multipart/form-data" data-submit-once>
+    {% csrf_token %}
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">{{ action }} Person</h2>
+      </div>
+      <div class="card-body">
+
+        <!-- Non-field errors -->
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>{{ form.non_field_errors }}</span>
+        </div>
+        {% endif %}
+
+        <!-- ── Personal info section ── -->
+        <div class="form-section">
+          <div class="form-section-title">Personal Information</div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+              {{ form.title }}
+            </div>
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label" for="{{ form.name.id_for_label }}">Full Name<span class="required">*</span></label>
+              <input type="text" id="{{ form.name.id_for_label }}" name="name"
+                     value="{{ form.name.value|default:'' }}"
+                     class="form-control{% if form.name.errors %} is-invalid{% endif %}"
+                     required autofocus>
+              {% for err in form.name.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.appellative.id_for_label }}">Appellative</label>
+              {{ form.appellative }}
+              <span class="form-text">Preferred way to address this person</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.gender.id_for_label }}">Gender</label>
+              {{ form.gender }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.birthday.id_for_label }}">Birthday</label>
+              {{ form.birthday }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.uid.id_for_label }}">UID / Tax ID</label>
+              {{ form.uid }}
+              {% for err in form.uid.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Contact section ── -->
+        <div class="form-section">
+          <div class="form-section-title">Contact</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
+              {{ form.email }}
+              {% for err in form.email.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+              {{ form.phone }}
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Employment section ── -->
+        <div class="form-section">
+          <div class="form-section-title">Employment</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.company.id_for_label }}">Company</label>
+              {{ form.company }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
+              {{ form.status }}
+            </div>
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label" for="{{ form.position.id_for_label }}">Position / Role</label>
+              {{ form.position }}
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Photo & notes section ── -->
+        <div class="form-section">
+          <div class="form-section-title">Photo &amp; Notes</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Photo</label>
+              {% if object.avatar %}
+              <div style="margin-bottom:var(--space-sm);">
+                <div class="avatar avatar-lg" id="avatarPreview">
+                  <img src="{{ object.avatar.url }}" alt="{{ object.name }}">
+                </div>
+              </div>
+              {% else %}
+              <div class="avatar avatar-lg" id="avatarPreview" style="margin-bottom:var(--space-sm);">
+                {{ object.initials|default:"?" }}
+              </div>
+              {% endif %}
+              <input type="file" name="avatar" accept="image/*"
+                     class="form-control" id="{{ form.avatar.id_for_label }}"
+                     data-preview-target="avatarPreview">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.obs.id_for_label }}">Observations</label>
+              {{ form.obs }}
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.card-body -->
+
+      <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center;">
+        <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'people:index' %}{% endif %}"
+           class="btn btn-outline-secondary">
+          <i class="fas fa-times"></i> Cancel
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create Person{% endif %}
+        </button>
+      </div>
+    </div><!-- /.card -->
+
+  </form>
+</div>
+{% endblock %}

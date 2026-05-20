@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+
+{% block title %}Delete {{ company.name }} — HR Platform{% endblock %}
+{% block page_title %}Delete Company{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'companies:index' %}">Companies</a>
+<span class="sep">/</span>
+<a href="{{ company.get_absolute_url }}">{{ company.name }}</a>
+<span class="sep">/</span>
+<span class="current">Delete</span>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:500px;">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title" style="color:var(--color-danger);">
+        <i class="fas fa-circle-exclamation"></i> Confirm Deletion
+      </h2>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:var(--space-md);margin-bottom:var(--space-lg);">
+        <div class="avatar avatar-lg avatar-square">{{ company.initials }}</div>
+        <div>
+          <div style="font-weight:600;font-size:var(--font-size-lg);">{{ company.name }}</div>
+          <div class="text-muted text-sm">{{ company.people_count }} associated people</div>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary);">
+        Are you sure you want to permanently delete <strong>{{ company.name }}</strong>?
+        This action <strong>cannot be undone</strong>. People linked to this company will
+        have their company reference cleared.
+      </p>
+    </div>
+    <div class="card-footer" style="display:flex;justify-content:space-between;">
+      <a href="{{ company.get_absolute_url }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Cancel
+      </a>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+          <i class="fas fa-trash"></i> Yes, Delete
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

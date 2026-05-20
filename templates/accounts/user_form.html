@@ -1,0 +1,61 @@
+{% extends "base/base.html" %}
+
+{% block title %}Edit {{ user_obj.username }} — HR Platform{% endblock %}
+{% block page_title %}Edit User{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'accounts:user_list' %}">Users</a>
+<span class="sep">/</span>
+<span class="current">{{ user_obj.username }}</span>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:600px;">
+  <form method="post" data-submit-once>
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Edit User: {{ user_obj.username }}</h2>
+      </div>
+      <div class="card-body">
+        {% if form.errors %}
+        <div class="alert alert-danger">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>Please correct the errors below.</span>
+        </div>
+        {% endif %}
+
+        <div class="form-row form-row-2">
+          {% for field in form %}
+          {% if field.name != 'groups' %}
+          <div class="form-group {% if field.name == 'email' %}style="grid-column:span 2;"{% endif %}">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+              {% for err in field.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Groups</label>
+          {{ form.groups }}
+        </div>
+      </div>
+
+      <div class="card-footer" style="display:flex;justify-content:space-between;">
+        <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-times"></i> Cancel
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-check"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

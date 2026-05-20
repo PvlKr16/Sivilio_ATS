@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HR IT Platform — People & Company Management">
+  <title>{% block title %}HR Platform{% endblock %}</title>
+
+  <!-- Stylesheets (order matters: base → layout → components → forms → page) -->
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+  {% block extra_css %}{% endblock %}
+
+  <!-- Font Awesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+  <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+
+    <a class="sidebar-brand" href="{% url 'core:dashboard' %}">
+      <div class="sidebar-brand-icon"><i class="fas fa-users-gear"></i></div>
+      <div>
+        <div class="sidebar-brand-text">HR Platform</div>
+        <div class="sidebar-brand-sub">IT People & Companies</div>
+      </div>
+    </a>
+
+    <div class="sidebar-nav">
+      <!-- Main section -->
+      <div class="sidebar-section-label">Main</div>
+
+      <a class="sidebar-link" href="{% url 'core:dashboard' %}">
+        <i class="fas fa-gauge-high"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Administration section -->
+      <div class="sidebar-section-label">Administration</div>
+
+      <a class="sidebar-link" href="{% url 'people:index' %}">
+        <i class="fas fa-user-group"></i>
+        <span>People</span>
+        {% if nav_people_count %}
+          <span class="sidebar-badge">{{ nav_people_count }}</span>
+        {% endif %}
+      </a>
+
+      <a class="sidebar-link" href="{% url 'companies:index' %}">
+        <i class="fas fa-building"></i>
+        <span>Companies</span>
+        {% if nav_companies_count %}
+          <span class="sidebar-badge">{{ nav_companies_count }}</span>
+        {% endif %}
+      </a>
+
+      <!-- System section (staff only) -->
+      {% if user.is_staff %}
+      <div class="sidebar-section-label">System</div>
+
+      <a class="sidebar-link" href="{% url 'accounts:user_list' %}">
+        <i class="fas fa-shield-halved"></i>
+        <span>Users</span>
+      </a>
+
+      <a class="sidebar-link" href="{% url 'admin:index' %}">
+        <i class="fas fa-screwdriver-wrench"></i>
+        <span>Admin Panel</span>
+      </a>
+      {% endif %}
+    </div>
+
+    <!-- Sidebar footer: current user -->
+    <div class="sidebar-footer">
+      <a class="sidebar-link" href="{% url 'accounts:profile' %}">
+        <div class="avatar avatar-xs">{{ user.display_name|slice:":2"|upper }}</div>
+        <span>{{ user.display_name|truncatechars:20 }}</span>
+      </a>
+      <a class="sidebar-link" href="{% url 'accounts:logout' %}">
+        <i class="fas fa-right-from-bracket"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+  <!-- ── Main area ─────────────────────────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <!-- Mobile sidebar toggle -->
+        <button class="sidebar-toggle topbar-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <div>
+          <h1 class="topbar-title">{% block page_title %}Dashboard{% endblock %}</h1>
+          <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+            {% block breadcrumb %}
+            <a href="{% url 'core:dashboard' %}">Home</a>
+            {% endblock %}
+          </nav>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        {% block topbar_actions %}{% endblock %}
+
+        <!-- User dropdown trigger -->
+        <div class="user-avatar-sm" title="{{ user.display_name }}">
+          {{ user.display_name|slice:":2"|upper }}
+        </div>
+      </div>
+    </header>
+
+    <!-- Flash messages -->
+    <div class="page-messages" style="padding: 0 var(--space-xl); padding-top: var(--space-md);">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }}" data-auto-dismiss="4000" role="alert">
+        <i class="fas {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'error' or message.tags == 'danger' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+        <span>{{ message }}</span>
+        <button class="alert-close" aria-label="Close">&times;</button>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Page body -->
+    <main class="page-body" id="main-content">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div><!-- /.main-content -->
+</div><!-- /.app-wrapper -->
+
+<!-- JavaScript (order: sidebar → ui → tables → forms → page) -->
+<script src="{% static 'js/sidebar.js' %}"></script>
+<script src="{% static 'js/ui.js' %}"></script>
+<script src="{% static 'js/tables.js' %}"></script>
+<script src="{% static 'js/forms.js' %}"></script>
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

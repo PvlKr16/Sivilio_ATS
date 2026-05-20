@@ -1,0 +1,141 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}{{ action }} Company — HR Platform{% endblock %}
+{% block page_title %}{{ action }} Company{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'companies:index' %}">Companies</a>
+<span class="sep">/</span>
+{% if object %}
+<a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+<span class="sep">/</span>
+{% endif %}
+<span class="current">{{ action }}</span>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:780px;">
+  <form method="post" enctype="multipart/form-data" data-submit-once>
+    {% csrf_token %}
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">{{ action }} Company</h2>
+      </div>
+      <div class="card-body">
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>{{ form.non_field_errors }}</span>
+        </div>
+        {% endif %}
+
+        <!-- ── Identity section ── -->
+        <div class="form-section">
+          <div class="form-section-title">Company Information</div>
+          <div class="form-row form-row-2">
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label" for="{{ form.name.id_for_label }}">Company Name<span class="required">*</span></label>
+              <input type="text" id="{{ form.name.id_for_label }}" name="name"
+                     value="{{ form.name.value|default:'' }}"
+                     class="form-control{% if form.name.errors %} is-invalid{% endif %}"
+                     required autofocus>
+              {% for err in form.name.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
+              {{ form.email }}
+              {% for err in form.email.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+              {{ form.phone }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.fax.id_for_label }}">Fax</label>
+              {{ form.fax }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.mandatary.id_for_label }}">Mandatary</label>
+              {{ form.mandatary }}
+              <span class="form-text">Legal representative of the company</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Banking section ── -->
+        <div class="form-section">
+          <div class="form-section-title">Banking Details</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.bank.id_for_label }}">Bank</label>
+              {{ form.bank }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.bank_account.id_for_label }}">Bank Account</label>
+              {{ form.bank_account }}
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Flags section ── -->
+        <div class="form-section">
+          <div class="form-section-title">Settings</div>
+          <div style="display:flex;gap:var(--space-xl);">
+            <div class="form-check">
+              {{ form.pays_vat }}
+              <label class="form-check-label" for="{{ form.pays_vat.id_for_label }}">Pays VAT</label>
+            </div>
+            <div class="form-check">
+              {{ form.is_tenant }}
+              <label class="form-check-label" for="{{ form.is_tenant.id_for_label }}">Is Tenant</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Logo & notes ── -->
+        <div class="form-section">
+          <div class="form-section-title">Logo &amp; Notes</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Logo</label>
+              {% if object.logo %}
+              <div class="avatar avatar-lg avatar-square" id="logoPreview" style="margin-bottom:var(--space-sm);">
+                <img src="{{ object.logo.url }}" alt="{{ object.name }}">
+              </div>
+              {% else %}
+              <div class="avatar avatar-lg avatar-square" id="logoPreview" style="margin-bottom:var(--space-sm);">
+                {{ object.initials|default:"?" }}
+              </div>
+              {% endif %}
+              <input type="file" name="logo" accept="image/*"
+                     class="form-control"
+                     data-preview-target="logoPreview">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.obs.id_for_label }}">Observations</label>
+              {{ form.obs }}
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.card-body -->
+
+      <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center;">
+        <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'companies:index' %}{% endif %}"
+           class="btn btn-outline-secondary">
+          <i class="fas fa-times"></i> Cancel
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create Company{% endif %}
+        </button>
+      </div>
+    </div><!-- /.card -->
+
+  </form>
+</div>
+{% endblock %}

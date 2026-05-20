@@ -1,0 +1,191 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}People — HR Platform{% endblock %}
+{% block page_title %}People{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<span class="current">People</span>
+{% endblock %}
+
+{% block topbar_actions %}
+{% if perms.people.add_person %}
+<a href="{% url 'people:create' %}" class="btn btn-primary btn-sm">
+  <i class="fas fa-plus"></i> Add Person
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Filter bar ── -->
+<div class="card" style="margin-bottom:var(--space-lg);">
+  <div class="card-body" style="padding:var(--space-md);">
+    <form method="get" action="" id="filterForm">
+      <div class="filter-bar">
+        <div class="input-group" style="flex:1;min-width:220px;">
+          <span class="input-group-icon"><i class="fas fa-search"></i></span>
+          {{ search_form.q }}
+        </div>
+        {{ search_form.company }}
+        {{ search_form.status }}
+        <button type="submit" class="btn btn-outline-primary">
+          <i class="fas fa-filter"></i> Filter
+        </button>
+        {% if request.GET.q or request.GET.company or request.GET.status %}
+        <a href="{% url 'people:index' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-times"></i> Clear
+        </a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Results table ── -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">
+      People
+      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} record{{ total_count|pluralize }}</span>
+    </h2>
+  </div>
+
+  {% if people %}
+  <div class="data-table-wrapper">
+    <table class="data-table" id="peopleTable">
+      <thead>
+        <tr>
+          <th data-sortable>Name</th>
+          <th data-sortable>Company</th>
+          <th data-sortable>Position</th>
+          <th>Contact</th>
+          <th>Status</th>
+          <th style="width:100px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for person in people %}
+        <tr data-href="{{ person.get_absolute_url }}">
+          <td>
+            <div class="entity-row">
+              <div class="avatar avatar-sm">
+                {% if person.avatar %}
+                  <img src="{{ person.avatar.url }}" alt="{{ person.name }}">
+                {% else %}
+                  {{ person.initials }}
+                {% endif %}
+              </div>
+              <div class="entity-row-info">
+                <div class="entity-row-name">
+                  <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
+                </div>
+                {% if person.appellative %}
+                <div class="entity-row-sub">{{ person.appellative }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </td>
+          <td>
+            {% if person.company %}
+            <a href="{{ person.company.get_absolute_url }}" style="color:var(--text-secondary);font-size:var(--font-size-sm);">
+              {{ person.company.name }}
+            </a>
+            {% else %}
+            <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+          <td class="text-sm">{{ person.position|default:"—"|truncatechars:35 }}</td>
+          <td class="text-sm">
+            {% if person.email %}
+            <a href="mailto:{{ person.email }}" style="color:var(--text-secondary);" title="{{ person.email }}">
+              <i class="fas fa-envelope"></i> {{ person.email|truncatechars:25 }}
+            </a>
+            {% elif person.phone %}
+            <a href="tel:{{ person.phone }}" style="color:var(--text-secondary);">
+              <i class="fas fa-phone"></i> {{ person.phone }}
+            </a>
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            {% if person.status %}
+            <span class="badge badge-{{ person.status.color }}">{{ person.status.name }}</span>
+            {% else %}—{% endif %}
+          </td>
+          <td class="actions-cell">
+            <div class="btn-group">
+              <a href="{{ person.get_absolute_url }}" class="btn btn-sm btn-outline-secondary" title="View">
+                <i class="fas fa-eye"></i>
+              </a>
+              {% if perms.people.change_person %}
+              <a href="{% url 'people:edit' person.pk %}" class="btn btn-sm btn-outline-primary" title="Edit">
+                <i class="fas fa-pen"></i>
+              </a>
+              {% endif %}
+              {% if perms.people.delete_person %}
+              <a href="{% url 'people:delete' person.pk %}"
+                 class="btn btn-sm btn-outline-danger"
+                 data-confirm="Delete {{ person.name }}? This cannot be undone."
+                 title="Delete">
+                <i class="fas fa-trash"></i>
+              </a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div class="pagination-wrapper">
+    <span>Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.previous_page_number }}">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.next_page_number }}">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="fas fa-user-group"></i></div>
+    <div class="empty-state-title">No people found</div>
+    <div class="empty-state-text">
+      {% if request.GET.q %}Try a different search term or clear the filters.{% else %}Get started by adding the first person.{% endif %}
+    </div>
+    {% if perms.people.add_person %}
+    <a href="{% url 'people:create' %}" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Add Person
+    </a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

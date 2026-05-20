@@ -1,0 +1,102 @@
+{% extends "base/base.html" %}
+
+{% block title %}Users — HR Platform{% endblock %}
+{% block page_title %}Users{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<span class="current">Users</span>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">System Users</h2>
+    <a href="{% url 'admin:accounts_user_add' %}" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus"></i> Add User
+    </a>
+  </div>
+
+  {% if users %}
+  <div class="data-table-wrapper">
+    <table class="data-table" id="usersTable">
+      <thead>
+        <tr>
+          <th data-sortable>Username</th>
+          <th data-sortable>Email</th>
+          <th>Person</th>
+          <th>Groups</th>
+          <th>Active</th>
+          <th>Staff</th>
+          <th style="width:80px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>
+            <div class="entity-row">
+              <div class="avatar avatar-sm">{{ u.display_name|slice:":2"|upper }}</div>
+              <div class="entity-row-info">
+                <div class="entity-row-name">{{ u.username }}</div>
+                <div class="entity-row-sub">{{ u.get_full_name }}</div>
+              </div>
+            </div>
+          </td>
+          <td class="text-sm">{{ u.email|default:"—" }}</td>
+          <td class="text-sm">
+            {% if u.person %}
+            <a href="{{ u.person.get_absolute_url }}">{{ u.person.name }}</a>
+            {% else %}<span class="text-muted">—</span>{% endif %}
+          </td>
+          <td>
+            {% for group in u.groups.all %}
+            <span class="badge badge-secondary">{{ group.name }}</span>
+            {% empty %}<span class="text-muted text-xs">—</span>{% endfor %}
+          </td>
+          <td>
+            {% if u.is_active %}
+            <span class="badge badge-success">Active</span>
+            {% else %}
+            <span class="badge badge-secondary">Inactive</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if u.is_staff %}
+            <span class="badge badge-warning">Staff</span>
+            {% else %}—{% endif %}
+          </td>
+          <td class="actions-cell">
+            <a href="{% url 'accounts:user_edit' u.pk %}" class="btn btn-sm btn-outline-primary" title="Edit">
+              <i class="fas fa-pen"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if is_paginated %}
+  <div class="pagination-wrapper">
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-chevron-left"></i></a></li>
+      {% endif %}
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="fas fa-chevron-right"></i></a></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="fas fa-users"></i></div>
+    <div class="empty-state-title">No users found</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
