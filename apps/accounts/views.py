@@ -1,7 +1,7 @@
 """Views for user management and self-service profile."""
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.views.generic import ListView, UpdateView, CreateView
+from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db.models import Q
@@ -94,3 +94,21 @@ class UserUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         ctx = super().get_context_data(**kwargs)
         ctx['action'] = 'Edit'
         return ctx
+
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = 'accounts/user_detail.html'
+    context_object_name = 'user_obj'
+
+
+class UserDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = User
+    template_name = 'accounts/user_confirm_delete.html'
+    success_url = reverse_lazy('accounts:user_list')
+    permission_required = 'accounts.delete_user'
+    context_object_name = 'user_obj'
+
+    def form_valid(self, form):
+        messages.success(self.request, f'User "{self.object.username}" deleted.')
+        return super().form_valid(form)

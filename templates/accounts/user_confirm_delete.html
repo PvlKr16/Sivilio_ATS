@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+
+{% block title %}Delete {{ user_obj.username }} — HR Platform{% endblock %}
+{% block page_title %}Delete User{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'accounts:user_list' %}">Users</a>
+<span class="sep">/</span>
+<span class="current">Delete</span>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:500px;">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title" style="color:var(--color-danger);">
+        <i class="fas fa-circle-exclamation"></i> Confirm Deletion
+      </h2>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:var(--space-md);margin-bottom:var(--space-lg);">
+        <div class="avatar avatar-lg">
+          {% if user_obj.avatar %}<img src="{{ user_obj.avatar.url }}" alt="">
+          {% else %}{{ user_obj.initials }}{% endif %}
+        </div>
+        <div>
+          <div style="font-weight:600;font-size:var(--font-size-lg);">{{ user_obj.display_name }}</div>
+          <div class="text-muted text-sm">{{ user_obj.username }}</div>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary);">
+        Are you sure you want to permanently delete <strong>{{ user_obj.username }}</strong>?
+        This action <strong>cannot be undone</strong>.
+      </p>
+    </div>
+    <div class="card-footer" style="display:flex;justify-content:space-between;">
+      <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Cancel
+      </a>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+          <i class="fas fa-trash"></i> Yes, Delete
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

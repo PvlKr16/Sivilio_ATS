@@ -1,0 +1,94 @@
+{% extends "base/base.html" %}
+
+{% block title %}{{ user_obj.display_name }} — HR Platform{% endblock %}
+{% block page_title %}User Profile{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'accounts:user_list' %}">Users</a>
+<span class="sep">/</span>
+<span class="current">{{ user_obj.display_name }}</span>
+{% endblock %}
+
+{% block topbar_actions %}
+<div class="btn-group">
+  {% if perms.accounts.change_user %}
+  <a href="{% url 'accounts:user_edit' user_obj.pk %}" class="btn btn-primary btn-sm">
+    <i class="fas fa-pen"></i> Edit
+  </a>
+  {% endif %}
+  {% if request.user.is_superuser or request.user.role.name == 'Superman' %}
+  <a href="{% url 'accounts:user_delete' user_obj.pk %}"
+     class="btn btn-outline-danger btn-sm"
+     data-confirm="Delete user {{ user_obj.username }}? This cannot be undone.">
+    <i class="fas fa-trash"></i> Delete
+  </a>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:260px 1fr;gap:var(--space-lg);align-items:start;max-width:900px;">
+
+  <div class="card" style="text-align:center;">
+    <div class="card-body">
+      <div style="display:flex;justify-content:center;margin-bottom:var(--space-md);">
+        <div class="avatar avatar-xl">
+          {% if user_obj.avatar %}<img src="{{ user_obj.avatar.url }}" alt="{{ user_obj.display_name }}">
+          {% else %}{{ user_obj.initials }}{% endif %}
+        </div>
+      </div>
+      <h2 style="font-size:var(--font-size-xl);margin-bottom:4px;">{{ user_obj.display_name }}</h2>
+      <div style="margin-bottom:var(--space-sm);">
+        {% if user_obj.role %}<span class="badge badge-primary">{{ user_obj.role_name }}</span>{% endif %}
+      </div>
+      {% if user_obj.status == 'working' %}
+      <span class="badge badge-success">Working</span>
+      {% else %}
+      <span class="badge badge-secondary">Sleeping</span>
+      {% endif %}
+    </div>
+    <div class="card-footer" style="font-size:var(--font-size-xs);color:var(--text-muted);text-align:left;display:flex;flex-direction:column;gap:4px;">
+      {% if user_obj.email %}<div><i class="fas fa-envelope" style="width:14px;"></i> {{ user_obj.email }}</div>{% endif %}
+      {% if user_obj.phone %}<div><i class="fas fa-phone" style="width:14px;"></i> {{ user_obj.phone }}</div>{% endif %}
+      {% if user_obj.viber %}<div><i class="fas fa-mobile-screen" style="width:14px;"></i> {{ user_obj.viber }}</div>{% endif %}
+      {% if user_obj.telegram %}<div><i class="fab fa-telegram" style="width:14px;"></i> {{ user_obj.telegram }}</div>{% endif %}
+      {% if user_obj.cv %}<div><a href="{{ user_obj.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);width:14px;"></i> View CV</a></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">Details</h2></div>
+    <div class="card-body">
+      <div class="detail-fields">
+        <div class="detail-field">
+          <span class="detail-label">Username</span>
+          <span class="detail-value">{{ user_obj.username }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-label">Works Since</span>
+          <span class="detail-value">{{ user_obj.works_since|date:"d M Y"|default:"—" }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-label">Active</span>
+          <span class="detail-value">{% if user_obj.is_active %}<span class="badge badge-success">Yes</span>{% else %}<span class="badge badge-secondary">No</span>{% endif %}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-label">Staff</span>
+          <span class="detail-value">{% if user_obj.is_staff %}<span class="badge badge-warning">Yes</span>{% else %}—{% endif %}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-label">Last Login</span>
+          <span class="detail-value">{{ user_obj.last_login|date:"d M Y H:i"|default:"—" }}</span>
+        </div>
+        <div class="detail-field">
+          <span class="detail-label">Member Since</span>
+          <span class="detail-value">{{ user_obj.date_joined|date:"d M Y" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
