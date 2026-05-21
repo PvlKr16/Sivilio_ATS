@@ -1,0 +1,27 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": { "name": "Superman",   "permissions": [] }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": { "name": "Supervisor", "permissions": [] }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": { "name": "Recruiter",  "permissions": [] }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": { "name": "Client",     "permissions": [] }
+  },
+  {
+    "model": "auth.group",
+    "pk": 5,
+    "fields": { "name": "Intern",     "permissions": [] }
+  }
+]

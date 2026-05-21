@@ -9,26 +9,63 @@
 <span class="current">Users</span>
 {% endblock %}
 
+{% block topbar_actions %}
+{% if perms.accounts.add_user %}
+<a href="{% url 'accounts:user_create' %}" class="btn btn-primary btn-sm">
+  <i class="fas fa-plus"></i> Add User
+</a>
+{% endif %}
+{% endblock %}
+
 {% block content %}
+
+<!-- Filter bar -->
+<div class="card" style="margin-bottom:var(--space-lg);">
+  <div class="card-body" style="padding:var(--space-md);">
+    <form method="get">
+      <div class="filter-bar">
+        <div class="input-group" style="flex:1;min-width:200px;">
+          <span class="input-group-icon"><i class="fas fa-search"></i></span>
+          <input type="text" name="q" value="{{ request.GET.q }}"
+                 class="form-control" placeholder="Search by name, email...">
+        </div>
+        <select name="role" class="form-select" style="min-width:140px;">
+          <option value="">All roles</option>
+          {% for role in roles %}
+          <option value="{{ role.pk }}" {% if request.GET.role == role.pk|stringformat:"s" %}selected{% endif %}>{{ role.name }}</option>
+          {% endfor %}
+        </select>
+        <select name="status" class="form-select" style="min-width:130px;">
+          <option value="">All statuses</option>
+          {% for val, label in status_choices %}
+          <option value="{{ val }}" {% if request.GET.status == val %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filter</button>
+        {% if request.GET.q or request.GET.role or request.GET.status %}
+        <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Clear</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="card">
   <div class="card-header">
     <h2 class="card-title">System Users</h2>
-    <a href="{% url 'admin:accounts_user_add' %}" class="btn btn-primary btn-sm">
-      <i class="fas fa-plus"></i> Add User
-    </a>
   </div>
 
   {% if users %}
   <div class="data-table-wrapper">
-    <table class="data-table" id="usersTable">
+    <table class="data-table">
       <thead>
         <tr>
-          <th data-sortable>Username</th>
-          <th data-sortable>Email</th>
-          <th>Person</th>
-          <th>Groups</th>
-          <th>Active</th>
-          <th>Staff</th>
+          <th data-sortable>Name</th>
+          <th>Contacts</th>
+          <th data-sortable>Role</th>
+          <th>Status</th>
+          <th>Works Since</th>
+          <th>CV</th>
           <th style="width:80px;"></th>
         </tr>
       </thead>
@@ -37,40 +74,45 @@
         <tr>
           <td>
             <div class="entity-row">
-              <div class="avatar avatar-sm">{{ u.display_name|slice:":2"|upper }}</div>
+              <div class="avatar avatar-sm">
+                {% if u.avatar %}<img src="{{ u.avatar.url }}" alt="{{ u.display_name }}">
+                {% else %}{{ u.initials }}{% endif %}
+              </div>
               <div class="entity-row-info">
-                <div class="entity-row-name">{{ u.username }}</div>
-                <div class="entity-row-sub">{{ u.get_full_name }}</div>
+                <div class="entity-row-name">{{ u.display_name }}</div>
+                <div class="entity-row-sub">{{ u.username }}{% if not u.is_active %} · <span style="color:var(--color-danger);">Inactive</span>{% endif %}{% if u.is_staff %} · <span style="color:var(--color-warning);">Staff</span>{% endif %}</div>
               </div>
             </div>
           </td>
-          <td class="text-sm">{{ u.email|default:"—" }}</td>
-          <td class="text-sm">
-            {% if u.person %}
-            <a href="{{ u.person.get_absolute_url }}">{{ u.person.name }}</a>
-            {% else %}<span class="text-muted">—</span>{% endif %}
+          <td style="font-size:var(--font-size-xs);line-height:1.8;">
+            {% if u.email %}<div><i class="fas fa-envelope" style="width:13px;color:var(--color-primary);"></i> {{ u.email }}</div>{% endif %}
+            {% if u.phone %}<div><i class="fas fa-phone" style="width:13px;color:var(--color-primary);"></i> {{ u.phone }}</div>{% endif %}
+            {% if u.telegram %}<div><i class="fab fa-telegram" style="width:13px;color:var(--color-primary);"></i> {{ u.telegram }}</div>{% endif %}
           </td>
           <td>
-            {% for group in u.groups.all %}
-            <span class="badge badge-secondary">{{ group.name }}</span>
-            {% empty %}<span class="text-muted text-xs">—</span>{% endfor %}
+            {% if u.role %}<span class="badge badge-primary">{{ u.role_name }}</span>{% else %}<span class="text-muted">—</span>{% endif %}
           </td>
           <td>
-            {% if u.is_active %}
-            <span class="badge badge-success">Active</span>
+            {% if u.status == 'working' %}
+            <span class="badge badge-success">Working</span>
             {% else %}
-            <span class="badge badge-secondary">Inactive</span>
+            <span class="badge badge-secondary">Sleeping</span>
             {% endif %}
           </td>
+          <td class="text-sm">{{ u.works_since|date:"d M Y"|default:"—" }}</td>
           <td>
-            {% if u.is_staff %}
-            <span class="badge badge-warning">Staff</span>
-            {% else %}—{% endif %}
+            {% if u.cv %}
+            <a href="{{ u.cv.url }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Download CV">
+              <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i>
+            </a>
+            {% else %}<span class="text-muted">—</span>{% endif %}
           </td>
           <td class="actions-cell">
+            {% if perms.accounts.change_user %}
             <a href="{% url 'accounts:user_edit' u.pk %}" class="btn btn-sm btn-outline-primary" title="Edit">
               <i class="fas fa-pen"></i>
             </a>
+            {% endif %}
           </td>
         </tr>
         {% endfor %}
@@ -83,10 +125,10 @@
     <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
     <ul class="pagination">
       {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-chevron-left"></i></a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-left"></i></a></li>
       {% endif %}
       {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="fas fa-chevron-right"></i></a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-right"></i></a></li>
       {% endif %}
     </ul>
   </div>

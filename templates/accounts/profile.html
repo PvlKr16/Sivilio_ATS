@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}My Profile — HR Platform{% endblock %}
 {% block page_title %}My Profile{% endblock %}
@@ -10,73 +11,125 @@
 {% endblock %}
 
 {% block content %}
-<div style="max-width:600px;">
-  <div class="card">
-    <div class="card-body" style="text-align:center;padding:var(--space-2xl) var(--space-xl);">
-      <div style="display:flex;justify-content:center;margin-bottom:var(--space-lg);">
-        <div class="avatar avatar-xl">
-          {% if user.person and user.person.avatar %}
-            <img src="{{ user.person.avatar.url }}" alt="{{ user.display_name }}">
+<div style="display:grid;grid-template-columns:260px 1fr;gap:var(--space-lg);align-items:start;max-width:900px;">
+
+  <!-- Left: avatar card -->
+  <div class="card" style="text-align:center;">
+    <div class="card-body">
+      <div style="display:flex;justify-content:center;margin-bottom:var(--space-md);">
+        <div class="avatar avatar-xl" id="avatarPreview">
+          {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" alt="{{ user.display_name }}">
           {% else %}
-            {{ user.display_name|slice:":2"|upper }}
+            {{ user.initials }}
           {% endif %}
         </div>
       </div>
       <h2 style="font-size:var(--font-size-xl);margin-bottom:4px;">{{ user.display_name }}</h2>
-      <p class="text-muted text-sm">{{ user.email }}</p>
-      {% if user.is_superuser %}
-      <span class="badge badge-danger">Superuser</span>
-      {% elif user.is_staff %}
-      <span class="badge badge-warning">Staff</span>
+      {% if user.role %}
+      <span class="badge badge-primary" style="margin-bottom:var(--space-sm);">{{ user.role_name }}</span>
+      {% endif %}
+      <br>
+      {% if user.status == 'working' %}
+      <span class="badge badge-success">Working</span>
+      {% else %}
+      <span class="badge badge-secondary">Sleeping</span>
       {% endif %}
     </div>
-
-    <div class="card-body" style="border-top:1px solid var(--border-color);">
-      <div class="detail-fields">
-        <div class="detail-field">
-          <span class="detail-label">Username</span>
-          <span class="detail-value">{{ user.username }}</span>
-        </div>
-        <div class="detail-field">
-          <span class="detail-label">Email</span>
-          <span class="detail-value">{{ user.email|default:"—" }}</span>
-        </div>
-        <div class="detail-field">
-          <span class="detail-label">Full Name</span>
-          <span class="detail-value">{{ user.get_full_name|default:"—" }}</span>
-        </div>
-        <div class="detail-field">
-          <span class="detail-label">Linked Person</span>
-          <span class="detail-value">
-            {% if user.person %}
-              <a href="{{ user.person.get_absolute_url }}">{{ user.person.full_name }}</a>
-            {% else %}—{% endif %}
-          </span>
-        </div>
-        <div class="detail-field">
-          <span class="detail-label">Groups</span>
-          <span class="detail-value">
-            {% for group in user.groups.all %}
-            <span class="badge badge-secondary">{{ group.name }}</span>
-            {% empty %}—{% endfor %}
-          </span>
-        </div>
-        <div class="detail-field">
-          <span class="detail-label">Member Since</span>
-          <span class="detail-value">{{ user.date_joined|date:"d M Y" }}</span>
-        </div>
-        <div class="detail-field">
-          <span class="detail-label">Last Login</span>
-          <span class="detail-value">{{ user.last_login|date:"d M Y H:i"|default:"—" }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="card-footer">
-      <a href="/admin/password_change/" class="btn btn-outline-secondary btn-sm">
-        <i class="fas fa-key"></i> Change Password
-      </a>
+    <div class="card-footer" style="font-size:var(--font-size-xs);color:var(--text-muted);text-align:left;display:flex;flex-direction:column;gap:4px;">
+      {% if user.works_since %}<div><i class="fas fa-calendar" style="width:14px;"></i> Since {{ user.works_since|date:"d M Y" }}</div>{% endif %}
+      {% if user.phone %}<div><i class="fas fa-phone" style="width:14px;"></i> {{ user.phone }}</div>{% endif %}
+      {% if user.viber %}<div><i class="fas fa-mobile" style="width:14px;"></i> {{ user.viber }}</div>{% endif %}
+      {% if user.telegram %}<div><i class="fab fa-telegram" style="width:14px;"></i> {{ user.telegram }}</div>{% endif %}
+      {% if user.cv %}<div><a href="{{ user.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="width:14px;color:var(--color-danger);"></i> View CV</a></div>{% endif %}
     </div>
   </div>
+
+  <!-- Right: edit form -->
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">Edit Profile</h2></div>
+    <form method="post" enctype="multipart/form-data" data-submit-once>
+      {% csrf_token %}
+      <div class="card-body">
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger"><i class="fas fa-circle-exclamation"></i> {{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form-section">
+          <div class="form-section-title">Personal Info</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name</label>
+              {{ form.first_name }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name</label>
+              {{ form.last_name }}
+            </div>
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label" for="{{ form.email.id_for_label }}">E-mail</label>
+              {{ form.email }}
+              {% for err in form.email.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Contacts</div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+              <div class="input-group">
+                <span class="input-group-icon"><i class="fas fa-phone"></i></span>
+                {{ form.phone }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.viber.id_for_label }}">Viber</label>
+              <div class="input-group">
+                <span class="input-group-icon"><i class="fas fa-mobile-screen"></i></span>
+                {{ form.viber }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.telegram.id_for_label }}">Telegram</label>
+              <div class="input-group">
+                <span class="input-group-icon"><i class="fab fa-telegram"></i></span>
+                {{ form.telegram }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Avatar &amp; CV</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Avatar <span class="form-text" style="display:inline;">max 3 MB</span></label>
+              <input type="file" name="avatar" accept="image/*"
+                     class="form-control" id="{{ form.avatar.id_for_label }}"
+                     data-preview-target="avatarPreview">
+              {% for err in form.avatar.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+              {% if user.avatar %}<div style="margin-top:4px;font-size:var(--font-size-xs);color:var(--text-muted);">Current: {{ user.avatar.name|truncatechars:30 }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              <label class="form-label">CV <span class="form-text" style="display:inline;">PDF only</span></label>
+              <input type="file" name="cv" accept=".pdf"
+                     class="form-control" id="{{ form.cv.id_for_label }}">
+              {% for err in form.cv.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+              {% if user.cv %}<div style="margin-top:4px;font-size:var(--font-size-xs);"><a href="{{ user.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV</a></div>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer" style="display:flex;justify-content:flex-end;">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-check"></i> Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+
 </div>
 {% endblock %}

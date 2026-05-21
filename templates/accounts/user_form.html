@@ -1,58 +1,167 @@
 {% extends "base/base.html" %}
+{% load static %}
 
-{% block title %}Edit {{ user_obj.username }} — HR Platform{% endblock %}
-{% block page_title %}Edit User{% endblock %}
+{% block title %}{{ action }} User — HR Platform{% endblock %}
+{% block page_title %}{{ action }} User{% endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">Home</a>
 <span class="sep">/</span>
 <a href="{% url 'accounts:user_list' %}">Users</a>
 <span class="sep">/</span>
-<span class="current">{{ user_obj.username }}</span>
+<span class="current">{{ action }}</span>
 {% endblock %}
 
 {% block content %}
-<div style="max-width:600px;">
-  <form method="post" data-submit-once>
+<div style="max-width:780px;">
+  <form method="post" enctype="multipart/form-data" data-submit-once novalidate>
     {% csrf_token %}
     <div class="card">
       <div class="card-header">
-        <h2 class="card-title">Edit User: {{ user_obj.username }}</h2>
+        <h2 class="card-title">{{ action }} User {% if object %}— {{ object.username }}{% endif %}</h2>
       </div>
       <div class="card-body">
-        {% if form.errors %}
-        <div class="alert alert-danger">
-          <i class="fas fa-circle-exclamation"></i>
-          <span>Please correct the errors below.</span>
-        </div>
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger"><i class="fas fa-circle-exclamation"></i> {{ form.non_field_errors }}</div>
         {% endif %}
 
-        <div class="form-row form-row-2">
-          {% for field in form %}
-          {% if field.name != 'groups' %}
-          <div class="form-group {% if field.name == 'email' %}style="grid-column:span 2;"{% endif %}">
-            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}
-              {% for err in field.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+        <!-- Identity -->
+        <div class="form-section">
+          <div class="form-section-title">Account</div>
+          <div class="form-row form-row-2">
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label" for="{{ form.username.id_for_label }}">Username <span class="required">*</span></label>
+              {{ form.username }}
+              {% for err in form.username.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            </div>
+            {% if form.password1 %}
+            <div class="form-group">
+              <label class="form-label" for="{{ form.password1.id_for_label }}">Password <span class="required">*</span></label>
+              {{ form.password1 }}
+              {% for err in form.password1.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm Password <span class="required">*</span></label>
+              {{ form.password2 }}
+              {% for err in form.password2.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            </div>
             {% endif %}
           </div>
-          {% endif %}
-          {% endfor %}
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Groups</label>
-          {{ form.groups }}
+        <!-- Personal -->
+        <div class="form-section">
+          <div class="form-section-title">Personal Info</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name<span class="required">*</span></label>
+              {{ form.first_name }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name<span class="required">*</span></label>
+              {{ form.last_name }}
+            </div>
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label" for="{{ form.email.id_for_label }}">E-mail<span class="required">*</span></label>
+              {{ form.email }}
+              {% for err in form.email.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            </div>
+          </div>
         </div>
+
+        <!-- Contacts -->
+        <div class="form-section">
+          <div class="form-section-title">Contacts</div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+              <div class="input-group"><span class="input-group-icon"><i class="fas fa-phone"></i></span>{{ form.phone }}</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.viber.id_for_label }}">Viber</label>
+              <div class="input-group"><span class="input-group-icon"><i class="fas fa-mobile-screen"></i></span>{{ form.viber }}</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.telegram.id_for_label }}">Telegram</label>
+              <div class="input-group"><span class="input-group-icon"><i class="fab fa-telegram"></i></span>{{ form.telegram }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HR Role -->
+        <div class="form-section">
+          <div class="form-section-title">HR Role &amp; Status</div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.role.id_for_label }}">Role</label>
+              {{ form.role }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
+              {{ form.status }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.works_since.id_for_label }}">Works Since</label>
+              {{ form.works_since }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Files -->
+        <div class="form-section">
+          <div class="form-section-title">Avatar &amp; CV</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Avatar <span class="form-text" style="display:inline;">max 3 MB</span></label>
+              {% if object and object.avatar %}
+              <div class="avatar avatar-md" id="avatarPreview" style="margin-bottom:var(--space-sm);">
+                <img src="{{ object.avatar.url }}" alt="">
+              </div>
+              {% else %}
+              <div class="avatar avatar-md" id="avatarPreview" style="margin-bottom:var(--space-sm);">
+                {% if object %}{{ object.initials }}{% else %}?{% endif %}
+              </div>
+              {% endif %}
+              <input type="file" name="avatar" accept="image/*" class="form-control"
+                     data-preview-target="avatarPreview">
+              {% for err in form.avatar.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label">CV <span class="form-text" style="display:inline;">PDF only</span></label>
+              {% if object and object.cv %}
+              <div style="margin-bottom:var(--space-sm);font-size:var(--font-size-sm);">
+                <a href="{{ object.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV</a>
+              </div>
+              {% endif %}
+              <input type="file" name="cv" accept=".pdf" class="form-control">
+              {% for err in form.cv.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Flags -->
+        <div class="form-section">
+          <div class="form-section-title">Permissions</div>
+          <div style="display:flex;gap:var(--space-xl);">
+            <div class="form-check">
+              {{ form.is_active }}
+              <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Active</label>
+            </div>
+            <div class="form-check">
+              {{ form.is_staff }}
+              <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">Staff (admin access)</label>
+            </div>
+          </div>
+        </div>
+
       </div>
-
       <div class="card-footer" style="display:flex;justify-content:space-between;">
         <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary">
           <i class="fas fa-times"></i> Cancel
         </a>
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-check"></i> Save Changes
+          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create User{% endif %}
         </button>
       </div>
     </div>
