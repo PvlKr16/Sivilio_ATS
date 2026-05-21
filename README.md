@@ -56,8 +56,10 @@ cp .env.example .env
 
 # 2.a. 
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+add it to .env SECRET_KEY=
 
 # 3. Start everything
+docker compose run --rm web python manage.py makemigrations
 docker compose up --build -d
 
 # 4. Open in browser

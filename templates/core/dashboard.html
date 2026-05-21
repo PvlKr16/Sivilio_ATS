@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}Dashboard — HR Platform{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
@@ -151,5 +152,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/tables.js' %}"></script>
+    <script src="{% static 'js/tables.js' %}"></script>
 {% endblock %}
