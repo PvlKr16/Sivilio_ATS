@@ -13,12 +13,12 @@
 {% endblock %}
 
 {% block content %}
-<div style="max-width:780px;">
+<div style="max-width:740px;">
   <form method="post" enctype="multipart/form-data" data-submit-once novalidate>
     {% csrf_token %}
     <div class="card">
       <div class="card-header">
-        <h2 class="card-title">{{ action }} User {% if object %}— {{ object.username }}{% endif %}</h2>
+        <h2 class="card-title">{{ action }} User {% if object %}<span style="opacity:.45;font-size:.8em;">— {{ object.username }}</span>{% endif %}</h2>
       </div>
       <div class="card-body">
 
@@ -26,25 +26,25 @@
         <div class="alert alert-danger"><i class="fas fa-circle-exclamation"></i> {{ form.non_field_errors }}</div>
         {% endif %}
 
-        <!-- Identity -->
+        <!-- Account -->
         <div class="form-section">
           <div class="form-section-title">Account</div>
           <div class="form-row form-row-2">
             <div class="form-group" style="grid-column:span 2;">
               <label class="form-label" for="{{ form.username.id_for_label }}">Username <span class="required">*</span></label>
               {{ form.username }}
-              {% for err in form.username.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+              {% for err in form.username.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
             {% if form.password1 %}
             <div class="form-group">
               <label class="form-label" for="{{ form.password1.id_for_label }}">Password <span class="required">*</span></label>
               {{ form.password1 }}
-              {% for err in form.password1.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+              {% for err in form.password1.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
             <div class="form-group">
               <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm Password <span class="required">*</span></label>
               {{ form.password2 }}
-              {% for err in form.password2.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+              {% for err in form.password2.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
             {% endif %}
           </div>
@@ -53,20 +53,20 @@
         <!-- Personal -->
         <div class="form-section">
           <div class="form-section-title">Personal Info</div>
-          <div class="form-row form-row-2">
-            <div class="form-group">
-              <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name<span class="required">*</span></label>
+          <div class="form-row form-row-2" style="margin-bottom:12px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name <span class="required">*</span></label>
               {{ form.first_name }}
             </div>
-            <div class="form-group">
-              <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name<span class="required">*</span></label>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name <span class="required">*</span></label>
               {{ form.last_name }}
             </div>
-            <div class="form-group" style="grid-column:span 2;">
-              <label class="form-label" for="{{ form.email.id_for_label }}">E-mail<span class="required">*</span></label>
-              {{ form.email }}
-              {% for err in form.email.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
-            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="{{ form.email.id_for_label }}">E-mail <span class="required">*</span></label>
+            {{ form.email }}
+            {% for err in form.email.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
           </div>
         </div>
 
@@ -74,15 +74,15 @@
         <div class="form-section">
           <div class="form-section-title">Contacts</div>
           <div class="form-row form-row-3">
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0;">
               <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
               <div class="input-group"><span class="input-group-icon"><i class="fas fa-phone"></i></span>{{ form.phone }}</div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0;">
               <label class="form-label" for="{{ form.viber.id_for_label }}">Viber</label>
               <div class="input-group"><span class="input-group-icon"><i class="fas fa-mobile-screen"></i></span>{{ form.viber }}</div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0;">
               <label class="form-label" for="{{ form.telegram.id_for_label }}">Telegram</label>
               <div class="input-group"><span class="input-group-icon"><i class="fab fa-telegram"></i></span>{{ form.telegram }}</div>
             </div>
@@ -93,15 +93,15 @@
         <div class="form-section">
           <div class="form-section-title">HR Role &amp; Status</div>
           <div class="form-row form-row-3">
-            <div class="form-group">
-              <label class="form-label" for="{{ form.role.id_for_label }}">Role<span class="required">*</span></label>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="{{ form.role.id_for_label }}">Role <span class="required">*</span></label>
               {{ form.role }}
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0;">
               <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
               {{ form.status }}
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0;">
               <label class="form-label" for="{{ form.works_since.id_for_label }}">Works Since</label>
               {{ form.works_since }}
             </div>
@@ -112,56 +112,59 @@
         <div class="form-section">
           <div class="form-section-title">Avatar &amp; CV</div>
           <div class="form-row form-row-2">
-            <div class="form-group">
-              <label class="form-label">Avatar <span class="form-text" style="display:inline;">max 3 MB</span></label>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Avatar <span class="form-text" style="display:inline;font-style:normal;">— max 3 MB</span></label>
               {% if object and object.avatar %}
-              <div class="avatar avatar-md" id="avatarPreview" style="margin-bottom:var(--space-sm);">
-                <img src="{{ object.avatar.url }}" alt="">
+              <div class="avatar avatar-md" id="avatarPreview" style="margin-bottom:8px;width:52px;height:52px;">
+                <img src="{{ object.avatar.url }}" alt="" style="width:100%;height:100%;object-fit:cover;">
               </div>
               {% else %}
-              <div class="avatar avatar-md" id="avatarPreview" style="margin-bottom:var(--space-sm);">
+              <div class="avatar avatar-md" id="avatarPreview"
+                   style="margin-bottom:8px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:var(--color-primary-light,#e8f0fc);color:var(--color-primary);font-weight:600;font-size:16px;">
                 {% if object %}{{ object.initials }}{% else %}?{% endif %}
               </div>
               {% endif %}
-              <input type="file" name="avatar" accept="image/*" class="form-control"
-                     data-preview-target="avatarPreview">
-              {% for err in form.avatar.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+              <input type="file" name="avatar" accept="image/*" class="form-control" data-preview-target="avatarPreview">
+              {% for err in form.avatar.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
-            <div class="form-group">
-              <label class="form-label">CV <span class="form-text" style="display:inline;">PDF only</span></label>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">CV <span class="form-text" style="display:inline;font-style:normal;">— PDF only</span></label>
               {% if object and object.cv %}
-              <div style="margin-bottom:var(--space-sm);font-size:var(--font-size-sm);">
-                <a href="{{ object.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV</a>
+              <div style="margin-bottom:8px;font-size:12.5px;">
+                <a href="{{ object.cv.url }}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;color:var(--color-primary);">
+                  <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV
+                </a>
               </div>
               {% endif %}
               <input type="file" name="cv" accept=".pdf" class="form-control">
-              {% for err in form.cv.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
+              {% for err in form.cv.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
           </div>
         </div>
 
-        <!-- Flags -->
-        <div class="form-section">
+        <!-- Permissions -->
+        <div class="form-section" style="margin-bottom:6px;">
           <div class="form-section-title">Permissions</div>
-          <div style="display:flex;gap:var(--space-xl);">
+          <div style="display:flex;gap:24px;">
             <div class="form-check">
               {{ form.is_active }}
               <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Active</label>
             </div>
             <div class="form-check">
               {{ form.is_staff }}
-              <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">Staff (admin access)</label>
+              <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">Staff <span style="color:var(--text-muted);font-size:11.5px;">(admin access)</span></label>
             </div>
           </div>
         </div>
 
-      </div>
-      <div class="card-footer" style="display:flex;justify-content:space-between;">
+      </div><!-- /.card-body -->
+
+      <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center;">
         <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary">
-          <i class="fas fa-times"></i> Cancel
+          <i class="fas fa-times" style="font-size:11px;margin-right:5px;"></i>Cancel
         </a>
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create User{% endif %}
+          <i class="fas fa-check" style="font-size:11px;margin-right:5px;"></i>{% if object %}Save Changes{% else %}Create User{% endif %}
         </button>
       </div>
     </div>
