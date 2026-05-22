@@ -1,6 +1,11 @@
 """
 Models for the People module.
-Mirrors the Laravel Enso people package schema.
+
+Reference models (also used by Vacancy):
+  Gender, Level, Skill, WorkingHours, Region, WorkingPlace, Profession, English
+
+Person-specific:
+  Person
 """
 
 from django.db import models
@@ -8,149 +13,253 @@ from django.conf import settings
 from django.urls import reverse
 
 
-class TitleChoices(models.IntegerChoices):
-    """Salutation titles matching the original tinyInteger field."""
-    MR = 1, 'Mr'
-    MRS = 2, 'Mrs'
-    MS = 3, 'Ms'
-    DR = 4, 'Dr'
-    PROF = 5, 'Prof'
+# ── Currency choices for salary ───────────────────────────────────────────────
+
+class CurrencyChoices(models.TextChoices):
+    USD = 'USD', 'USD ($)'
+    EUR = 'EUR', 'EUR (€)'
+    UAH = 'UAH', 'UAH (₴)'
+    RUB = 'RUB', 'RUB (₽)'
+    GBP = 'GBP', 'GBP (£)'
 
 
-class GenderChoices(models.TextChoices):
-    MALE = 'M', 'Male'
-    FEMALE = 'F', 'Female'
-    OTHER = 'O', 'Other'
+# ── Person status ─────────────────────────────────────────────────────────────
+
+class PersonStatus(models.TextChoices):
+    ACTIVE   = 'active',   'Active'
+    INACTIVE = 'inactive', 'Inactive'
 
 
-class PeopleStatus(models.Model):
-    """Employment/engagement status for a person."""
-    name = models.CharField(max_length=100, unique=True)
-    color = models.CharField(max_length=20, default='secondary')
-    is_active = models.BooleanField(default=True)
+# ════════════════════════════════════════════════════════════════════════════════
+# Reference models — shared with Vacancy
+# ════════════════════════════════════════════════════════════════════════════════
+
+class Gender(models.Model):
+    name = models.CharField(max_length=50, unique=True, verbose_name='Gender')
 
     class Meta:
-        verbose_name = 'People Status'
-        verbose_name_plural = 'People Statuses'
+        verbose_name = 'Gender'
+        verbose_name_plural = 'Genders'
         ordering = ['name']
 
     def __str__(self):
         return self.name
 
 
-class EducationLevel(models.Model):
-    """Education level reference (mirrors enso Level model)."""
-    name = models.CharField(max_length=100, unique=True)
+class Level(models.Model):
+    LEVEL_CHOICES = [
+        ('junior',     'Junior'),
+        ('middle',     'Middle'),
+        ('senior',     'Senior'),
+        ('lead',       'Lead'),
+        ('head_of',    'Head of'),
+        ('architect',  'Architect'),
+    ]
+    name  = models.CharField(max_length=20, choices=LEVEL_CHOICES,
+                             unique=True, verbose_name='Level')
     order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        verbose_name = 'Education Level'
-        verbose_name_plural = 'Education Levels'
+        verbose_name = 'Level'
+        verbose_name_plural = 'Levels'
         ordering = ['order']
+
+    def __str__(self):
+        return self.get_name_display()
+
+
+class Skill(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Skill')
+
+    class Meta:
+        verbose_name = 'Skill'
+        verbose_name_plural = 'Skills'
+        ordering = ['name']
 
     def __str__(self):
         return self.name
 
 
+class WorkingHours(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Working Hours')
+
+    class Meta:
+        verbose_name = 'Working Hours'
+        verbose_name_plural = 'Working Hours'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Region(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Region')
+
+    class Meta:
+        verbose_name = 'Region'
+        verbose_name_plural = 'Regions'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class WorkingPlace(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Working Place')
+
+    class Meta:
+        verbose_name = 'Working Place'
+        verbose_name_plural = 'Working Places'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Profession(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Profession')
+
+    class Meta:
+        verbose_name = 'Profession'
+        verbose_name_plural = 'Professions'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class English(models.Model):
+    LEVEL_CHOICES = [
+        ('a1', 'A1 — Beginner'),
+        ('a2', 'A2 — Elementary'),
+        ('b1', 'B1 — Intermediate'),
+        ('b2', 'B2 — Upper-Intermediate'),
+        ('c1', 'C1 — Advanced'),
+        ('c2', 'C2 — Proficient'),
+    ]
+    name  = models.CharField(max_length=10, choices=LEVEL_CHOICES,
+                             unique=True, verbose_name='English Level')
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'English Level'
+        verbose_name_plural = 'English Levels'
+        ordering = ['order']
+
+    def __str__(self):
+        return self.get_name_display()
+
+
+# ════════════════════════════════════════════════════════════════════════════════
+# Person
+# ════════════════════════════════════════════════════════════════════════════════
+
 class Person(models.Model):
     """
-    Core person entity.
-    Mirrors the 'people' table from the original Laravel migration.
+    HR candidate / contact record.
+    All reference fields (Gender, Level, etc.) are shared with Vacancy.
     """
 
-    # Optional link to a company (added in create_companies_table migration)
-    company = models.ForeignKey(
-        'companies.Company',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='people',
-        verbose_name='Company',
-    )
-
-    title = models.PositiveSmallIntegerField(
-        choices=TitleChoices.choices,
-        null=True,
-        blank=True,
-        verbose_name='Title',
-    )
-    name = models.CharField(max_length=255, verbose_name='Full Name')
-    appellative = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name='Appellative',
-        help_text='Preferred way to address this person',
-    )
-
-    # Unique identifiers
-    uid = models.CharField(
-        max_length=100,
-        unique=True,
-        null=True,
-        blank=True,
-        verbose_name='UID',
-        help_text='Tax ID / National ID',
-    )
-    email = models.EmailField(unique=True, null=True, blank=True, verbose_name='Email')
-    phone = models.CharField(max_length=50, blank=True, null=True, verbose_name='Phone')
-    birthday = models.DateField(null=True, blank=True, verbose_name='Birthday')
-
-    # Job position (free-text, not FK - matches original schema)
-    position = models.CharField(max_length=255, blank=True, null=True, verbose_name='Position')
-
-    # HR status
-    status = models.ForeignKey(
-        PeopleStatus,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='people',
-        verbose_name='Status',
-    )
-
-    gender = models.CharField(
-        max_length=1,
-        choices=GenderChoices.choices,
-        blank=True,
-        null=True,
-        verbose_name='Gender',
-    )
-
-    obs = models.TextField(blank=True, null=True, verbose_name='Observations')
-
-    # Avatar / photo
+    # ── Identity ──────────────────────────────────────────────────────────────
     avatar = models.ImageField(
         upload_to='people/avatars/',
-        null=True,
-        blank=True,
-        verbose_name='Photo',
+        null=True, blank=True,
+        verbose_name='Avatar',
+    )
+    first_name = models.CharField(max_length=150, verbose_name='First Name')
+    last_name  = models.CharField(max_length=150, verbose_name='Last Name')
+    gender     = models.ForeignKey(
+        Gender, on_delete=models.SET_NULL,
+        null=True, blank=True, verbose_name='Gender',
+    )
+    birthdate = models.DateField(null=True, blank=True, verbose_name='Birthdate')
+
+    # ── Professional ──────────────────────────────────────────────────────────
+    profession = models.ForeignKey(
+        Profession, on_delete=models.SET_NULL,
+        null=True, blank=True, verbose_name='Profession',
+    )
+    level = models.ForeignKey(
+        Level, on_delete=models.SET_NULL,
+        null=True, blank=True, verbose_name='Level',
+    )
+    main_skill = models.ForeignKey(
+        Skill, on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='main_skill_people',
+        verbose_name='Main Skill',
+    )
+    skills = models.ManyToManyField(
+        Skill, blank=True,
+        related_name='people',
+        verbose_name='Skills',
+    )
+    english = models.ForeignKey(
+        English, on_delete=models.SET_NULL,
+        null=True, blank=True, verbose_name='English',
+    )
+    education = models.CharField(
+        max_length=255, blank=True, verbose_name='Education',
+    )
+    work_experience = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        verbose_name='Work Experience (years)',
     )
 
-    # Audit fields (mirrors created_by / updated_by FK pattern)
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='people_created',
-        verbose_name='Created By',
+    # ── Salary ────────────────────────────────────────────────────────────────
+    salary_desired  = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        null=True, blank=True,
+        verbose_name='Salary Desired',
     )
-    updated_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
+    salary_currency = models.CharField(
+        max_length=3,
+        choices=CurrencyChoices.choices,
+        default=CurrencyChoices.USD,
         blank=True,
-        related_name='people_updated',
-        verbose_name='Updated By',
+        verbose_name='Currency',
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
+    # ── Location & schedule ───────────────────────────────────────────────────
+    region = models.ForeignKey(
+        Region, on_delete=models.SET_NULL,
+        null=True, blank=True, verbose_name='Region',
+    )
+    working_hours = models.ManyToManyField(
+        WorkingHours, blank=True,
+        verbose_name='Working Hours',
+    )
+    working_place = models.ManyToManyField(
+        WorkingPlace, blank=True,
+        verbose_name='Working Place',
+    )
+
+    # ── Contacts ──────────────────────────────────────────────────────────────
+    email    = models.EmailField(unique=True, null=True, blank=True, verbose_name='E-mail')
+    phone    = models.CharField(max_length=50, blank=True, verbose_name='Phone')
+    linkedin = models.URLField(blank=True, verbose_name='LinkedIn')
+    telegram = models.CharField(max_length=100, blank=True, verbose_name='Telegram')
+
+    # ── Status & meta ─────────────────────────────────────────────────────────
+    status = models.CharField(
+        max_length=10,
+        choices=PersonStatus.choices,
+        default=PersonStatus.ACTIVE,
+        verbose_name='Status',
+    )
+    notes = models.TextField(blank=True, verbose_name='Notes')
+    cv    = models.FileField(
+        upload_to='people/cv/',
+        null=True, blank=True,
+        verbose_name='CV (PDF)',
+        help_text='PDF files only',
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created At')
 
     class Meta:
         verbose_name = 'Person'
         verbose_name_plural = 'People'
-        ordering = ['name']
+        ordering = ['last_name', 'first_name']
         permissions = [
             ('export_person', 'Can export people data'),
         ]
@@ -163,71 +272,16 @@ class Person(models.Model):
 
     @property
     def full_name(self):
-        """Return title + name."""
-        if self.title:
-            return f"{self.get_title_display()} {self.name}"
-        return self.name
+        return f"{self.first_name} {self.last_name}".strip()
 
     @property
     def initials(self):
-        """Return up to 2 initials for avatar placeholder."""
-        parts = self.name.split()
-        if len(parts) >= 2:
-            return f"{parts[0][0]}{parts[-1][0]}".upper()
-        return self.name[:2].upper()
+        parts = [self.first_name, self.last_name]
+        letters = [p[0].upper() for p in parts if p]
+        return ''.join(letters[:2]) if letters else '?'
 
-
-class Education(models.Model):
-    """Education record for a person (mirrors enso Education model)."""
-
-    person = models.ForeignKey(
-        Person,
-        on_delete=models.CASCADE,
-        related_name='educations',
-        verbose_name='Person',
-    )
-    level = models.ForeignKey(
-        EducationLevel,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name='Level',
-    )
-    institution = models.CharField(max_length=255, verbose_name='Institution')
-    specialization = models.CharField(max_length=255, blank=True, verbose_name='Specialization')
-    year_start = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Year Start')
-    year_end = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Year End')
-    notes = models.TextField(blank=True, verbose_name='Notes')
-
-    class Meta:
-        verbose_name = 'Education'
-        verbose_name_plural = 'Education Records'
-        ordering = ['-year_end', '-year_start']
-
-    def __str__(self):
-        return f"{self.person.name} — {self.institution}"
-
-
-class Work(models.Model):
-    """Work experience record for a person (mirrors enso Work model)."""
-
-    person = models.ForeignKey(
-        Person,
-        on_delete=models.CASCADE,
-        related_name='works',
-        verbose_name='Person',
-    )
-    employer = models.CharField(max_length=255, verbose_name='Employer')
-    position = models.CharField(max_length=255, blank=True, verbose_name='Position')
-    date_start = models.DateField(null=True, blank=True, verbose_name='Start Date')
-    date_end = models.DateField(null=True, blank=True, verbose_name='End Date')
-    is_current = models.BooleanField(default=False, verbose_name='Current Job')
-    notes = models.TextField(blank=True, verbose_name='Notes')
-
-    class Meta:
-        verbose_name = 'Work Experience'
-        verbose_name_plural = 'Work Experience'
-        ordering = ['-date_start']
-
-    def __str__(self):
-        return f"{self.person.name} @ {self.employer}"
+    @property
+    def salary_display(self):
+        if self.salary_desired:
+            return f"{self.salary_desired:,.0f} {self.salary_currency}"
+        return '—'

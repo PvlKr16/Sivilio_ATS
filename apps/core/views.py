@@ -1,9 +1,10 @@
-"""Core views: dashboard and utility pages."""
+"""Core views: dashboard."""
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.db.models import Count
-from apps.people.models import Person, PeopleStatus
+
+from apps.people.models import Person, PersonStatus
 from apps.companies.models import Company
 
 
@@ -14,28 +15,32 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        # Summary stats for cards
-        ctx['total_people'] = Person.objects.count()
+        # Summary stat cards
+        ctx['total_people']    = Person.objects.count()
         ctx['total_companies'] = Company.objects.count()
-        ctx['people_no_company'] = Person.objects.filter(company__isnull=True).count()
-        ctx['companies_with_vat'] = Company.objects.filter(pays_vat=True).count()
+        ctx['active_people']   = Person.objects.filter(status=PersonStatus.ACTIVE).count()
+        ctx['inactive_people'] = Person.objects.filter(status=PersonStatus.INACTIVE).count()
 
         # People by status breakdown
         ctx['status_breakdown'] = (
-            PeopleStatus.objects
-            .annotate(count=Count('people'))
+            Person.objects
+            .values('status')
+            .annotate(count=Count('status'))
             .filter(count__gt=0)
-            .values('name', 'color', 'count')
+            .order_by('status')
         )
 
-        # Recently added
+        # Recently added people
         ctx['recent_people'] = (
             Person.objects
-            .select_related('company', 'status')
+            .select_related('profession', 'level')
             .order_by('-created_at')[:8]
         )
+
+        # Recently added companies
         ctx['recent_companies'] = (
             Company.objects
             .order_by('-created_at')[:6]
         )
+
         return ctx

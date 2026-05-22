@@ -9,20 +9,17 @@
 <span class="sep">/</span>
 <a href="{% url 'people:index' %}">People</a>
 <span class="sep">/</span>
-<span class="current">{{ person.name }}</span>
+<span class="current">{{ person.full_name }}</span>
 {% endblock %}
 
 {% block topbar_actions %}
 <div class="btn-group">
   {% if perms.people.change_person %}
-  <a href="{% url 'people:edit' person.pk %}" class="btn btn-primary btn-sm">
-    <i class="fas fa-pen"></i> Edit
-  </a>
+  <a href="{% url 'people:edit' person.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i> Edit</a>
   {% endif %}
   {% if perms.people.delete_person %}
-  <a href="{% url 'people:delete' person.pk %}"
-     class="btn btn-outline-danger btn-sm"
-     data-confirm="Delete {{ person.name }}? This cannot be undone.">
+  <a href="{% url 'people:delete' person.pk %}" class="btn btn-outline-danger btn-sm"
+     data-confirm="Delete {{ person.full_name }}? This cannot be undone.">
     <i class="fas fa-trash"></i> Delete
   </a>
   {% endif %}
@@ -30,297 +27,118 @@
 {% endblock %}
 
 {% block content %}
+<div style="display:grid;grid-template-columns:280px 1fr;gap:var(--space-lg);align-items:start;">
 
-<div style="display:grid;grid-template-columns:300px 1fr;gap:var(--space-lg);align-items:start;">
-
-  <!-- ── Left: profile card ── -->
+  <!-- Left: profile card -->
   <div style="display:flex;flex-direction:column;gap:var(--space-lg);">
-
     <div class="card" style="text-align:center;">
       <div class="card-body">
-        <!-- Avatar -->
         <div style="display:flex;justify-content:center;margin-bottom:var(--space-md);">
           <div class="avatar avatar-xl">
-            {% if person.avatar %}
-              <img src="{{ person.avatar.url }}" alt="{{ person.name }}">
-            {% else %}
-              {{ person.initials }}
-            {% endif %}
+            {% if person.avatar %}<img src="{{ person.avatar.url }}" alt="{{ person.full_name }}">
+            {% else %}{{ person.initials }}{% endif %}
+          </div>
+        </div>
+        <h2 style="font-size:var(--font-size-xl);margin-bottom:4px;">{{ person.full_name }}</h2>
+        {% if person.profession %}<p style="color:var(--text-secondary);font-size:var(--font-size-sm);margin:0 0 var(--space-sm);">{{ person.profession }}</p>{% endif %}
+        <div style="display:flex;justify-content:center;gap:var(--space-xs);flex-wrap:wrap;margin-bottom:var(--space-sm);">
+          {% if person.level %}<span class="badge badge-primary">{{ person.level }}</span>{% endif %}
+          {% if person.status == 'active' %}<span class="badge badge-success">Active</span>
+          {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+        </div>
+        {% if person.main_skill %}<span class="badge badge-info">{{ person.main_skill }}</span>{% endif %}
+      </div>
+
+      <!-- Contacts -->
+      <div class="card-footer" style="text-align:left;display:flex;flex-direction:column;gap:5px;font-size:var(--font-size-xs);">
+        {% if person.email %}<div><i class="fas fa-envelope" style="width:14px;color:var(--color-primary);"></i> <a href="mailto:{{ person.email }}">{{ person.email }}</a></div>{% endif %}
+        {% if person.phone %}<div><i class="fas fa-phone" style="width:14px;color:var(--color-primary);"></i> {{ person.phone }}</div>{% endif %}
+        {% if person.telegram %}<div><i class="fab fa-telegram" style="width:14px;color:var(--color-primary);"></i> {{ person.telegram }}</div>{% endif %}
+        {% if person.linkedin %}<div><i class="fab fa-linkedin" style="width:14px;color:var(--color-primary);"></i> <a href="{{ person.linkedin }}" target="_blank">LinkedIn</a></div>{% endif %}
+        {% if person.cv %}<div><i class="fas fa-file-pdf" style="width:14px;color:var(--color-danger);"></i> <a href="{{ person.cv.url }}" target="_blank">Download CV</a></div>{% endif %}
+      </div>
+    </div>
+
+    <!-- Skills -->
+    {% if person.skills.all %}
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Skills</h3></div>
+      <div class="card-body" style="display:flex;flex-wrap:wrap;gap:var(--space-xs);">
+        {% for skill in person.skills.all %}
+        <span class="badge badge-secondary">{{ skill }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Right: details -->
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">Details</h2></div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg);">
+
+        <!-- Column 1 -->
+        <div class="detail-fields">
+          <div class="detail-field">
+            <span class="detail-label">Gender</span>
+            <span class="detail-value">{{ person.gender|default:"—" }}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Birthdate</span>
+            <span class="detail-value">{{ person.birthdate|date:"d M Y"|default:"—" }}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Education</span>
+            <span class="detail-value">{{ person.education|default:"—" }}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">English</span>
+            <span class="detail-value">{{ person.english|default:"—" }}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Experience</span>
+            <span class="detail-value">{% if person.work_experience %}{{ person.work_experience }} yr{% else %}—{% endif %}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Salary</span>
+            <span class="detail-value">{{ person.salary_display }}</span>
           </div>
         </div>
 
-        <h2 style="font-size:var(--font-size-xl);margin-bottom:4px;">{{ person.full_name }}</h2>
-        {% if person.appellative %}
-        <p class="text-muted text-sm" style="margin:0 0 var(--space-sm);">{{ person.appellative }}</p>
-        {% endif %}
-        {% if person.position %}
-        <p style="font-size:var(--font-size-sm);color:var(--text-secondary);margin:0 0 var(--space-sm);">{{ person.position }}</p>
-        {% endif %}
-        {% if person.status %}
-        <span class="badge badge-{{ person.status.color }}">{{ person.status.name }}</span>
-        {% endif %}
+        <!-- Column 2 -->
+        <div class="detail-fields">
+          <div class="detail-field">
+            <span class="detail-label">Region</span>
+            <span class="detail-value">{{ person.region|default:"—" }}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Working Hours</span>
+            <span class="detail-value">
+              {% for wh in person.working_hours.all %}{{ wh }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
+            </span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Working Place</span>
+            <span class="detail-value">
+              {% for wp in person.working_place.all %}{{ wp }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
+            </span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Created</span>
+            <span class="detail-value">{{ person.created_at|date:"d M Y" }}</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Contact quick links -->
-      {% if person.email or person.phone %}
-      <div class="card-footer" style="display:flex;flex-direction:column;gap:6px;">
-        {% if person.email %}
-        <a href="mailto:{{ person.email }}" style="font-size:var(--font-size-sm);display:flex;align-items:center;gap:6px;color:var(--text-secondary);">
-          <i class="fas fa-envelope" style="width:14px;color:var(--color-primary);"></i>
-          {{ person.email }}
-        </a>
-        {% endif %}
-        {% if person.phone %}
-        <a href="tel:{{ person.phone }}" style="font-size:var(--font-size-sm);display:flex;align-items:center;gap:6px;color:var(--text-secondary);">
-          <i class="fas fa-phone" style="width:14px;color:var(--color-primary);"></i>
-          {{ person.phone }}
-        </a>
-        {% endif %}
+      {% if person.notes %}
+      <div style="margin-top:var(--space-lg);padding-top:var(--space-md);border-top:1px solid var(--border-color);">
+        <div class="detail-label" style="margin-bottom:var(--space-xs);">Notes</div>
+        <p style="color:var(--text-secondary);font-size:var(--font-size-sm);white-space:pre-wrap;margin:0;">{{ person.notes }}</p>
       </div>
       {% endif %}
     </div>
-
-    <!-- Audit info -->
-    <div class="card">
-      <div class="card-header"><h3 class="card-title">Record Info</h3></div>
-      <div class="card-body">
-        <div class="detail-fields">
-          <div class="detail-field">
-            <span class="detail-label">Created</span>
-            <span class="detail-value">
-              {{ person.created_at|date:"d M Y" }}
-              {% if person.created_by %}<br><span class="text-muted text-xs">by {{ person.created_by.display_name }}</span>{% endif %}
-            </span>
-          </div>
-          <div class="detail-field">
-            <span class="detail-label">Updated</span>
-            <span class="detail-value">
-              {{ person.updated_at|date:"d M Y" }}
-              {% if person.updated_by %}<br><span class="text-muted text-xs">by {{ person.updated_by.display_name }}</span>{% endif %}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- ── Right: tabs ── -->
-  <div>
-    <div class="card">
-      <div class="card-body" style="padding-bottom:0;">
-        <!-- Tab navigation -->
-        <nav class="tab-nav">
-          <a class="tab-link" data-tab-target="tab-details">
-            <i class="fas fa-id-card"></i> Details
-          </a>
-          <a class="tab-link" data-tab-target="tab-education">
-            <i class="fas fa-graduation-cap"></i> Education
-            {% if educations %}<span class="sidebar-badge" style="background:var(--bg-body);color:var(--text-secondary);">{{ educations|length }}</span>{% endif %}
-          </a>
-          <a class="tab-link" data-tab-target="tab-work">
-            <i class="fas fa-briefcase"></i> Work Experience
-            {% if works %}<span class="sidebar-badge" style="background:var(--bg-body);color:var(--text-secondary);">{{ works|length }}</span>{% endif %}
-          </a>
-        </nav>
-      </div>
-
-      <!-- ─── Tab: Details ─── -->
-      <div class="tab-pane" id="tab-details">
-        <div class="card-body">
-          <div class="detail-fields">
-            <div class="detail-field">
-              <span class="detail-label">UID / Tax ID</span>
-              <span class="detail-value">{{ person.uid|default:"—" }}</span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Birthday</span>
-              <span class="detail-value">{{ person.birthday|date:"d M Y"|default:"—" }}</span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Gender</span>
-              <span class="detail-value">{{ person.get_gender_display|default:"—" }}</span>
-            </div>
-            <div class="detail-field">
-              <span class="detail-label">Company</span>
-              <span class="detail-value">
-                {% if person.company %}
-                <a href="{{ person.company.get_absolute_url }}">{{ person.company.name }}</a>
-                {% else %}—{% endif %}
-              </span>
-            </div>
-            {% if person.obs %}
-            <div class="detail-field">
-              <span class="detail-label">Observations</span>
-              <span class="detail-value" style="white-space:pre-wrap;">{{ person.obs }}</span>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── Tab: Education ─── -->
-      <div class="tab-pane" id="tab-education">
-        <div class="card-body">
-          {% if educations %}
-          <div style="display:flex;flex-direction:column;gap:var(--space-md);margin-bottom:var(--space-lg);">
-            {% for edu in educations %}
-            <div style="border:1px solid var(--border-color);border-radius:var(--border-radius);padding:var(--space-md);display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-md);">
-              <div>
-                <div style="font-weight:600;margin-bottom:2px;">{{ edu.institution }}</div>
-                <div style="font-size:var(--font-size-sm);color:var(--text-secondary);">
-                  {% if edu.level %}{{ edu.level.name }}{% endif %}
-                  {% if edu.specialization %} · {{ edu.specialization }}{% endif %}
-                </div>
-                <div style="font-size:var(--font-size-xs);color:var(--text-muted);margin-top:4px;">
-                  {{ edu.year_start|default:"" }}{% if edu.year_start and edu.year_end %} – {% endif %}{{ edu.year_end|default:"" }}
-                </div>
-                {% if edu.notes %}<p style="font-size:var(--font-size-sm);color:var(--text-secondary);margin:var(--space-sm) 0 0;">{{ edu.notes }}</p>{% endif %}
-              </div>
-              {% if perms.people.delete_education %}
-              <form method="post" action="{% url 'people:education_delete' edu.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-danger"
-                        data-confirm="Remove this education record?" title="Remove">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </form>
-              {% endif %}
-            </div>
-            {% endfor %}
-          </div>
-          {% else %}
-          <div class="empty-state" style="padding:var(--space-xl) 0;">
-            <div class="empty-state-icon"><i class="fas fa-graduation-cap"></i></div>
-            <div class="empty-state-title">No education records</div>
-          </div>
-          {% endif %}
-
-          {% if perms.people.add_education %}
-          <hr style="border-color:var(--border-color);margin:var(--space-md) 0;">
-          <h4 style="font-size:var(--font-size-sm);font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:var(--space-md);">Add Education</h4>
-          <form method="post" action="{% url 'people:education_add' person.pk %}">
-            {% csrf_token %}
-            <div class="form-row form-row-2">
-              <div class="form-group">
-                <label class="form-label">Institution<span class="required">*</span></label>
-                {{ education_form.institution }}
-              </div>
-              <div class="form-group">
-                <label class="form-label">Level</label>
-                {{ education_form.level }}
-              </div>
-              <div class="form-group">
-                <label class="form-label">Specialization</label>
-                {{ education_form.specialization }}
-              </div>
-              <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);">
-                <div>
-                  <label class="form-label">Year Start</label>
-                  {{ education_form.year_start }}
-                </div>
-                <div>
-                  <label class="form-label">Year End</label>
-                  {{ education_form.year_end }}
-                </div>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-sm">
-              <i class="fas fa-plus"></i> Add Record
-            </button>
-          </form>
-          {% endif %}
-        </div>
-      </div>
-
-      <!-- ─── Tab: Work Experience ─── -->
-      <div class="tab-pane" id="tab-work">
-        <div class="card-body">
-          {% if works %}
-          <div style="display:flex;flex-direction:column;gap:var(--space-md);margin-bottom:var(--space-lg);">
-            {% for work in works %}
-            <div style="border:1px solid var(--border-color);border-radius:var(--border-radius);padding:var(--space-md);display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-md);">
-              <div>
-                <div style="display:flex;align-items:center;gap:var(--space-sm);">
-                  <span style="font-weight:600;">{{ work.employer }}</span>
-                  {% if work.is_current %}<span class="badge badge-success">Current</span>{% endif %}
-                </div>
-                {% if work.position %}
-                <div style="font-size:var(--font-size-sm);color:var(--text-secondary);margin-top:2px;">{{ work.position }}</div>
-                {% endif %}
-                <div style="font-size:var(--font-size-xs);color:var(--text-muted);margin-top:4px;">
-                  {{ work.date_start|date:"M Y"|default:"" }}
-                  {% if work.is_current %} – Present
-                  {% elif work.date_end %} – {{ work.date_end|date:"M Y" }}
-                  {% endif %}
-                </div>
-                {% if work.notes %}<p style="font-size:var(--font-size-sm);color:var(--text-secondary);margin:var(--space-sm) 0 0;">{{ work.notes }}</p>{% endif %}
-              </div>
-              {% if perms.people.delete_work %}
-              <form method="post" action="{% url 'people:work_delete' work.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-danger"
-                        data-confirm="Remove this work record?" title="Remove">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </form>
-              {% endif %}
-            </div>
-            {% endfor %}
-          </div>
-          {% else %}
-          <div class="empty-state" style="padding:var(--space-xl) 0;">
-            <div class="empty-state-icon"><i class="fas fa-briefcase"></i></div>
-            <div class="empty-state-title">No work records</div>
-          </div>
-          {% endif %}
-
-          {% if perms.people.add_work %}
-          <hr style="border-color:var(--border-color);margin:var(--space-md) 0;">
-          <h4 style="font-size:var(--font-size-sm);font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:var(--space-md);">Add Work Experience</h4>
-          <form method="post" action="{% url 'people:work_add' person.pk %}">
-            {% csrf_token %}
-            <div class="form-row form-row-2">
-              <div class="form-group">
-                <label class="form-label">Employer<span class="required">*</span></label>
-                {{ work_form.employer }}
-              </div>
-              <div class="form-group">
-                <label class="form-label">Position</label>
-                {{ work_form.position }}
-              </div>
-              <div class="form-group">
-                <label class="form-label">Start Date</label>
-                {{ work_form.date_start }}
-              </div>
-              <div class="form-group" id="date-end-group">
-                <label class="form-label">End Date</label>
-                {{ work_form.date_end }}
-              </div>
-            </div>
-            <div class="form-check" style="margin-bottom:var(--space-md);">
-              {{ work_form.is_current }}
-              <label class="form-check-label" for="{{ work_form.is_current.id_for_label }}">Currently working here</label>
-            </div>
-            <button type="submit" class="btn btn-primary btn-sm">
-              <i class="fas fa-plus"></i> Add Record
-            </button>
-          </form>
-          {% endif %}
-        </div>
-      </div>
-
-    </div><!-- /.card -->
-  </div><!-- /.right -->
-
-</div><!-- /.grid -->
-
-{% endblock %}
-
-{% block extra_js %}
-<script>
-  // Mark work_form is_current checkbox for the forms.js handler
-  var workCurrentCheckbox = document.getElementById('{{ work_form.is_current.id_for_label }}');
-  if (workCurrentCheckbox) workCurrentCheckbox.setAttribute('data-work-current', '');
-</script>
+</div>
 {% endblock %}

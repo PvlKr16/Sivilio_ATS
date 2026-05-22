@@ -4,152 +4,282 @@
 {% block title %}{{ action }} Person — HR Platform{% endblock %}
 {% block page_title %}{{ action }} Person{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+<style>
+  /* ── Select2: match our design system ── */
+  .select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius);
+    min-height: 38px;
+    padding: 2px 8px;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-base);
+    background: var(--bg-card);
+  }
+  .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59,125,221,.15);
+    outline: none;
+  }
+  .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    border: none;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+  }
+  .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: var(--color-primary);
+    margin-right: 4px;
+    font-size: 14px;
+  }
+  .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: var(--color-danger);
+    background: transparent;
+  }
+  .select2-dropdown {
+    border: 1px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-base);
+  }
+  .select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background: var(--color-primary);
+  }
+  .select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius-sm);
+    padding: 6px 10px;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-base);
+  }
+  .select2-container--default .select2-selection--multiple .select2-selection__clear {
+    font-size: 18px;
+    margin-top: 3px;
+    margin-right: 4px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .select2-container--default .select2-selection--multiple .select2-selection__clear:hover {
+    color: var(--color-danger);
+  }
+  /* Contain the dropdown inside the form-group so it never overflows the page */
+  .form-group { position: relative; }
+</style>
+{% endblock %}
+
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">Home</a>
 <span class="sep">/</span>
 <a href="{% url 'people:index' %}">People</a>
 <span class="sep">/</span>
-{% if object %}
-<a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
-<span class="sep">/</span>
-{% endif %}
+{% if object %}<a href="{{ object.get_absolute_url }}">{{ object.full_name }}</a><span class="sep">/</span>{% endif %}
 <span class="current">{{ action }}</span>
 {% endblock %}
 
 {% block content %}
-<div style="max-width:780px;">
+<div style="max-width:860px;">
   <form method="post" enctype="multipart/form-data" data-submit-once>
     {% csrf_token %}
-
     <div class="card">
-      <div class="card-header">
-        <h2 class="card-title">{{ action }} Person</h2>
-      </div>
+      <div class="card-header"><h2 class="card-title">{{ action }} Person</h2></div>
       <div class="card-body">
 
-        <!-- Non-field errors -->
         {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-          <i class="fas fa-circle-exclamation"></i>
-          <span>{{ form.non_field_errors }}</span>
-        </div>
+        <div class="alert alert-danger"><i class="fas fa-circle-exclamation"></i> {{ form.non_field_errors }}</div>
         {% endif %}
 
-        <!-- ── Personal info section ── -->
+        <!-- Identity -->
         <div class="form-section">
-          <div class="form-section-title">Personal Information</div>
-          <div class="form-row form-row-3">
-            <div class="form-group">
-              <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
-              {{ form.title }}
-            </div>
-            <div class="form-group" style="grid-column:span 2;">
-              <label class="form-label" for="{{ form.name.id_for_label }}">Full Name<span class="required">*</span></label>
-              <input type="text" id="{{ form.name.id_for_label }}" name="name"
-                     value="{{ form.name.value|default:'' }}"
-                     class="form-control{% if form.name.errors %} is-invalid{% endif %}"
-                     required autofocus>
-              {% for err in form.name.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
-            </div>
-          </div>
+          <div class="form-section-title">Identity</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label" for="{{ form.appellative.id_for_label }}">Appellative</label>
-              {{ form.appellative }}
-              <span class="form-text">Preferred way to address this person</span>
+              <label class="form-label">First Name <span class="required">*</span></label>
+              {{ form.first_name }}
+              {% for e in form.first_name.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.gender.id_for_label }}">Gender</label>
+              <label class="form-label">Last Name <span class="required">*</span></label>
+              {{ form.last_name }}
+              {% for e in form.last_name.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Gender</label>
               {{ form.gender }}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.birthday.id_for_label }}">Birthday</label>
-              {{ form.birthday }}
+              <label class="form-label">Birthdate</label>
+              {{ form.birthdate }}
+            </div>
+          </div>
+          <div class="form-group" style="max-width:160px;">
+            <label class="form-label">Avatar</label>
+            {% if object and object.avatar %}
+            <div class="avatar avatar-lg" id="avatarPreview" style="margin-bottom:var(--space-sm);">
+              <img src="{{ object.avatar.url }}" alt="">
+            </div>
+            {% else %}
+            <div class="avatar avatar-lg" id="avatarPreview" style="margin-bottom:var(--space-sm);">
+              {{ object.initials|default:"?" }}
+            </div>
+            {% endif %}
+            <input type="file" name="avatar" accept="image/*" class="form-control" data-preview-target="avatarPreview">
+          </div>
+        </div>
+
+        <!-- Professional -->
+        <div class="form-section">
+          <div class="form-section-title">Professional</div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label">Profession</label>
+              {{ form.profession }}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.uid.id_for_label }}">UID / Tax ID</label>
-              {{ form.uid }}
-              {% for err in form.uid.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+              <label class="form-label">Level</label>
+              {{ form.level }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">English</label>
+              {{ form.english }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Main Skill</label>
+              {{ form.main_skill }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Education</label>
+              {{ form.education }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Work Experience (years)</label>
+              {{ form.work_experience }}
+            </div>
+          </div>
+
+          <!-- Skills — Select2 multi -->
+          <div class="form-group">
+            <label class="form-label">Skills</label>
+            <select name="skills" id="id_skills_select2" multiple style="width:100%;">
+              {% for skill in form.skills.field.queryset %}
+              <option value="{{ skill.pk }}"
+                {% if skill in form.instance.skills.all %}selected{% endif %}>
+                {{ skill.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <!-- Salary & Location -->
+        <div class="form-section">
+          <div class="form-section-title">Salary &amp; Location</div>
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label class="form-label">Salary Desired</label>
+              {{ form.salary_desired }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Currency</label>
+              {{ form.salary_currency }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Region</label>
+              {{ form.region }}
+            </div>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Working Hours</label>
+              <select name="working_hours" id="id_working_hours_select2" multiple style="width:100%;">
+                {% for wh in form.working_hours.field.queryset %}
+                <option value="{{ wh.pk }}"
+                  {% if wh in form.instance.working_hours.all %}selected{% endif %}>
+                  {{ wh.name }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Working Place</label>
+              <select name="working_place" id="id_working_place_select2" multiple style="width:100%;">
+                {% for wp in form.working_place.field.queryset %}
+                <option value="{{ wp.pk }}"
+                  {% if wp in form.instance.working_place.all %}selected{% endif %}>
+                  {{ wp.name }}
+                </option>
+                {% endfor %}
+              </select>
             </div>
           </div>
         </div>
 
-        <!-- ── Contact section ── -->
+        <!-- Contacts -->
         <div class="form-section">
-          <div class="form-section-title">Contact</div>
+          <div class="form-section-title">Contacts</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label" for="{{ form.email.id_for_label }}">Email</label>
+              <label class="form-label">E-mail</label>
               {{ form.email }}
-              {% for err in form.email.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+              {% for e in form.email.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+              <label class="form-label">Phone</label>
               {{ form.phone }}
             </div>
+            <div class="form-group">
+              <label class="form-label">Telegram</label>
+              <div class="input-group"><span class="input-group-icon"><i class="fab fa-telegram"></i></span>{{ form.telegram }}</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">LinkedIn</label>
+              <div class="input-group"><span class="input-group-icon"><i class="fab fa-linkedin"></i></span>{{ form.linkedin }}</div>
+            </div>
           </div>
         </div>
 
-        <!-- ── Employment section ── -->
+        <!-- Meta -->
         <div class="form-section">
-          <div class="form-section-title">Employment</div>
+          <div class="form-section-title">Status &amp; Notes</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label" for="{{ form.company.id_for_label }}">Company</label>
-              {{ form.company }}
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
+              <label class="form-label">Status</label>
               {{ form.status }}
             </div>
-            <div class="form-group" style="grid-column:span 2;">
-              <label class="form-label" for="{{ form.position.id_for_label }}">Position / Role</label>
-              {{ form.position }}
+            <div class="form-group">
+              <label class="form-label">CV <span class="form-text" style="display:inline;">PDF only</span></label>
+              {% if object and object.cv %}<div style="margin-bottom:4px;font-size:var(--font-size-xs);"><a href="{{ object.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV</a></div>{% endif %}
+              <input type="file" name="cv" accept=".pdf" class="form-control">
+              {% for e in form.cv.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            {{ form.notes }}
           </div>
         </div>
 
-        <!-- ── Photo & notes section ── -->
-        <div class="form-section">
-          <div class="form-section-title">Photo &amp; Notes</div>
-          <div class="form-row form-row-2">
-            <div class="form-group">
-              <label class="form-label">Photo</label>
-              {% if object.avatar %}
-              <div style="margin-bottom:var(--space-sm);">
-                <div class="avatar avatar-lg" id="avatarPreview">
-                  <img src="{{ object.avatar.url }}" alt="{{ object.name }}">
-                </div>
-              </div>
-              {% else %}
-              <div class="avatar avatar-lg" id="avatarPreview" style="margin-bottom:var(--space-sm);">
-                {{ object.initials|default:"?" }}
-              </div>
-              {% endif %}
-              <input type="file" name="avatar" accept="image/*"
-                     class="form-control" id="{{ form.avatar.id_for_label }}"
-                     data-preview-target="avatarPreview">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="{{ form.obs.id_for_label }}">Observations</label>
-              {{ form.obs }}
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /.card-body -->
-
-      <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center;">
-        <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'people:index' %}{% endif %}"
-           class="btn btn-outline-secondary">
+      </div>
+      <div class="card-footer" style="display:flex;justify-content:space-between;">
+        <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'people:index' %}{% endif %}" class="btn btn-outline-secondary">
           <i class="fas fa-times"></i> Cancel
         </a>
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create Person{% endif %}
         </button>
       </div>
-    </div><!-- /.card -->
-
+    </div>
   </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- jQuery and Select2 must load before select2_init.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="{% static 'js/select2_init.js' %}"></script>
 {% endblock %}
