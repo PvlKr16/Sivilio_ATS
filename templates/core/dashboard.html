@@ -4,12 +4,11 @@
 {% block title %}Dashboard — HR Platform{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
 
-{% block breadcrumb %}
-<span class="current">Home</span>
-{% endblock %}
+{% block breadcrumb %}<span class="current">Home</span>{% endblock %}
 
 {% block content %}
-<!-- ── Stat cards row ── -->
+
+<!-- Stat cards -->
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-md);margin-bottom:var(--space-xl);">
 
   <a class="stat-card" href="{% url 'people:index' %}" style="text-decoration:none;color:inherit;">
@@ -20,33 +19,33 @@
     </div>
   </a>
 
+  <a class="stat-card" href="{% url 'people:index' %}?status=active" style="text-decoration:none;color:inherit;">
+    <div class="stat-icon green"><i class="fas fa-user-check"></i></div>
+    <div class="stat-body">
+      <div class="stat-value">{{ active_people }}</div>
+      <div class="stat-label">Active</div>
+    </div>
+  </a>
+
+  <a class="stat-card" href="{% url 'people:index' %}?status=inactive" style="text-decoration:none;color:inherit;">
+    <div class="stat-icon yellow"><i class="fas fa-user-clock"></i></div>
+    <div class="stat-body">
+      <div class="stat-value">{{ inactive_people }}</div>
+      <div class="stat-label">Inactive</div>
+    </div>
+  </a>
+
   <a class="stat-card" href="{% url 'companies:index' %}" style="text-decoration:none;color:inherit;">
-    <div class="stat-icon green"><i class="fas fa-building"></i></div>
+    <div class="stat-icon teal"><i class="fas fa-building"></i></div>
     <div class="stat-body">
       <div class="stat-value">{{ total_companies }}</div>
       <div class="stat-label">Companies</div>
     </div>
   </a>
 
-  <div class="stat-card">
-    <div class="stat-icon yellow"><i class="fas fa-user-xmark"></i></div>
-    <div class="stat-body">
-      <div class="stat-value">{{ people_no_company }}</div>
-      <div class="stat-label">Without Company</div>
-    </div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-icon teal"><i class="fas fa-receipt"></i></div>
-    <div class="stat-body">
-      <div class="stat-value">{{ companies_with_vat }}</div>
-      <div class="stat-label">VAT Payers</div>
-    </div>
-  </div>
-
 </div>
 
-<!-- ── Two-column grid ── -->
+<!-- Two-column grid -->
 <div style="display:grid;grid-template-columns:2fr 1fr;gap:var(--space-lg);align-items:start;">
 
   <!-- Recent people -->
@@ -57,13 +56,13 @@
     </div>
     {% if recent_people %}
     <div class="data-table-wrapper">
-      <table class="data-table" id="recentPeopleTable">
+      <table class="data-table">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Company</th>
+            <th>Profession</th>
+            <th>Level</th>
             <th>Status</th>
-            <th>Position</th>
           </tr>
         </thead>
         <tbody>
@@ -72,25 +71,24 @@
             <td>
               <div class="entity-row">
                 <div class="avatar avatar-sm">
-                  {% if person.avatar %}
-                    <img src="{{ person.avatar.url }}" alt="{{ person.name }}">
-                  {% else %}
-                    {{ person.initials }}
-                  {% endif %}
+                  {% if person.avatar %}<img src="{{ person.avatar.url }}" alt="{{ person.full_name }}">
+                  {% else %}{{ person.initials }}{% endif %}
                 </div>
                 <div class="entity-row-info">
-                  <div class="entity-row-name">{{ person.name }}</div>
-                  <div class="entity-row-sub">{{ person.email|default:"—" }}</div>
+                  <div class="entity-row-name">{{ person.full_name }}</div>
+                  <div class="entity-row-sub">{{ person.email|default:"" }}</div>
                 </div>
               </div>
             </td>
-            <td>{{ person.company.name|default:"—" }}</td>
+            <td class="text-sm">{{ person.profession|default:"—" }}</td>
+            <td class="text-sm">{{ person.level|default:"—" }}</td>
             <td>
-              {% if person.status %}
-              <span class="badge badge-{{ person.status.color }}">{{ person.status.name }}</span>
-              {% else %}—{% endif %}
+              {% if person.status == 'active' %}
+              <span class="badge badge-success">Active</span>
+              {% else %}
+              <span class="badge badge-secondary">Inactive</span>
+              {% endif %}
             </td>
-            <td class="text-muted text-sm">{{ person.position|default:"—"|truncatechars:30 }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -117,7 +115,11 @@
       <div class="card-body" style="padding:var(--space-md);">
         {% for item in status_breakdown %}
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-sm);">
-          <span class="badge badge-{{ item.color }}">{{ item.name }}</span>
+          {% if item.status == 'active' %}
+          <span class="badge badge-success">Active</span>
+          {% else %}
+          <span class="badge badge-secondary">Inactive</span>
+          {% endif %}
           <strong style="font-size:var(--font-size-sm);">{{ item.count }}</strong>
         </div>
         {% endfor %}
@@ -137,7 +139,6 @@
           <div class="avatar avatar-sm avatar-square">{{ company.initials }}</div>
           <div class="entity-row-info">
             <div class="entity-row-name" style="font-size:var(--font-size-sm);">{{ company.name }}</div>
-            <div class="entity-row-sub">{{ company.people_count }} people</div>
           </div>
         </a>
         {% empty %}
@@ -147,10 +148,5 @@
     </div>
 
   </div>
-</div><!-- /.grid -->
-
-{% endblock %}
-
-{% block extra_js %}
-    <script src="{% static 'js/tables.js' %}"></script>
+</div>
 {% endblock %}
