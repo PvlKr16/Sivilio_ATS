@@ -1,6 +1,6 @@
 """
 Template context processors.
-Inject navigation and summary data into every template.
+Inject navigation counts into every template.
 """
 
 from apps.people.models import Person
@@ -13,7 +13,7 @@ def sidebar_context(request):
         return {}
 
     return {
-        'nav_people_count': Person.objects.count(),
+        'nav_people_count':    Person.objects.count(),
         'nav_companies_count': Company.objects.count(),
-        'current_path': request.path,
+        'current_path':        request.path,
     }

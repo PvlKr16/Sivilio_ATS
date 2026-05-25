@@ -26,13 +26,12 @@
         <div class="avatar avatar-lg avatar-square">{{ company.initials }}</div>
         <div>
           <div style="font-weight:600;font-size:var(--font-size-lg);">{{ company.name }}</div>
-          <div class="text-muted text-sm">{{ company.people_count }} associated people</div>
+          <div class="text-muted text-sm">{{ company.get_status_display }}</div>
         </div>
       </div>
       <p style="color:var(--text-secondary);">
         Are you sure you want to permanently delete <strong>{{ company.name }}</strong>?
-        This action <strong>cannot be undone</strong>. People linked to this company will
-        have their company reference cleared.
+        This action <strong>cannot be undone</strong>.
       </p>
     </div>
     <div class="card-footer" style="display:flex;justify-content:space-between;">

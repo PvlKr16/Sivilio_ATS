@@ -5,40 +5,53 @@ from .models import Company
 
 
 class CompanyForm(forms.ModelForm):
-    """Main company creation/edit form."""
+    """Create / edit form for Company."""
 
     class Meta:
-        model = Company
+        model  = Company
         fields = [
-            'name', 'email', 'phone', 'fax',
-            'bank', 'bank_account',
-            'pays_vat', 'is_tenant',
-            'mandatary',
-            'logo', 'obs',
+            'name', 'email', 'phone', 'contact_person',
+            'payment_options', 'amount', 'status', 'notes',
         ]
         widgets = {
-            'obs': forms.Textarea(attrs={'rows': 3}),
-            'mandatary': forms.Select(attrs={'class': 'form-select'}),
+            'payment_options': forms.Select(attrs={'class': 'form-select'}),
+            'status':          forms.Select(attrs={'class': 'form-select'}),
+            'notes':           forms.Textarea(attrs={'rows': 3}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].required = True
+        self.fields['name'].widget.attrs['required'] = 'required'
 
 
 class CompanySearchForm(forms.Form):
-    """Search/filter form for company list."""
+    """Filter form for the company list."""
     q = forms.CharField(
-        required=False,
-        label='',
+        required=False, label='',
         widget=forms.TextInput(attrs={
             'placeholder': 'Search by name, email...',
             'class': 'form-control',
         })
     )
-    pays_vat = forms.ChoiceField(
+    status = forms.ChoiceField(
         required=False,
-        choices=[('', 'All'), ('1', 'Pays VAT'), ('0', 'No VAT')],
+        choices=[
+            ('', 'All statuses'),
+            ('active',   'Active'),
+            ('inactive', 'Inactive'),
+            ('lead',     'Lead'),
+            ('paused',   'Paused'),
+        ],
         widget=forms.Select(attrs={'class': 'form-select'}),
     )
-    is_tenant = forms.ChoiceField(
+    payment_options = forms.ChoiceField(
         required=False,
-        choices=[('', 'All'), ('1', 'Tenant'), ('0', 'Non-tenant')],
+        choices=[
+            ('', 'All payment options'),
+            ('50_50',   '50/50'),
+            ('on_fact', 'По факту'),
+            ('prepaid', 'Предоплата'),
+        ],
         widget=forms.Select(attrs={'class': 'form-select'}),
     )
