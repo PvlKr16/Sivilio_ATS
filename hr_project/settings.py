@@ -2,6 +2,7 @@
 Django settings for HR IT platform.
 """
 
+import os
 from pathlib import Path
 from decouple import config
 
@@ -11,6 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='dev-secret-key-change-me')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost').split(',')
+CSRF_TRUSTED_ORIGINS = ["https://*.trycloudflare.com",]
 
 # Application definition
 INSTALLED_APPS = [
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.people',
     'apps.companies',
+    'apps.vacancies',
 ]
 
 MIDDLEWARE = [

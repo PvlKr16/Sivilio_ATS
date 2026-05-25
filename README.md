@@ -64,6 +64,9 @@ docker compose up --build -d
 
 # 4. Open in browser
 open http://localhost
+
+cloudflared-windows-amd64.exe tunnel --url http://localhost:8000
+
 ```
 
 Default credentials: **admin / admin123** — change immediately after first login.

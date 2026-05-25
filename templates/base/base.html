@@ -60,6 +60,14 @@
         {% endif %}
       </a>
 
+      <a class="sidebar-link" href="{% url 'vacancies:index' %}">
+        <i class="fas fa-briefcase"></i>
+        <span>Vacancies</span>
+        {% if nav_vacancies_count %}
+          <span class="sidebar-badge">{{ nav_vacancies_count }}</span>
+        {% endif %}
+      </a>
+
       <!-- System section (staff only) -->
       {% if user.is_staff %}
       <div class="sidebar-section-label">System</div>

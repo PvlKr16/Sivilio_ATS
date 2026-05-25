@@ -1,0 +1,147 @@
+{% extends "base/base.html" %}
+
+{% block title %}Vacancies — HR Platform{% endblock %}
+{% block page_title %}Vacancies{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<span class="current">Vacancies</span>
+{% endblock %}
+
+{% block topbar_actions %}
+{% if perms.vacancies.add_vacancy %}
+<a href="{% url 'vacancies:create' %}" class="btn btn-primary btn-sm">
+  <i class="fas fa-plus"></i> Add Vacancy
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Filter bar -->
+<div class="card" style="margin-bottom:var(--space-lg);">
+  <div class="card-body" style="padding:var(--space-md);">
+    <form method="get">
+      <div class="filter-bar">
+        <div class="input-group" style="flex:1;min-width:220px;">
+          <span class="input-group-icon"><i class="fas fa-search"></i></span>
+          {{ search_form.q }}
+        </div>
+        {{ search_form.status }}
+        {{ search_form.company }}
+        {{ search_form.for_freelancers }}
+        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filter</button>
+        {% if request.GET.q or request.GET.status or request.GET.company or request.GET.for_freelancers %}
+        <a href="{% url 'vacancies:index' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Clear</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">
+      Vacancies
+      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} record{{ total_count|pluralize }}</span>
+    </h2>
+  </div>
+
+  {% if vacancies %}
+  <div class="data-table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th data-sortable>Title</th>
+          <th data-sortable>Company</th>
+          <th>Level</th>
+          <th>Main Skill</th>
+          <th>Salary</th>
+          <th>Freelance</th>
+          <th>Status</th>
+          <th style="width:100px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vacancy in vacancies %}
+        <tr data-href="{{ vacancy.get_absolute_url }}">
+          <td>
+            <div class="entity-row-info">
+              <div class="entity-row-name">
+                <a href="{{ vacancy.get_absolute_url }}">{{ vacancy.title }}</a>
+              </div>
+              <div class="entity-row-sub">{{ vacancy.created_at|date:"d M Y" }}</div>
+            </div>
+          </td>
+          <td class="text-sm">
+            <a href="{{ vacancy.company.get_absolute_url }}" style="color:var(--text-secondary);">{{ vacancy.company.name }}</a>
+          </td>
+          <td class="text-sm">{{ vacancy.level|default:"—" }}</td>
+          <td class="text-sm">
+            {% if vacancy.main_skill %}<span class="badge badge-primary">{{ vacancy.main_skill }}</span>
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-sm">{{ vacancy.salary_display }}</td>
+          <td>
+            {% if vacancy.for_freelancers %}
+            <span class="badge badge-info">Yes</span>
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            {% if vacancy.status == 'in_progress' %}
+            <span class="badge badge-success">В работе</span>
+            {% else %}
+            <span class="badge badge-secondary">Стоп</span>
+            {% endif %}
+          </td>
+          <td class="actions-cell">
+            <div class="btn-group">
+              <a href="{{ vacancy.get_absolute_url }}" class="btn btn-sm btn-outline-secondary" title="View"><i class="fas fa-eye"></i></a>
+              {% if perms.vacancies.change_vacancy %}
+              <a href="{% url 'vacancies:edit' vacancy.pk %}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-pen"></i></a>
+              {% endif %}
+              {% if perms.vacancies.delete_vacancy %}
+              <a href="{% url 'vacancies:delete' vacancy.pk %}" class="btn btn-sm btn-outline-danger"
+                 data-confirm="Delete vacancy &quot;{{ vacancy.title }}&quot;?" title="Delete"><i class="fas fa-trash"></i></a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if is_paginated %}
+  <div class="pagination-wrapper">
+    <span>Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-left"></i></a></li>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-right"></i></a></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="fas fa-briefcase"></i></div>
+    <div class="empty-state-title">No vacancies found</div>
+    <div class="empty-state-text">{% if request.GET.q %}Try a different search.{% else %}Add the first vacancy to get started.{% endif %}</div>
+    {% if perms.vacancies.add_vacancy %}
+    <a href="{% url 'vacancies:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Vacancy</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
