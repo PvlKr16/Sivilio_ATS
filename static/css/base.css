@@ -22,6 +22,15 @@
   --sidebar-width:       240px;
   --sidebar-width-sm:    60px;
 
+  .sidebar-footer button.sidebar-link {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
   /* Surface */
   --bg-body:             #f4f6f9;
   --bg-card:             #ffffff;
