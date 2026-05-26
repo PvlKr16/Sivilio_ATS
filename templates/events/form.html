@@ -1,0 +1,106 @@
+{% extends "base/base.html" %}
+
+{% block title %}{{ action }} Event — HR Platform{% endblock %}
+{% block page_title %}{{ action }} Event{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'events:index' %}">Events</a>
+<span class="sep">/</span>
+{% if object %}<a href="{{ object.get_absolute_url }}">{{ object.get_event_type_display }}</a><span class="sep">/</span>{% endif %}
+<span class="current">{{ action }}</span>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:680px;">
+  <form method="post" data-submit-once>
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-header"><h2 class="card-title">{{ action }} Event</h2></div>
+      <div class="card-body">
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger"><i class="fas fa-circle-exclamation"></i> {{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <!-- Type & Candidate -->
+        <div class="form-section">
+          <div class="form-section-title">Event Info</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Event Type <span class="required">*</span></label>
+              {{ form.event_type }}
+              {% for e in form.event_type.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Candidate <span class="required">*</span></label>
+              {{ form.candidate }}
+              {% for e in form.candidate.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="form-section">
+          <div class="form-section-title">Related Records</div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">Vacancy</label>
+              {{ form.vacancy }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Company</label>
+              {{ form.company }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule -->
+        <div class="form-section">
+          <div class="form-section-title">Schedule</div>
+          <div class="form-row form-row-3">
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label">Event Date</label>
+              {{ form.event_date }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Event Time</label>
+              {{ form.event_time }}
+            </div>
+            <div class="form-group" style="grid-column:span 3;">
+              <label class="form-label">Supervisor</label>
+              {{ form.supervisor }}
+              {% if not form.supervisor.field.queryset %}
+              <div class="form-text" style="color:var(--color-warning);">
+                <i class="fas fa-triangle-exclamation"></i>
+                No users with role "Supervisor" found.
+                <a href="{% url 'accounts:user_list' %}">Manage users</a>.
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-section">
+          <div class="form-section-title">Notes</div>
+          <div class="form-group">
+            {{ form.notes }}
+          </div>
+        </div>
+
+      </div>
+      <div class="card-footer" style="display:flex;justify-content:space-between;">
+        <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'events:index' %}{% endif %}"
+           class="btn btn-outline-secondary">
+          <i class="fas fa-times"></i> Cancel
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create Event{% endif %}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

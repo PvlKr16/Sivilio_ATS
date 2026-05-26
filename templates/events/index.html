@@ -1,0 +1,162 @@
+{% extends "base/base.html" %}
+
+{% block title %}Events — HR Platform{% endblock %}
+{% block page_title %}Events{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<span class="current">Events</span>
+{% endblock %}
+
+{% block topbar_actions %}
+{% if perms.events.add_event %}
+<a href="{% url 'events:create' %}" class="btn btn-primary btn-sm">
+  <i class="fas fa-plus"></i> Add Event
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Filter bar -->
+<div class="card" style="margin-bottom:var(--space-lg);">
+  <div class="card-body" style="padding:var(--space-md);">
+    <form method="get">
+      <div class="filter-bar">
+        <div class="input-group" style="flex:1;min-width:200px;">
+          <span class="input-group-icon"><i class="fas fa-search"></i></span>
+          {{ search_form.q }}
+        </div>
+        {{ search_form.event_type }}
+        {{ search_form.company }}
+        {{ search_form.supervisor }}
+        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filter</button>
+        {% if request.GET.q or request.GET.event_type or request.GET.company or request.GET.supervisor %}
+        <a href="{% url 'events:index' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Clear</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">
+      Events
+      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} record{{ total_count|pluralize }}</span>
+    </h2>
+  </div>
+
+  {% if events %}
+  <div class="data-table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th data-sortable>Candidate</th>
+          <th>Vacancy</th>
+          <th>Company</th>
+          <th data-sortable>Date</th>
+          <th>Supervisor</th>
+          <th style="width:100px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+        <tr data-href="{{ event.get_absolute_url }}">
+          <td>
+            <span class="badge badge-{{ event.badge_color }}">
+              {{ event.get_event_type_display }}
+            </span>
+          </td>
+          <td>
+            <div class="entity-row">
+              <div class="avatar avatar-sm">{{ event.candidate.initials }}</div>
+              <div class="entity-row-info">
+                <div class="entity-row-name">
+                  <a href="{{ event.candidate.get_absolute_url }}">{{ event.candidate.full_name }}</a>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="text-sm">
+            {% if event.vacancy %}
+            <a href="{{ event.vacancy.get_absolute_url }}" style="color:var(--text-secondary);">
+              {{ event.vacancy.title|truncatechars:30 }}
+            </a>
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-sm">
+            {% if event.company %}
+            <a href="{{ event.company.get_absolute_url }}" style="color:var(--text-secondary);">
+              {{ event.company.name }}
+            </a>
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-sm">
+            {% if event.event_date %}
+            <div>{{ event.event_date|date:"d M Y" }}</div>
+            {% if event.event_time %}
+            <div class="text-muted" style="font-size:var(--font-size-xs);">{{ event.event_time|time:"H:i" }}</div>
+            {% endif %}
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-sm">
+            {% if event.supervisor %}
+            <div class="entity-row">
+              <div class="avatar avatar-xs">{{ event.supervisor.initials }}</div>
+              <span style="margin-left:4px;">{{ event.supervisor.display_name }}</span>
+            </div>
+            {% else %}—{% endif %}
+          </td>
+          <td class="actions-cell">
+            <div class="btn-group">
+              <a href="{{ event.get_absolute_url }}" class="btn btn-sm btn-outline-secondary" title="View"><i class="fas fa-eye"></i></a>
+              {% if perms.events.change_event %}
+              <a href="{% url 'events:edit' event.pk %}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-pen"></i></a>
+              {% endif %}
+              {% if perms.events.delete_event %}
+              <a href="{% url 'events:delete' event.pk %}" class="btn btn-sm btn-outline-danger"
+                 data-confirm="Delete this event?" title="Delete"><i class="fas fa-trash"></i></a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if is_paginated %}
+  <div class="pagination-wrapper">
+    <span>Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-left"></i></a></li>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-right"></i></a></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="fas fa-calendar-check"></i></div>
+    <div class="empty-state-title">No events found</div>
+    <div class="empty-state-text">{% if request.GET.q %}Try a different search.{% else %}Add the first recruitment event.{% endif %}</div>
+    {% if perms.events.add_event %}
+    <a href="{% url 'events:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Event</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

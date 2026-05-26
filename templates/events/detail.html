@@ -1,0 +1,135 @@
+{% extends "base/base.html" %}
+
+{% block title %}{{ event.get_event_type_display }} — HR Platform{% endblock %}
+{% block page_title %}{{ event.get_event_type_display }}{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'core:dashboard' %}">Home</a>
+<span class="sep">/</span>
+<a href="{% url 'events:index' %}">Events</a>
+<span class="sep">/</span>
+<span class="current">{{ event.get_event_type_display }}</span>
+{% endblock %}
+
+{% block topbar_actions %}
+<div class="btn-group">
+  {% if perms.events.change_event %}
+  <a href="{% url 'events:edit' event.pk %}" class="btn btn-primary btn-sm">
+    <i class="fas fa-pen"></i> Edit
+  </a>
+  {% endif %}
+  {% if perms.events.delete_event %}
+  <a href="{% url 'events:delete' event.pk %}" class="btn btn-outline-danger btn-sm"
+     data-confirm="Delete this event? This cannot be undone.">
+    <i class="fas fa-trash"></i> Delete
+  </a>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:260px 1fr;gap:var(--space-lg);align-items:start;">
+
+  <!-- Left card -->
+  <div class="card" style="text-align:center;">
+    <div class="card-body">
+      <div style="font-size:2.5rem;color:var(--color-primary);margin-bottom:var(--space-md);">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <span class="badge badge-{{ event.badge_color }}" style="font-size:var(--font-size-sm);padding:6px 14px;margin-bottom:var(--space-md);display:inline-block;">
+        {{ event.get_event_type_display }}
+      </span>
+      <div style="font-size:var(--font-size-xs);color:var(--text-muted);margin-top:var(--space-sm);">
+        Created {{ event.created_at|date:"d M Y H:i" }}
+      </div>
+    </div>
+    {% if event.event_date %}
+    <div class="card-footer" style="text-align:left;display:flex;flex-direction:column;gap:4px;font-size:var(--font-size-xs);">
+      <div><i class="fas fa-calendar" style="width:14px;color:var(--color-primary);"></i> {{ event.event_date|date:"d M Y" }}</div>
+      {% if event.event_time %}
+      <div><i class="fas fa-clock" style="width:14px;color:var(--color-primary);"></i> {{ event.event_time|time:"H:i" }}</div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Right: details -->
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">Details</h2></div>
+    <div class="card-body">
+      <div class="detail-fields">
+
+        <div class="detail-field">
+          <span class="detail-label">Candidate</span>
+          <span class="detail-value">
+            <div class="entity-row">
+              <div class="avatar avatar-sm">{{ event.candidate.initials }}</div>
+              <div>
+                <a href="{{ event.candidate.get_absolute_url }}" style="font-weight:500;">
+                  {{ event.candidate.full_name }}
+                </a>
+                {% if event.candidate.profession %}
+                <div class="text-muted" style="font-size:var(--font-size-xs);">{{ event.candidate.profession }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </span>
+        </div>
+
+        <div class="detail-field">
+          <span class="detail-label">Vacancy</span>
+          <span class="detail-value">
+            {% if event.vacancy %}
+            <a href="{{ event.vacancy.get_absolute_url }}">{{ event.vacancy.title }}</a>
+            {% else %}—{% endif %}
+          </span>
+        </div>
+
+        <div class="detail-field">
+          <span class="detail-label">Company</span>
+          <span class="detail-value">
+            {% if event.company %}
+            <a href="{{ event.company.get_absolute_url }}">{{ event.company.name }}</a>
+            {% else %}—{% endif %}
+          </span>
+        </div>
+
+        <div class="detail-field">
+          <span class="detail-label">Supervisor</span>
+          <span class="detail-value">
+            {% if event.supervisor %}
+            <div class="entity-row">
+              <div class="avatar avatar-sm">{{ event.supervisor.initials }}</div>
+              <span>{{ event.supervisor.display_name }}</span>
+            </div>
+            {% else %}—{% endif %}
+          </span>
+        </div>
+
+        {% if event.notes %}
+        <div class="detail-field">
+          <span class="detail-label">Notes</span>
+          <span class="detail-value" style="white-space:pre-wrap;">{{ event.notes }}</span>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+
+    <!-- Quick actions footer -->
+    <div class="card-footer" style="display:flex;gap:var(--space-sm);">
+      {% if perms.events.add_event %}
+      <a href="{% url 'events:create' %}?candidate={{ event.candidate.pk }}{% if event.vacancy %}&vacancy={{ event.vacancy.pk }}{% endif %}{% if event.company %}&company={{ event.company.pk }}{% endif %}"
+         class="btn btn-sm btn-outline-primary">
+        <i class="fas fa-plus"></i> Add another event for this candidate
+      </a>
+      {% endif %}
+      <a href="{% url 'events:index' %}?q={{ event.candidate.full_name }}"
+         class="btn btn-sm btn-outline-secondary">
+        <i class="fas fa-history"></i> All events for this candidate
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
