@@ -12,7 +12,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='dev-secret-key-change-me')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost').split(',')
-CSRF_TRUSTED_ORIGINS = ["https://*.trycloudflare.com",]
+
+
+CLOUDFLARE_URL = os.environ.get("CLOUDFLARE_URL", "")
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000",]
+
+if CLOUDFLARE_URL:
+    CSRF_TRUSTED_ORIGINS.append(CLOUDFLARE_URL)
+# CSRF_TRUSTED_ORIGINS = ["https://*.trycloudflare.com",]
 
 # Application definition
 INSTALLED_APPS = [
