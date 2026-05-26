@@ -6,6 +6,7 @@ from django.db.models import Count
 
 from apps.people.models import Person, PersonStatus
 from apps.companies.models import Company
+from apps.vacancies.models import Vacancy
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -19,7 +20,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx['total_people']    = Person.objects.count()
         ctx['total_companies'] = Company.objects.count()
         ctx['active_people']   = Person.objects.filter(status=PersonStatus.ACTIVE).count()
-        ctx['inactive_people'] = Person.objects.filter(status=PersonStatus.INACTIVE).count()
+        ctx['total_vacancies'] = Vacancy.objects.count()
 
         # People by status breakdown
         ctx['status_breakdown'] = (
@@ -40,6 +41,12 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Recently added companies
         ctx['recent_companies'] = (
             Company.objects
+            .order_by('-created_at')[:6]
+        )
+
+        # Recently added vacancies
+        ctx['recent_vacancies'] = (
+            Vacancy.objects
             .order_by('-created_at')[:6]
         )
 
