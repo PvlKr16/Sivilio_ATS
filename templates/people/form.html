@@ -116,19 +116,6 @@
               {{ form.birthdate }}
             </div>
           </div>
-          <div class="form-group" style="max-width:160px;">
-            <label class="form-label">Avatar</label>
-            {% if object and object.avatar %}
-            <div class="avatar avatar-lg" id="avatarPreview" style="margin-bottom:var(--space-sm);">
-              <img src="{{ object.avatar.url }}" alt="">
-            </div>
-            {% else %}
-            <div class="avatar avatar-lg" id="avatarPreview" style="margin-bottom:var(--space-sm);">
-              {{ object.initials|default:"?" }}
-            </div>
-            {% endif %}
-            <input type="file" name="avatar" accept="image/*" class="form-control" data-preview-target="avatarPreview">
-          </div>
         </div>
 
         <!-- Professional -->

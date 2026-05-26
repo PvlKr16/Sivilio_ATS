@@ -161,11 +161,6 @@ class Person(models.Model):
     """
 
     # ── Identity ──────────────────────────────────────────────────────────────
-    avatar = models.ImageField(
-        upload_to='people/avatars/',
-        null=True, blank=True,
-        verbose_name='Avatar',
-    )
     first_name = models.CharField(max_length=150, verbose_name='First Name')
     last_name  = models.CharField(max_length=150, verbose_name='Last Name')
     gender     = models.ForeignKey(

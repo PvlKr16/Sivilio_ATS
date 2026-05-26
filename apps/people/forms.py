@@ -17,7 +17,6 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model  = Person
         fields = [
-            'avatar',
             'first_name', 'last_name', 'gender', 'birthdate',
             'profession', 'level', 'main_skill', 'skills',
             'english', 'education', 'work_experience',

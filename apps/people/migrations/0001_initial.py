@@ -102,7 +102,6 @@ class Migration(migrations.Migration):
             name='Person',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
-                ('avatar', models.ImageField(blank=True, null=True, upload_to='people/avatars/', verbose_name='Avatar')),
                 ('first_name', models.CharField(max_length=150, verbose_name='First Name')),
                 ('last_name', models.CharField(max_length=150, verbose_name='Last Name')),
                 ('birthdate', models.DateField(blank=True, null=True, verbose_name='Birthdate')),
