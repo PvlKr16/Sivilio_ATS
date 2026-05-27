@@ -2,7 +2,6 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from django.db.models import Count
 
 from apps.people.models import Person, PersonStatus
 from apps.companies.models import Company
@@ -21,15 +20,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx['total_companies'] = Company.objects.count()
         ctx['active_people']   = Person.objects.filter(status=PersonStatus.ACTIVE).count()
         ctx['total_vacancies'] = Vacancy.objects.count()
-
-        # People by status breakdown
-        ctx['status_breakdown'] = (
-            Person.objects
-            .values('status')
-            .annotate(count=Count('status'))
-            .filter(count__gt=0)
-            .order_by('status')
-        )
 
         # Recently added people
         ctx['recent_people'] = (

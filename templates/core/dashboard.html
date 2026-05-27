@@ -19,14 +19,6 @@
     </div>
   </a>
 
-  <a class="stat-card" href="{% url 'people:index' %}?status=active" style="text-decoration:none;color:inherit;">
-    <div class="stat-icon green"><i class="fas fa-user-check"></i></div>
-    <div class="stat-body">
-      <div class="stat-value">{{ active_people }}</div>
-      <div class="stat-label">Active</div>
-    </div>
-  </a>
-
   <a class="stat-card" href="{% url 'vacancies:index' %}" style="text-decoration:none;color:inherit;">
     <div class="stat-icon teal"><i class="fas fa-building"></i></div>
     <div class="stat-body">
@@ -106,26 +98,27 @@
   <!-- Right column -->
   <div style="display:flex;flex-direction:column;gap:var(--space-lg);">
 
-    <!-- Status breakdown -->
-    {% if status_breakdown %}
-    <div class="card">
+
+     <!-- Recent vacancies -->
+      <div class="card">
       <div class="card-header">
-        <h2 class="card-title"><i class="fas fa-chart-pie" style="color:var(--color-primary);margin-right:6px;"></i>By Status</h2>
+        <h2 class="card-title"><i class="fas fa-building" style="color:var(--color-primary);margin-right:6px;"></i>Recent Vacancies</h2>
+        <a href="{% url 'vacancies:index' %}" class="btn btn-sm btn-outline-primary">View all</a>
       </div>
-      <div class="card-body" style="padding:var(--space-md);">
-        {% for item in status_breakdown %}
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-sm);">
-          {% if item.status == 'active' %}
-          <span class="badge badge-success">Active</span>
-          {% else %}
-          <span class="badge badge-secondary">Inactive</span>
-          {% endif %}
-          <strong style="font-size:var(--font-size-sm);">{{ item.count }}</strong>
-        </div>
+      <div class="card-body" style="padding:var(--space-sm) 0;">
+        {% for vacancy in recent_vacancies %}
+        <a href="{{ vacancy.get_absolute_url }}" style="display:flex;align-items:center;gap:var(--space-sm);padding:8px var(--space-md);text-decoration:none;transition:background var(--transition-fast);" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background=''">
+          <div class="avatar avatar-sm avatar-square">{{ vacancy.initials }}</div>
+          <div class="entity-row-info">
+            <div class="entity-row-name" style="font-size:var(--font-size-sm);">{{ vacancy.name }}</div>
+          </div>
+        </a>
+        {% empty %}
+        <div style="padding:var(--space-md);text-align:center;color:var(--text-muted);font-size:var(--font-size-sm);">No vacancies yet</div>
         {% endfor %}
       </div>
     </div>
-    {% endif %}
+
 
     <!-- Recent companies -->
     <div class="card">
