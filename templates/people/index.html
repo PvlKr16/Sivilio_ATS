@@ -71,9 +71,10 @@
                 <div class="entity-row-name">
                   <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
                 </div>
-                <div class="entity-row-sub">{{ person.email|default:"" }}</div>
+                <div class="entity-row-sub">
+                    {{ person.email|default:"" }}
+                </div>
               </div>
-            </div>
           </td>
           <td class="text-sm">{{ person.profession|default:"—" }}</td>
           <td class="text-sm">{{ person.level|default:"—" }}</td>

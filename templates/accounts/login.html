@@ -8,68 +8,8 @@
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/forms.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
-  <style>
-    /* Login-specific layout (full-screen, no sidebar) */
-    body { background: var(--sidebar-bg); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-
-    .login-card {
-      background: var(--bg-card);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-lg);
-      width: 100%;
-      max-width: 420px;
-      padding: var(--space-2xl) var(--space-xl);
-    }
-
-    .login-logo {
-      text-align: center;
-      margin-bottom: var(--space-xl);
-    }
-    .login-logo-icon {
-      width: 56px;
-      height: 56px;
-      background: var(--color-primary);
-      border-radius: var(--border-radius);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      color: #fff;
-      margin-bottom: var(--space-md);
-    }
-    .login-logo h1 {
-      font-size: var(--font-size-xl);
-      margin: 0;
-    }
-    .login-logo p {
-      color: var(--text-secondary);
-      font-size: var(--font-size-sm);
-      margin: 4px 0 0;
-    }
-
-    .login-submit {
-      width: 100%;
-      padding: 10px;
-      font-size: var(--font-size-base);
-      justify-content: center;
-      margin-top: var(--space-md);
-    }
-
-    .login-error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-      border-radius: var(--border-radius);
-      padding: var(--space-sm) var(--space-md);
-      font-size: var(--font-size-sm);
-      margin-bottom: var(--space-md);
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-  </style>
 </head>
-<body>
+<body class="login-page">
   <div class="login-card">
     <div class="login-logo">
       <div class="login-logo-icon"><i class="fas fa-users-gear"></i></div>
@@ -88,25 +28,15 @@
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ next }}">
 
-<!--      <div class="form-group">-->
-<!--        <label class="form-label" for="id_username">Username</label>-->
-<!--        <div class="input-group">-->
-<!--          <span class="input-group-icon"><i class="fas fa-user"></i></span>-->
-<!--          <input type="text" id="id_username" name="username"-->
-<!--                 class="form-control" autocomplete="username"-->
-<!--                 autofocus required placeholder="Enter your username">-->
-<!--        </div>-->
-<!--      </div>-->
-
-        <div class="form-group">
-          <label class="form-label" for="id_username">Email</label>
-          <div class="input-group">
-            <span class="input-group-icon"><i class="fas fa-envelope"></i></span>
-            <input type="email" id="id_username" name="username"
-                   class="form-control" autocomplete="email"
-                   autofocus required placeholder="Enter your email">
-          </div>
+      <div class="form-group">
+        <label class="form-label" for="id_username">Email</label>
+        <div class="input-group">
+          <span class="input-group-icon"><i class="fas fa-envelope"></i></span>
+          <input type="email" id="id_username" name="username"
+                 class="form-control" autocomplete="email"
+                 autofocus required placeholder="Enter your email">
         </div>
+      </div>
 
       <div class="form-group">
         <label class="form-label" for="id_password">Password</label>

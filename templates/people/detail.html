@@ -27,15 +27,15 @@
 {% endblock %}
 
 {% block content %}
-<div style="display:grid;grid-template-columns:280px 1fr;gap:var(--space-lg);align-items:start;">
+<div class="detail-layout">
 
   <!-- Left: profile card -->
-  <div style="display:flex;flex-direction:column;gap:var(--space-lg);">
-    <div class="card" style="text-align:center;">
+  <div class="detail-sidebar">
+    <div class="card detail-profile-card">
       <div class="card-body">
-        <h2 style="font-size:var(--font-size-xl);margin-bottom:4px;">{{ person.full_name }}</h2>
-        {% if person.profession %}<p style="color:var(--text-secondary);font-size:var(--font-size-sm);margin:0 0 var(--space-sm);">{{ person.profession }}</p>{% endif %}
-        <div style="display:flex;justify-content:center;gap:var(--space-xs);flex-wrap:wrap;margin-bottom:var(--space-sm);">
+        <h2 class="detail-profile-name">{{ person.full_name }}</h2>
+        {% if person.profession %}<p class="detail-profile-sub">{{ person.profession }}</p>{% endif %}
+        <div class="detail-profile-badges">
           {% if person.level %}<span class="badge badge-primary">{{ person.level }}</span>{% endif %}
           {% if person.status == 'active' %}<span class="badge badge-success">Active</span>
           {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
@@ -43,12 +43,12 @@
       </div>
 
       <!-- Contacts -->
-      <div class="card-footer" style="text-align:left;display:flex;flex-direction:column;gap:5px;font-size:var(--font-size-xs);">
-        {% if person.email %}<div><i class="fas fa-envelope" style="width:14px;color:var(--color-primary);"></i> <a href="mailto:{{ person.email }}">{{ person.email }}</a></div>{% endif %}
-        {% if person.phone %}<div><i class="fas fa-phone" style="width:14px;color:var(--color-primary);"></i> {{ person.phone }}</div>{% endif %}
-        {% if person.telegram %}<div><i class="fab fa-telegram" style="width:14px;color:var(--color-primary);"></i> {{ person.telegram }}</div>{% endif %}
-        {% if person.linkedin %}<div><i class="fab fa-linkedin" style="width:14px;color:var(--color-primary);"></i> <a href="{{ person.linkedin }}" target="_blank">LinkedIn</a></div>{% endif %}
-        {% if person.cv %}<div><i class="fas fa-file-pdf" style="width:14px;color:var(--color-danger);"></i> <a href="{{ person.cv.url }}" target="_blank">Download CV</a></div>{% endif %}
+      <div class="card-footer detail-contacts">
+        {% if person.email %}<div class="detail-contact-item"><i class="fas fa-envelope"></i> <a href="mailto:{{ person.email }}">{{ person.email }}</a></div>{% endif %}
+        {% if person.phone %}<div class="detail-contact-item"><i class="fas fa-phone"></i> {{ person.phone }}</div>{% endif %}
+        {% if person.telegram %}<div class="detail-contact-item"><i class="fab fa-telegram"></i> {{ person.telegram }}</div>{% endif %}
+        {% if person.linkedin %}<div class="detail-contact-item"><i class="fab fa-linkedin"></i> <a href="{{ person.linkedin }}" target="_blank">LinkedIn</a></div>{% endif %}
+        {% if person.cv %}<div class="detail-contact-item"><i class="fas fa-file-pdf danger"></i> <a href="{{ person.cv.url }}" target="_blank">Download CV</a></div>{% endif %}
       </div>
     </div>
 
@@ -56,7 +56,7 @@
     {% if person.skills.all %}
     <div class="card">
       <div class="card-header"><h3 class="card-title">Skills</h3></div>
-      <div class="card-body" style="display:flex;flex-wrap:wrap;gap:var(--space-xs);">
+      <div class="card-body detail-skills">
         {% for skill in person.skills.all %}
         <span class="badge badge-secondary">{{ skill }}</span>
         {% endfor %}
@@ -69,7 +69,7 @@
   <div class="card">
     <div class="card-header"><h2 class="card-title">Details</h2></div>
     <div class="card-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg);">
+      <div class="detail-fields-grid">
 
         <!-- Column 1 -->
         <div class="detail-fields">
@@ -125,9 +125,9 @@
       </div>
 
       {% if person.notes %}
-      <div style="margin-top:var(--space-lg);padding-top:var(--space-md);border-top:1px solid var(--border-color);">
-        <div class="detail-label" style="margin-bottom:var(--space-xs);">Notes</div>
-        <p style="color:var(--text-secondary);font-size:var(--font-size-sm);white-space:pre-wrap;margin:0;">{{ person.notes }}</p>
+      <div class="detail-notes">
+        <div class="detail-label">Notes</div>
+        <p class="detail-notes-text">{{ person.notes }}</p>
       </div>
       {% endif %}
     </div>
