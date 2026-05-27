@@ -1,9 +1,17 @@
 """Forms for user account management and self-service profile editing."""
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from .models import User
 
+
+# ── Auth by e-mail ─────────────────────────────────────────────────
+
+class EmailAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput(attrs={'autofocus': True}),
+    )
 
 # ── Shared validation helpers ─────────────────────────────────────────────────
 
