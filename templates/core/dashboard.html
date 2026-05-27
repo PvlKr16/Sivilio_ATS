@@ -108,9 +108,9 @@
       <div class="card-body" style="padding:var(--space-sm) 0;">
         {% for vacancy in recent_vacancies %}
         <a href="{{ vacancy.get_absolute_url }}" style="display:flex;align-items:center;gap:var(--space-sm);padding:8px var(--space-md);text-decoration:none;transition:background var(--transition-fast);" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background=''">
-          <div class="avatar avatar-sm avatar-square">{{ vacancy.initials }}</div>
+<!--          <div class="avatar avatar-sm avatar-square">{{ vacancy.initials }}</div>-->
           <div class="entity-row-info">
-            <div class="entity-row-name" style="font-size:var(--font-size-sm);">{{ vacancy.name }}</div>
+            <div class="entity-row-name" style="font-size:var(--font-size-sm);">{{ vacancy.title }}</div>
           </div>
         </a>
         {% empty %}
@@ -129,7 +129,7 @@
       <div class="card-body" style="padding:var(--space-sm) 0;">
         {% for company in recent_companies %}
         <a href="{{ company.get_absolute_url }}" style="display:flex;align-items:center;gap:var(--space-sm);padding:8px var(--space-md);text-decoration:none;transition:background var(--transition-fast);" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background=''">
-          <div class="avatar avatar-sm avatar-square">{{ company.initials }}</div>
+<!--          <div class="avatar avatar-sm avatar-square">{{ company.initials }}</div>-->
           <div class="entity-row-info">
             <div class="entity-row-name" style="font-size:var(--font-size-sm);">{{ company.name }}</div>
           </div>
