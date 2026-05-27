@@ -57,7 +57,6 @@
           <th data-sortable>Title</th>
           <th data-sortable>Company</th>
           <th>Level</th>
-          <th>Main Skill</th>
           <th>Salary</th>
           <th>Freelance</th>
           <th>Status</th>
@@ -79,10 +78,6 @@
             <a href="{{ vacancy.company.get_absolute_url }}" style="color:var(--text-secondary);">{{ vacancy.company.name }}</a>
           </td>
           <td class="text-sm">{{ vacancy.level|default:"—" }}</td>
-          <td class="text-sm">
-            {% if vacancy.main_skill %}<span class="badge badge-primary">{{ vacancy.main_skill }}</span>
-            {% else %}—{% endif %}
-          </td>
           <td class="text-sm">{{ vacancy.salary_display }}</td>
           <td>
             {% if vacancy.for_freelancers %}

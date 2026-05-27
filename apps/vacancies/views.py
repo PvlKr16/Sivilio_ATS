@@ -18,7 +18,7 @@ class VacancyListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = Vacancy.objects.select_related(
-            'company', 'level', 'main_skill'
+            'company', 'level'
         ).order_by('-created_at')
 
         q              = self.request.GET.get('q', '').strip()
@@ -53,7 +53,7 @@ class VacancyDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Vacancy.objects.select_related(
-            'company', 'level', 'english', 'main_skill'
+            'company', 'level', 'english'
         ).prefetch_related(
             'skills', 'working_place', 'working_hours', 'supervisors'
         )

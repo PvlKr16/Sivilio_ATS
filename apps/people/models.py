@@ -178,12 +178,6 @@ class Person(models.Model):
         Level, on_delete=models.SET_NULL,
         null=True, blank=True, verbose_name='Level',
     )
-    main_skill = models.ForeignKey(
-        Skill, on_delete=models.SET_NULL,
-        null=True, blank=True,
-        related_name='main_skill_people',
-        verbose_name='Main Skill',
-    )
     skills = models.ManyToManyField(
         Skill, blank=True,
         related_name='people',

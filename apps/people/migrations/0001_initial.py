@@ -128,7 +128,6 @@ class Migration(migrations.Migration):
                 # FKs
                 ('gender', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.gender', verbose_name='Gender')),
                 ('level', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.level', verbose_name='Level')),
-                ('main_skill', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='main_skill_people', to='people.skill', verbose_name='Main Skill')),
                 ('english', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.english', verbose_name='English')),
                 ('profession', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.profession', verbose_name='Profession')),
                 ('region', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.region', verbose_name='Region')),

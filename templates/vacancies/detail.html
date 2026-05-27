@@ -104,13 +104,6 @@
             <span class="detail-value">{{ vacancy.english|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Main Skill</span>
-            <span class="detail-value">
-              {% if vacancy.main_skill %}<span class="badge badge-primary">{{ vacancy.main_skill }}</span>
-              {% else %}—{% endif %}
-            </span>
-          </div>
-          <div class="detail-field">
             <span class="detail-label">Salary</span>
             <span class="detail-value">{{ vacancy.salary_display }}</span>
           </div>

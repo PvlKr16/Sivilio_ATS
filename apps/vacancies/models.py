@@ -38,14 +38,6 @@ class Vacancy(models.Model):
     title = models.CharField(max_length=255, verbose_name='Title')
 
     # Skills — shared with Person
-    main_skill = models.ForeignKey(
-        'people.Skill',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='main_skill_vacancies',
-        verbose_name='Main Skill Required',
-    )
     skills = models.ManyToManyField(
         'people.Skill',
         blank=True,

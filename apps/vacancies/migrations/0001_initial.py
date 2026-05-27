@@ -33,13 +33,6 @@ class Migration(migrations.Migration):
                     verbose_name='Company',
                 )),
                 ('title', models.CharField(max_length=255, verbose_name='Title')),
-                ('main_skill', models.ForeignKey(
-                    blank=True, null=True,
-                    on_delete=django.db.models.deletion.SET_NULL,
-                    related_name='main_skill_vacancies',
-                    to='people.skill',
-                    verbose_name='Main Skill Required',
-                )),
                 ('skills', models.ManyToManyField(
                     blank=True,
                     related_name='vacancies',

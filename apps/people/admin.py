@@ -9,17 +9,17 @@ from .models import (
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display  = ['full_name', 'profession', 'level', 'main_skill',
+    list_display  = ['full_name', 'profession', 'level',
                      'region', 'status', 'salary_display', 'created_at']
     list_filter   = ['status', 'level', 'profession', 'region', 'english']
     search_fields = ['first_name', 'last_name', 'email', 'phone', 'telegram']
     filter_horizontal = ['skills', 'working_hours', 'working_place']
     fieldsets = (
         ('Identity', {
-            'fields': ('avatar', 'first_name', 'last_name', 'gender', 'birthdate'),
+            'fields': ('first_name', 'last_name', 'gender', 'birthdate'),
         }),
         ('Professional', {
-            'fields': ('profession', 'level', 'main_skill', 'skills',
+            'fields': ('profession', 'level', 'skills',
                        'english', 'education', 'work_experience'),
         }),
         ('Salary', {

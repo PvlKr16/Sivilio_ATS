@@ -14,7 +14,7 @@ class VacancyForm(forms.ModelForm):
         model  = Vacancy
         fields = [
             'status', 'company', 'title',
-            'main_skill', 'skills',
+            'skills',
             'salary_offered', 'salary_currency',
             'level', 'english',
             'working_place', 'working_hours',
@@ -25,7 +25,6 @@ class VacancyForm(forms.ModelForm):
         widgets = {
             'status':          forms.Select(attrs={'class': 'form-select'}),
             'company':         forms.Select(attrs={'class': 'form-select'}),
-            'main_skill':      forms.Select(attrs={'class': 'form-select'}),
             'salary_currency': forms.Select(attrs={'class': 'form-select'}),
             'level':           forms.Select(attrs={'class': 'form-select'}),
             'english':         forms.Select(attrs={'class': 'form-select'}),

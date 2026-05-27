@@ -58,7 +58,6 @@
           <th data-sortable>Name</th>
           <th data-sortable>Profession</th>
           <th data-sortable>Level</th>
-          <th>Skills</th>
           <th>Contacts</th>
           <th>Status</th>
           <th style="width:100px;">Actions</th>
@@ -68,7 +67,6 @@
         {% for person in people %}
         <tr data-href="{{ person.get_absolute_url }}">
           <td>
-            <div class="entity-row">
               <div class="entity-row-info">
                 <div class="entity-row-name">
                   <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
@@ -79,11 +77,6 @@
           </td>
           <td class="text-sm">{{ person.profession|default:"—" }}</td>
           <td class="text-sm">{{ person.level|default:"—" }}</td>
-          <td class="text-sm">
-            {% if person.main_skill %}
-            <span class="badge badge-primary">{{ person.main_skill }}</span>
-            {% else %}—{% endif %}
-          </td>
           <td style="font-size:var(--font-size-xs);line-height:1.8;">
             {% if person.phone %}<div><i class="fas fa-phone" style="width:13px;color:var(--color-primary);"></i> {{ person.phone }}</div>{% endif %}
             {% if person.telegram %}<div><i class="fab fa-telegram" style="width:13px;color:var(--color-primary);"></i> {{ person.telegram }}</div>{% endif %}

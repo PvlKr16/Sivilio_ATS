@@ -22,7 +22,7 @@ class PersonListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = Person.objects.select_related(
-            'profession', 'level', 'main_skill', 'region', 'english'
+            'profession', 'level', 'region', 'english'
         ).order_by('last_name', 'first_name')
 
         q          = self.request.GET.get('q', '').strip()
@@ -60,7 +60,7 @@ class PersonDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Person.objects.select_related(
-            'gender', 'profession', 'level', 'main_skill',
+            'gender', 'profession', 'level',
             'english', 'region'
         ).prefetch_related('skills', 'working_hours', 'working_place')
 

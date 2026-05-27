@@ -6,7 +6,7 @@ from .models import Vacancy
 
 @admin.register(Vacancy)
 class VacancyAdmin(admin.ModelAdmin):
-    list_display   = ['title', 'company', 'status', 'level', 'main_skill',
+    list_display   = ['title', 'company', 'status', 'level',
                       'salary_display', 'for_freelancers', 'created_at']
     list_filter    = ['status', 'for_freelancers', 'level', 'company']
     search_fields  = ['title', 'company__name']
@@ -17,7 +17,7 @@ class VacancyAdmin(admin.ModelAdmin):
             'fields': ('status', 'company', 'title'),
         }),
         ('Requirements', {
-            'fields': ('level', 'english', 'main_skill', 'skills',
+            'fields': ('level', 'english', 'skills',
                        'working_place', 'working_hours'),
         }),
         ('Salary', {

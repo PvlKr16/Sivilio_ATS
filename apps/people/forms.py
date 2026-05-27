@@ -18,7 +18,7 @@ class PersonForm(forms.ModelForm):
         model  = Person
         fields = [
             'first_name', 'last_name', 'gender', 'birthdate',
-            'profession', 'level', 'main_skill', 'skills',
+            'profession', 'level', 'skills',
             'english', 'education', 'work_experience',
             'salary_desired', 'salary_currency',
             'region', 'working_hours', 'working_place',
@@ -29,7 +29,6 @@ class PersonForm(forms.ModelForm):
             'birthdate':     forms.DateInput(attrs={'type': 'date'}),
             'gender':        forms.Select(attrs={'class': 'form-select'}),
             'level':         forms.Select(attrs={'class': 'form-select'}),
-            'main_skill': forms.Select(attrs={'class': 'form-select', 'data-no-select2': ''}),
             'skills':        forms.CheckboxSelectMultiple(),
             'english':       forms.Select(attrs={'class': 'form-select'}),
             'profession':    forms.Select(attrs={'class': 'form-select'}),
