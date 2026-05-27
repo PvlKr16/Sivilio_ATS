@@ -49,42 +49,46 @@
       <span class="badge badge-secondary">Sleeping</span>
       {% endif %}
     </div>
-    <div class="card-footer" style="font-size:var(--font-size-xs);color:var(--text-muted);text-align:left;display:flex;flex-direction:column;gap:4px;">
-      {% if user_obj.email %}<div><i class="fas fa-envelope" style="width:14px;"></i> {{ user_obj.email }}</div>{% endif %}
-      {% if user_obj.phone %}<div><i class="fas fa-phone" style="width:14px;"></i> {{ user_obj.phone }}</div>{% endif %}
-      {% if user_obj.viber %}<div><i class="fas fa-mobile-screen" style="width:14px;"></i> {{ user_obj.viber }}</div>{% endif %}
-      {% if user_obj.telegram %}<div><i class="fab fa-telegram" style="width:14px;"></i> {{ user_obj.telegram }}</div>{% endif %}
-      {% if user_obj.cv %}<div><a href="{{ user_obj.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);width:14px;"></i> View CV</a></div>{% endif %}
+    <div class="card-footer" style="text-align:left;display:flex;flex-direction:column;gap:4px;">
+      {% if user_obj.email %}<div class="info-item-value"><i class="fas fa-envelope" style="width:14px;"></i> {{ user_obj.email }}</div>{% endif %}
+      {% if user_obj.phone %}<div class="info-item-value"><i class="fas fa-phone" style="width:14px;"></i> {{ user_obj.phone }}</div>{% endif %}
+      {% if user_obj.viber %}<div class="info-item-value"><i class="fas fa-mobile-screen" style="width:14px;"></i> {{ user_obj.viber }}</div>{% endif %}
+      {% if user_obj.telegram %}<div class="info-item-value"><i class="fab fa-telegram" style="width:14px;"></i> {{ user_obj.telegram }}</div>{% endif %}
+      {% if user_obj.cv %}<div class="info-item-value"><a href="{{ user_obj.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);width:14px;"></i> View CV</a></div>{% endif %}
     </div>
   </div>
 
   <div class="card">
     <div class="card-header"><h2 class="card-title">Details</h2></div>
     <div class="card-body">
-      <div class="detail-fields">
-        <div class="detail-field">
-          <span class="detail-label">Username</span>
-          <span class="detail-value">{{ user_obj.username }}</span>
+      <div class="info-grid">
+        <div>
+          <div class="info-item-label">Username</div>
+          <div class="info-item-value">{{ user_obj.username }}</div>
         </div>
-        <div class="detail-field">
-          <span class="detail-label">Works Since</span>
-          <span class="detail-value">{{ user_obj.works_since|date:"d M Y"|default:"—" }}</span>
+        <div>
+          <div class="info-item-label">Works Since</div>
+          <div class="info-item-value">{{ user_obj.works_since|date:"d M Y"|default:"—" }}</div>
         </div>
-        <div class="detail-field">
-          <span class="detail-label">Active</span>
-          <span class="detail-value">{% if user_obj.is_active %}<span class="badge badge-success">Yes</span>{% else %}<span class="badge badge-secondary">No</span>{% endif %}</span>
+        <div>
+          <div class="info-item-label">Active</div>
+          <div class="info-item-value">
+            {% if user_obj.is_active %}<span class="badge badge-success">Yes</span>{% else %}<span class="badge badge-secondary">No</span>{% endif %}
+          </div>
         </div>
-        <div class="detail-field">
-          <span class="detail-label">Staff</span>
-          <span class="detail-value">{% if user_obj.is_staff %}<span class="badge badge-warning">Yes</span>{% else %}—{% endif %}</span>
+        <div>
+          <div class="info-item-label">Staff</div>
+          <div class="info-item-value">
+            {% if user_obj.is_staff %}<span class="badge badge-warning">Yes</span>{% else %}<span class="info-item-value empty">—</span>{% endif %}
+          </div>
         </div>
-        <div class="detail-field">
-          <span class="detail-label">Last Login</span>
-          <span class="detail-value">{{ user_obj.last_login|date:"d M Y H:i"|default:"—" }}</span>
+        <div>
+          <div class="info-item-label">Last Login</div>
+          <div class="info-item-value">{{ user_obj.last_login|date:"d M Y H:i"|default:"—" }}</div>
         </div>
-        <div class="detail-field">
-          <span class="detail-label">Member Since</span>
-          <span class="detail-value">{{ user_obj.date_joined|date:"d M Y" }}</span>
+        <div>
+          <div class="info-item-label">Member Since</div>
+          <div class="info-item-value">{{ user_obj.date_joined|date:"d M Y" }}</div>
         </div>
       </div>
     </div>
