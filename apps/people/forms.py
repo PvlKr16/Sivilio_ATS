@@ -1,7 +1,7 @@
 """Forms for the People module."""
 
 from django import forms
-from .models import Person
+from .models import Person, Level
 
 
 def validate_cv(f):
@@ -31,7 +31,6 @@ class PersonForm(forms.ModelForm):
             'level':         forms.Select(attrs={'class': 'form-select'}),
             'skills':        forms.CheckboxSelectMultiple(),
             'english':       forms.Select(attrs={'class': 'form-select'}),
-            'profession':    forms.Select(attrs={'class': 'form-select'}),
             'region':        forms.Select(attrs={'class': 'form-select'}),
             'working_hours': forms.CheckboxSelectMultiple(),
             'working_place': forms.CheckboxSelectMultiple(),
@@ -60,9 +59,12 @@ class PersonSearchForm(forms.Form):
             'class': 'form-control',
         })
     )
-    profession = forms.ModelChoiceField(
-        queryset=None, required=False, empty_label='All professions',
-        widget=forms.Select(attrs={'class': 'form-select'}),
+    profession = forms.CharField(
+        required=False, label='',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Profession',
+            'class': 'form-control',
+        })
     )
     level = forms.ModelChoiceField(
         queryset=None, required=False, empty_label='All levels',
@@ -76,6 +78,6 @@ class PersonSearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from .models import Profession, Level
-        self.fields['profession'].queryset = Profession.objects.all()
+        #from .models import Profession, Level
+        #self.fields['profession'].queryset = Profession.objects.all()
         self.fields['level'].queryset      = Level.objects.all()

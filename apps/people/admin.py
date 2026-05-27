@@ -3,7 +3,7 @@
 from django.contrib import admin
 from .models import (
     Person, Gender, Level, Skill, WorkingHours,
-    Region, WorkingPlace, Profession, English,
+    Region, WorkingPlace, English,
 )
 
 
@@ -64,11 +64,6 @@ class RegionAdmin(admin.ModelAdmin):
 @admin.register(WorkingPlace)
 class WorkingPlaceAdmin(admin.ModelAdmin):
     list_display = ['name']
-
-@admin.register(Profession)
-class ProfessionAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    search_fields = ['name']
 
 @admin.register(English)
 class EnglishAdmin(admin.ModelAdmin):

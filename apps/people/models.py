@@ -116,16 +116,16 @@ class WorkingPlace(models.Model):
         return self.name
 
 
-class Profession(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Profession')
-
-    class Meta:
-        verbose_name = 'Profession'
-        verbose_name_plural = 'Professions'
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
+# class Profession(models.Model):
+#     name = models.CharField(max_length=100, unique=True, verbose_name='Profession')
+#
+#     class Meta:
+#         verbose_name = 'Profession'
+#         verbose_name_plural = 'Professions'
+#         ordering = ['name']
+#
+#     def __str__(self):
+#         return self.name
 
 
 class English(models.Model):
@@ -162,38 +162,17 @@ class Person(models.Model):
 
     # ── Identity ──────────────────────────────────────────────────────────────
     first_name = models.CharField(max_length=150, verbose_name='First Name')
-    last_name  = models.CharField(max_length=150, verbose_name='Last Name')
-    gender     = models.ForeignKey(
-        Gender, on_delete=models.SET_NULL,
-        null=True, blank=True, verbose_name='Gender',
-    )
+    last_name = models.CharField(max_length=150, verbose_name='Last Name')
+    gender = models.ForeignKey(Gender, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Gender',)
     birthdate = models.DateField(null=True, blank=True, verbose_name='Birthdate')
 
     # ── Professional ──────────────────────────────────────────────────────────
-    profession = models.ForeignKey(
-        Profession, on_delete=models.SET_NULL,
-        null=True, blank=True, verbose_name='Profession',
-    )
-    level = models.ForeignKey(
-        Level, on_delete=models.SET_NULL,
-        null=True, blank=True, verbose_name='Level',
-    )
-    skills = models.ManyToManyField(
-        Skill, blank=True,
-        related_name='people',
-        verbose_name='Skills',
-    )
-    english = models.ForeignKey(
-        English, on_delete=models.SET_NULL,
-        null=True, blank=True, verbose_name='English',
-    )
-    education = models.CharField(
-        max_length=255, blank=True, verbose_name='Education',
-    )
-    work_experience = models.PositiveSmallIntegerField(
-        null=True, blank=True,
-        verbose_name='Work Experience (years)',
-    )
+    profession = models.CharField(max_length=150, blank=True, verbose_name='Profession',)
+    level = models.ForeignKey(Level, on_delete=models.SET_NULL,null=True, blank=True, verbose_name='Level',)
+    skills = models.ManyToManyField(Skill, blank=True, related_name='people', verbose_name='Skills', )
+    english = models.ForeignKey(English, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='English',)
+    education = models.CharField(max_length=255, blank=True, verbose_name='Education',)
+    work_experience = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Work Experience (years)',)
 
     # ── Salary ────────────────────────────────────────────────────────────────
     salary_desired  = models.DecimalField(

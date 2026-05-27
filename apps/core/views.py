@@ -34,7 +34,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Recently added people
         ctx['recent_people'] = (
             Person.objects
-            .select_related('profession', 'level')
+            .select_related('level')
             .order_by('-created_at')[:8]
         )
 

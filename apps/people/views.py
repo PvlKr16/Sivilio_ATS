@@ -22,7 +22,7 @@ class PersonListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = Person.objects.select_related(
-            'profession', 'level', 'region', 'english'
+            'level', 'region', 'english'
         ).order_by('last_name', 'first_name')
 
         q          = self.request.GET.get('q', '').strip()
@@ -39,7 +39,7 @@ class PersonListView(LoginRequiredMixin, ListView):
                 Q(telegram__icontains=q)
             )
         if profession:
-            qs = qs.filter(profession_id=profession)
+            qs = qs.filter(profession__icontains=profession)
         if level:
             qs = qs.filter(level_id=level)
         if status:
@@ -54,21 +54,20 @@ class PersonListView(LoginRequiredMixin, ListView):
 
 
 class PersonDetailView(LoginRequiredMixin, DetailView):
-    model               = Person
-    template_name       = 'people/detail.html'
+    model = Person
+    template_name = 'people/detail.html'
     context_object_name = 'person'
 
     def get_queryset(self):
         return Person.objects.select_related(
-            'gender', 'profession', 'level',
-            'english', 'region'
+            'gender', 'level', 'english', 'region'
         ).prefetch_related('skills', 'working_hours', 'working_place')
 
 
 class PersonCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    model               = Person
-    form_class          = PersonForm
-    template_name       = 'people/form.html'
+    model = Person
+    form_class = PersonForm
+    template_name = 'people/form.html'
     permission_required = 'people.add_person'
 
     def form_valid(self, form):

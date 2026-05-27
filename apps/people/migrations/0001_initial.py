@@ -73,14 +73,6 @@ class Migration(migrations.Migration):
             options={'verbose_name': 'Working Place', 'verbose_name_plural': 'Working Places', 'ordering': ['name']},
         ),
         migrations.CreateModel(
-            name='Profession',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100, unique=True, verbose_name='Profession')),
-            ],
-            options={'verbose_name': 'Profession', 'verbose_name_plural': 'Professions', 'ordering': ['name']},
-        ),
-        migrations.CreateModel(
             name='English',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
@@ -129,7 +121,7 @@ class Migration(migrations.Migration):
                 ('gender', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.gender', verbose_name='Gender')),
                 ('level', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.level', verbose_name='Level')),
                 ('english', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.english', verbose_name='English')),
-                ('profession', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.profession', verbose_name='Profession')),
+                ('profession', models.CharField(blank=True, max_length=150, verbose_name='Profession')),
                 ('region', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='people.region', verbose_name='Region')),
                 # M2M
                 ('skills', models.ManyToManyField(blank=True, related_name='people', to='people.skill', verbose_name='Skills')),
