@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load ui_tags %}
 
 {% block title %}People — HR Platform{% endblock %}
 {% block page_title %}People{% endblock %}
@@ -89,18 +90,9 @@
             <span class="badge badge-secondary">Inactive</span>
             {% endif %}
           </td>
-          <td class="actions-cell">
-              <div style="display:flex;flex-direction:row;gap:4px;justify-content:flex-end;">
-                <a href="{{ person.get_absolute_url }}" class="btn btn-sm btn-outline-primary" title="View"><i class="fas fa-eye"></i></a>
-                {% if perms.people.change_person %}
-                <a href="{% url 'people:edit' person.pk %}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-pen"></i></a>
-                {% endif %}
-                {% if perms.people.delete_person %}
-                <a href="{% url 'people:delete' person.pk %}" class="btn btn-sm btn-outline-primary"
-                   data-confirm="Delete {{ person.full_name }}?" title="Delete"><i class="fas fa-trash"></i></a>
-                {% endif %}
-              </div>
-            </td>
+          {% url 'people:edit' person.pk as eu %}
+            {% url 'people:delete' person.pk as du %}
+            {% action_buttons view_url=person.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg="Delete "|add:person.full_name|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>

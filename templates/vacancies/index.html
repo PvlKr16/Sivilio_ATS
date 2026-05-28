@@ -1,4 +1,6 @@
 {% extends "base/base.html" %}
+{% load static %}
+{% load ui_tags %}
 
 {% block title %}Vacancies — HR Platform{% endblock %}
 {% block page_title %}Vacancies{% endblock %}
@@ -91,18 +93,9 @@
             <span class="badge badge-secondary">Стоп</span>
             {% endif %}
           </td>
-          <td class="actions-cell">
-              <div class="btn-group" style="display:flex;flex-direction:row;gap:4px;">
-                <a href="{{ vacancy.get_absolute_url }}" class="btn btn-sm btn-outline-primary" title="View"><i class="fas fa-eye"></i></a>
-                {% if perms.vacancies.change_vacancy %}
-                <a href="{% url 'vacancies:edit' vacancy.pk %}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-pen"></i></a>
-                {% endif %}
-                {% if perms.vacancies.delete_vacancy %}
-                <a href="{% url 'vacancies:delete' vacancy.pk %}" class="btn btn-sm btn-outline-danger"
-                   data-confirm="Delete vacancy &quot;{{ vacancy.title }}&quot;?" title="Delete"><i class="fas fa-trash"></i></a>
-                {% endif %}
-              </div>
-            </td>
+          {% url 'vacancies:edit' vacancy.pk as eu %}
+            {% url 'vacancies:delete' vacancy.pk as du %}
+            {% action_buttons view_url=vacancy.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.vacancies.change_vacancy delete_perm=perms.vacancies.delete_vacancy confirm_msg="Delete "|add:vacancy.title|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>
