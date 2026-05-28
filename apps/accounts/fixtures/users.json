@@ -1,0 +1,77 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+      "username":     "bob.supervisor",
+      "password":     "pbkdf2_sha256$600000$changeme$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      "first_name":   "Bob",
+      "last_name":    "Johnson",
+      "email":        "bob@example.com",
+      "is_superuser": false,
+      "is_staff":     true,
+      "is_active":    true,
+      "date_joined":  "2024-02-01T09:00:00Z",
+      "phone":        "+380502223344",
+      "viber":        "+380502223344",
+      "telegram":     "@bob_johnson",
+      "role":         2,
+      "status":       "working",
+      "works_since":  "2024-02-01",
+      "avatar":       null,
+      "cv":           null,
+      "groups":       [2],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 3,
+    "fields": {
+      "username":     "carol.recruiter",
+      "password":     "pbkdf2_sha256$600000$changeme$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      "first_name":   "Carol",
+      "last_name":    "Williams",
+      "email":        "carol@example.com",
+      "is_superuser": false,
+      "is_staff":     false,
+      "is_active":    true,
+      "date_joined":  "2024-03-01T09:00:00Z",
+      "phone":        "+380503334455",
+      "viber":        "",
+      "telegram":     "@carol_w",
+      "role":         3,
+      "status":       "working",
+      "works_since":  "2024-03-01",
+      "avatar":       null,
+      "cv":           null,
+      "groups":       [3],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 4,
+    "fields": {
+      "username":     "dan.intern",
+      "password":     "pbkdf2_sha256$600000$changeme$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      "first_name":   "Dan",
+      "last_name":    "Brown",
+      "email":        "dan@example.com",
+      "is_superuser": false,
+      "is_staff":     false,
+      "is_active":    true,
+      "date_joined":  "2024-06-01T09:00:00Z",
+      "phone":        "",
+      "viber":        "",
+      "telegram":     "",
+      "role":         5,
+      "status":       "sleeping",
+      "works_since":  "2024-06-01",
+      "avatar":       null,
+      "cv":           null,
+      "groups":       [5],
+      "user_permissions": []
+    }
+  }
+]

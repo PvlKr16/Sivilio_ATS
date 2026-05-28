@@ -18,6 +18,10 @@ class Command(BaseCommand):
         self._create_people_reference_data()
         self._create_skills()
         self._create_superuser()
+        self._create_users()
+        self._create_companies()
+        self._create_people()
+        self._create_vacancies()
         self.stdout.write(self.style.SUCCESS('Initial data ready.'))
 
     def _create_groups(self):
@@ -50,3 +54,19 @@ class Command(BaseCommand):
             )
         else:
             self.stdout.write('  Superuser: already exists')
+
+    def _create_users(self):
+        call_command('loaddata', 'users', verbosity=0)
+        self.stdout.write('  Users: OK')
+
+    def _create_companies(self):
+        call_command('loaddata', 'companies', verbosity=0)
+        self.stdout.write('  Companies: OK')
+
+    def _create_people(self):
+        call_command('loaddata', 'people', verbosity=0)
+        self.stdout.write('  People: OK')
+
+    def _create_vacancies(self):
+        call_command('loaddata', 'vacancies', verbosity=0)
+        self.stdout.write('  Vacancies: OK')

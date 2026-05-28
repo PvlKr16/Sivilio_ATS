@@ -10,19 +10,26 @@
   {"model": "people.level", "pk": 5, "fields": {"name": "head_of",   "order": 5}},
   {"model": "people.level", "pk": 6, "fields": {"name": "architect", "order": 6}},
 
-  {"model": "people.english", "pk": 1, "fields": {"name": "a1", "order": 1}},
-  {"model": "people.english", "pk": 2, "fields": {"name": "a2", "order": 2}},
-  {"model": "people.english", "pk": 3, "fields": {"name": "b1", "order": 3}},
-  {"model": "people.english", "pk": 4, "fields": {"name": "b2", "order": 4}},
-  {"model": "people.english", "pk": 5, "fields": {"name": "c1", "order": 5}},
-  {"model": "people.english", "pk": 6, "fields": {"name": "c2", "order": 6}},
-
   {"model": "people.workinghours", "pk": 1, "fields": {"name": "Full-time"}},
   {"model": "people.workinghours", "pk": 2, "fields": {"name": "Part-time"}},
   {"model": "people.workinghours", "pk": 3, "fields": {"name": "Flexible"}},
   {"model": "people.workinghours", "pk": 4, "fields": {"name": "Project-based"}},
 
-  {"model": "people.workingplace", "pk": 1, "fields": {"name": "Office"}},
-  {"model": "people.workingplace", "pk": 2, "fields": {"name": "Remote"}},
-  {"model": "people.workingplace", "pk": 3, "fields": {"name": "Hybrid"}}
+  {"model": "people.workingplace", "pk": 1, "fields": {"name": "Remote"}},
+  {"model": "people.workingplace", "pk": 2, "fields": {"name": "Office"}},
+  {"model": "people.workingplace", "pk": 3, "fields": {"name": "Hybrid"}},
+
+  {"model": "people.region", "pk": 1, "fields": {"name": "Kyiv"}},
+  {"model": "people.region", "pk": 2, "fields": {"name": "Lviv"}},
+  {"model": "people.region", "pk": 3, "fields": {"name": "Kharkiv"}},
+  {"model": "people.region", "pk": 4, "fields": {"name": "Dnipro"}},
+  {"model": "people.region", "pk": 5, "fields": {"name": "Odessa"}},
+  {"model": "people.region", "pk": 6, "fields": {"name": "Remote / Any"}},
+
+  {"model": "people.english", "pk": 1, "fields": {"name": "a1", "order": 1}},
+  {"model": "people.english", "pk": 2, "fields": {"name": "a2", "order": 2}},
+  {"model": "people.english", "pk": 3, "fields": {"name": "b1", "order": 3}},
+  {"model": "people.english", "pk": 4, "fields": {"name": "b2", "order": 4}},
+  {"model": "people.english", "pk": 5, "fields": {"name": "c1", "order": 5}},
+  {"model": "people.english", "pk": 6, "fields": {"name": "c2", "order": 6}}
 ]
