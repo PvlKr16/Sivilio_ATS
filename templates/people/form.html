@@ -69,6 +69,67 @@
   }
   /* Contain the dropdown inside the form-group so it never overflows the page */
   .form-group { position: relative; }
+
+    /* ── CV Drag & Drop zone ── */
+    .cv-drop-zone {
+      position: relative;
+      border: 2px dashed #c8d0da;
+      border-radius: 6px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 150ms, background 150ms;
+      background: #fafbfc;
+    }
+    .cv-drop-zone:hover,
+    .cv-drop-zone.dragover {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+    }
+    .cv-drop-zone.has-file {
+      border-color: #2eb87a;
+      background: #f0faf5;
+    }
+    .cv-drop-input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .cv-drop-icon {
+      font-size: 2rem;
+      color: #b0b8c4;
+      margin-bottom: 8px;
+      display: block;
+      transition: color 150ms;
+    }
+    .cv-drop-zone:hover .cv-drop-icon,
+    .cv-drop-zone.dragover .cv-drop-icon { color: var(--color-primary); }
+    .cv-drop-zone.has-file .cv-drop-icon { color: #2eb87a; }
+    .cv-drop-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .cv-drop-hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .cv-drop-filename {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2eb87a;
+    }
+    /* Mobile: hide dropzone, show plain input */
+    .cv-mobile-input { display: none; }
+    @media (max-width: 768px) {
+      .cv-drop-zone    { display: none; }
+      .cv-mobile-input { display: block; }
+    }
 </style>
 {% endblock %}
 
@@ -233,10 +294,29 @@
               <label class="form-label">Status</label>
               {{ form.status }}
             </div>
+
             <div class="form-group">
               <label class="form-label">CV <span class="form-text" style="display:inline;">PDF only</span></label>
-              {% if object and object.cv %}<div style="margin-bottom:4px;font-size:var(--font-size-xs);"><a href="{{ object.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV</a></div>{% endif %}
-              <input type="file" name="cv" accept=".pdf" class="form-control">
+              {% if object and object.cv %}
+              <div style="margin-bottom:6px;font-size:var(--font-size-xs);">
+                <a href="{{ object.cv.url }}" target="_blank">
+                  <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV
+                </a>
+              </div>
+              {% endif %}
+
+              <!-- Desktop: drag & drop zone -->
+              <div id="cvDropZone" class="cv-drop-zone">
+                <i class="fas fa-file-pdf cv-drop-icon"></i>
+                <div class="cv-drop-text">Drag &amp; drop PDF here</div>
+                <div class="cv-drop-hint">or click to choose file</div>
+                <div class="cv-drop-filename" id="cvDropFilename" style="display:none;"></div>
+                <input type="file" name="cv" id="cvFileInput" accept=".pdf" class="cv-drop-input">
+              </div>
+
+              <!-- Mobile: plain file input (shown on small screens) -->
+              <input type="file" name="cv" accept=".pdf" class="form-control cv-mobile-input">
+
               {% for e in form.cv.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
           </div>

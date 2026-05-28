@@ -185,6 +185,59 @@
     });
 }
 
+// ── CV drag & drop zone ───────────────────────────────────────────────────
+function initCvDropZone() {
+  var zone    = document.getElementById('cvDropZone');
+  var input   = document.getElementById('cvFileInput');
+  var label   = document.getElementById('cvDropFilename');
+  if (!zone || !input) return;
+
+  // Validate and apply selected file
+  function applyFile(file) {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      zone.classList.remove('has-file', 'dragover');
+      label.style.display = 'none';
+      showFieldError(input, 'CV must be a PDF file.');
+      return;
+    }
+    zone.classList.add('has-file');
+    zone.classList.remove('dragover');
+    label.textContent = file.name;
+    label.style.display = 'block';
+    zone.querySelector('.cv-drop-icon').className = 'fas fa-check-circle cv-drop-icon';
+  }
+
+  // File chosen via click
+  input.addEventListener('change', function () {
+    applyFile(this.files[0]);
+  });
+
+  // Drag events
+  zone.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    zone.classList.add('dragover');
+  });
+  zone.addEventListener('dragleave', function (e) {
+    // Only remove if leaving the zone entirely
+    if (!zone.contains(e.relatedTarget)) {
+      zone.classList.remove('dragover');
+    }
+  });
+  zone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    var file = e.dataTransfer.files[0];
+    if (file) {
+      // Assign to the hidden file input via DataTransfer
+      var dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      applyFile(file);
+    }
+  });
+}
+
   // ── Init ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     initImagePreview();
@@ -193,6 +246,7 @@
     initCharCounters();
     initRequiredValidation(); // must come before initSubmitGuard
     initSubmitGuard();
+    initCvDropZone();
   });
 
 })();
