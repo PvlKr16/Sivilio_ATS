@@ -2,7 +2,8 @@
 
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Vacancy
+from .models import Vacancy, VacancyStatus, CurrencyChoices
+from apps.people.models import Level, English, WorkingHours
 
 User = get_user_model()
 
@@ -29,7 +30,6 @@ class VacancyForm(forms.ModelForm):
             'level':           forms.Select(attrs={'class': 'form-select'}),
             'english':         forms.Select(attrs={'class': 'form-select'}),
             'screening':       forms.Textarea(attrs={'rows': 4}),
-            # M2M — rendered via Select2 in template
             'skills':          forms.SelectMultiple(),
             'working_place':   forms.SelectMultiple(),
             'working_hours':   forms.SelectMultiple(),
@@ -38,12 +38,10 @@ class VacancyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Required fields
         for f in ('title', 'company'):
             self.fields[f].required = True
             self.fields[f].widget.attrs['required'] = 'required'
 
-        # Limit supervisors to users with role 'Supervisor'
         self.fields['supervisors'].queryset = User.objects.filter(
             role__name='Supervisor'
         ).order_by('last_name', 'first_name')
@@ -51,33 +49,76 @@ class VacancyForm(forms.ModelForm):
 
 class VacancySearchForm(forms.Form):
     """Filter form for the vacancies list."""
+
+    # ── Search bar ────────────────────────────────────────────────────────
     q = forms.CharField(
         required=False, label='',
         widget=forms.TextInput(attrs={
-            'placeholder': 'Search by title, company...',
+            'placeholder': 'Search by title, company…',
             'class': 'form-control',
         })
     )
-    status = forms.ChoiceField(
-        required=False,
-        choices=[('', 'All statuses'),
-                 ('in_progress', 'В работе'),
-                 ('stop', 'Стоп')],
+
+    # ── Row 1 ─────────────────────────────────────────────────────────────
+    supervisors = forms.ModelMultipleChoiceField(
+        queryset=None, required=False, label='Supervisor',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
+    )
+    status = forms.MultipleChoiceField(
+        required=False, label='Status',
+        choices=VacancyStatus.choices,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
+    )
+    company = forms.ModelMultipleChoiceField(
+        queryset=None, required=False, label='Company',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
+    )
+
+    # ── Row 2 ─────────────────────────────────────────────────────────────
+    salary_currency = forms.ChoiceField(
+        required=False, label='Currency',
+        choices=[
+            ('', 'Any'),
+            ('USD', 'USD ($)'),
+            ('EUR', 'EUR (€)'),
+            ('UAH', 'UAH (₴)'),
+            ('RUB', 'RUB (₽)'),
+            ('GBP', 'GBP (£)'),
+        ],
         widget=forms.Select(attrs={'class': 'form-select'}),
     )
-    company = forms.ModelChoiceField(
-        queryset=None,
-        required=False,
-        empty_label='All companies',
-        widget=forms.Select(attrs={'class': 'form-select'}),
+    salary_from = forms.IntegerField(
+        required=False, label='Salary from', min_value=0,
+        widget=forms.NumberInput(attrs={
+            'placeholder': 'From', 'class': 'form-control', 'min': '0',
+        }),
     )
-    for_freelancers = forms.ChoiceField(
-        required=False,
-        choices=[('', 'All'), ('1', 'Freelancers'), ('0', 'Not freelancers')],
-        widget=forms.Select(attrs={'class': 'form-select'}),
+    salary_to = forms.IntegerField(
+        required=False, label='Salary to', min_value=0,
+        widget=forms.NumberInput(attrs={
+            'placeholder': 'To', 'class': 'form-control', 'min': '0',
+        }),
+    )
+    level = forms.ModelMultipleChoiceField(
+        queryset=None, required=False, label='Level',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
+    )
+    english = forms.ModelMultipleChoiceField(
+        queryset=None, required=False, label='English',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
+    )
+    working_hours = forms.ModelMultipleChoiceField(
+        queryset=None, required=False, label='Working Hours',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         from apps.companies.models import Company
-        self.fields['company'].queryset = Company.objects.all()
+        self.fields['supervisors'].queryset = User.objects.filter(
+            role__name='Supervisor'
+        ).order_by('last_name', 'first_name')
+        self.fields['company'].queryset      = Company.objects.all()
+        self.fields['level'].queryset        = Level.objects.all()
+        self.fields['english'].queryset      = English.objects.all()
+        self.fields['working_hours'].queryset = WorkingHours.objects.all()

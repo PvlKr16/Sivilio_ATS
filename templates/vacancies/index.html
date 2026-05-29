@@ -21,33 +21,99 @@
 
 {% block content %}
 
-<!-- Filter bar -->
+<!-- ── Filter panel ─────────────────────────────────────────────────────── -->
 <div class="card" style="margin-bottom:var(--space-lg);">
   <div class="card-body" style="padding:var(--space-md);">
-    <form method="get">
-      <div class="filter-bar">
+    <form method="get" id="vacancyFilterForm">
+
+      <!-- Search bar -->
+      <div class="filter-search-row" style="margin-bottom:var(--space-sm);">
         <div class="input-group" style="flex:1;min-width:220px;">
           <span class="input-group-icon"><i class="fas fa-search"></i></span>
           {{ search_form.q }}
         </div>
-        {{ search_form.status }}
-        {{ search_form.company }}
-        {{ search_form.for_freelancers }}
-        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filter</button>
-        {% if request.GET.q or request.GET.status or request.GET.company or request.GET.for_freelancers %}
-        <a href="{% url 'vacancies:index' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Clear</a>
+        <button type="submit" class="btn btn-outline-primary">
+          <i class="fas fa-filter"></i> Filter
+        </button>
+        {% if has_filters %}
+        <a href="{% url 'vacancies:index' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-times"></i> Clear
+        </a>
         {% endif %}
       </div>
+
+      <!-- Row 1: Supervisor · Status · Company -->
+      <div class="filter-row">
+
+        <div class="ms-wrap" id="ms-supervisors"
+             data-name="supervisors"
+             data-placeholder="Supervisor">
+        </div>
+
+        <div class="ms-wrap" id="ms-status"
+             data-name="status"
+             data-placeholder="Status">
+        </div>
+
+        <div class="ms-wrap" id="ms-company"
+             data-name="company"
+             data-placeholder="Company">
+        </div>
+
+      </div><!-- /row 1 -->
+
+      <!-- Row 2: Salary · Level · English · Working Hours -->
+      <div class="filter-row">
+
+        <!-- Salary: currency + range -->
+        <div class="salary-group">
+          <span class="range-label"><i class="fas fa-dollar-sign" style="margin-right:3px;"></i>Salary</span>
+          <div class="salary-inputs">
+            {{ search_form.salary_currency }}
+            {{ search_form.salary_from }}
+            {{ search_form.salary_to }}
+          </div>
+        </div>
+
+        <div class="ms-wrap" id="ms-level"
+             data-name="level"
+             data-placeholder="Level">
+        </div>
+
+        <div class="ms-wrap" id="ms-english"
+             data-name="english"
+             data-placeholder="English">
+        </div>
+
+        <div class="ms-wrap" id="ms-working_hours"
+             data-name="working_hours"
+             data-placeholder="Working Hours">
+        </div>
+
+      </div><!-- /row 2 -->
+
     </form>
   </div>
 </div>
 
-<!-- Table -->
+<!-- Source data for multi-select widgets (outside <form> so checkboxes never submit) -->
+<div style="display:none;" aria-hidden="true" id="ms-source-data">
+  <div data-ms-for="supervisors">{{ search_form.supervisors }}</div>
+  <div data-ms-for="status">{{ search_form.status }}</div>
+  <div data-ms-for="company">{{ search_form.company }}</div>
+  <div data-ms-for="level">{{ search_form.level }}</div>
+  <div data-ms-for="english">{{ search_form.english }}</div>
+  <div data-ms-for="working_hours">{{ search_form.working_hours }}</div>
+</div>
+
+<!-- ── Table ────────────────────────────────────────────────────────────── -->
 <div class="card">
   <div class="card-header">
     <h2 class="card-title">
       Vacancies
-      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} record{{ total_count|pluralize }}</span>
+      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">
+        {{ total_count }} record{{ total_count|pluralize }}
+      </span>
     </h2>
   </div>
 
@@ -94,8 +160,8 @@
             {% endif %}
           </td>
           {% url 'vacancies:edit' vacancy.pk as eu %}
-            {% url 'vacancies:delete' vacancy.pk as du %}
-            {% action_buttons view_url=vacancy.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.vacancies.change_vacancy delete_perm=perms.vacancies.delete_vacancy confirm_msg="Delete "|add:vacancy.title|add:"?" %}
+          {% url 'vacancies:delete' vacancy.pk as du %}
+          {% action_buttons view_url=vacancy.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.vacancies.change_vacancy delete_perm=perms.vacancies.delete_vacancy confirm_msg="Delete "|add:vacancy.title|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>
@@ -107,15 +173,27 @@
     <span>Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
     <ul class="pagination">
       {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-left"></i></a></li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+      </li>
       {% endif %}
       {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% if page_obj.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a>
+        </li>
         {% endif %}
       {% endfor %}
       {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-right"></i></a></li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </li>
       {% endif %}
     </ul>
   </div>
@@ -125,11 +203,14 @@
   <div class="empty-state">
     <div class="empty-state-icon"><i class="fas fa-briefcase"></i></div>
     <div class="empty-state-title">No vacancies found</div>
-    <div class="empty-state-text">{% if request.GET.q %}Try a different search.{% else %}Add the first vacancy to get started.{% endif %}</div>
+    <div class="empty-state-text">
+      {% if has_filters %}Try different filters or clear them.{% else %}Add the first vacancy to get started.{% endif %}
+    </div>
     {% if perms.vacancies.add_vacancy %}
     <a href="{% url 'vacancies:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Vacancy</a>
     {% endif %}
   </div>
   {% endif %}
 </div>
+
 {% endblock %}
