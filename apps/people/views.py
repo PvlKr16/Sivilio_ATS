@@ -23,13 +23,14 @@ class PersonListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qs = Person.objects.select_related(
             'level', 'region', 'english'
+        ).prefetch_related(
+            'skills', 'working_hours'
         ).order_by('last_name', 'first_name')
 
-        q          = self.request.GET.get('q', '').strip()
-        profession = self.request.GET.get('profession', '')
-        level      = self.request.GET.get('level', '')
-        status     = self.request.GET.get('status', '')
+        g = self.request.GET
 
+        # ── Full-text search ──────────────────────────────────────────────
+        q = g.get('q', '').strip()
         if q:
             qs = qs.filter(
                 Q(first_name__icontains=q) |
@@ -38,18 +39,69 @@ class PersonListView(LoginRequiredMixin, ListView):
                 Q(phone__icontains=q)      |
                 Q(telegram__icontains=q)
             )
-        if profession:
-            qs = qs.filter(profession__icontains=profession)
+
+        # ── Row 1 filters ─────────────────────────────────────────────────
+        english = g.getlist('english')
+        if english:
+            qs = qs.filter(english_id__in=english)
+
+        created_from = g.get('created_from', '').strip()
+        created_to   = g.get('created_to', '').strip()
+        if created_from:
+            qs = qs.filter(created_at__date__gte=created_from)
+        if created_to:
+            qs = qs.filter(created_at__date__lte=created_to)
+
+        exp_from = g.get('exp_from', '').strip()
+        exp_to   = g.get('exp_to', '').strip()
+        if exp_from:
+            qs = qs.filter(work_experience__gte=int(exp_from))
+        if exp_to:
+            qs = qs.filter(work_experience__lte=int(exp_to))
+
+        salary_currency = g.get('salary_currency', '').strip()
+        salary_from     = g.get('salary_from', '').strip()
+        salary_to       = g.get('salary_to', '').strip()
+        if salary_currency:
+            qs = qs.filter(salary_currency=salary_currency)
+        if salary_from:
+            qs = qs.filter(salary_desired__gte=int(salary_from))
+        if salary_to:
+            qs = qs.filter(salary_desired__lte=int(salary_to))
+
+        # ── Row 2 filters ─────────────────────────────────────────────────
+        skills = g.getlist('skills')
+        if skills:
+            qs = qs.filter(skills__id__in=skills).distinct()
+
+        level = g.getlist('level')
         if level:
-            qs = qs.filter(level_id=level)
-        if status:
-            qs = qs.filter(status=status)
+            qs = qs.filter(level_id__in=level)
+
+        region = g.getlist('region')
+        if region:
+            qs = qs.filter(region_id__in=region)
+
+        working_hours = g.getlist('working_hours')
+        if working_hours:
+            qs = qs.filter(working_hours__id__in=working_hours).distinct()
+
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['search_form'] = PersonSearchForm(self.request.GET)
         ctx['total_count'] = self.get_queryset().count()
+
+        # Pass raw GET values so the template can detect active filters
+        g = self.request.GET
+        ctx['has_filters'] = any([
+            g.get('q'), g.getlist('english'), g.get('created_from'),
+            g.get('created_to'), g.get('exp_from'), g.get('exp_to'),
+            g.get('salary_currency'), g.get('salary_from'), g.get('salary_to'),
+            g.getlist('skills'), g.getlist('level'),
+            g.getlist('region'), g.getlist('working_hours'),
+        ])
         return ctx
 
 

@@ -19,35 +19,120 @@
 {% endif %}
 {% endblock %}
 
+
 {% block content %}
 
-<!-- Filter bar -->
+<!-- ── Filter panel ─────────────────────────────────────────────────────── -->
 <div class="card" style="margin-bottom:var(--space-lg);">
   <div class="card-body" style="padding:var(--space-md);">
-    <form method="get">
-      <div class="filter-bar">
+    <form method="get" id="peopleFilterForm">
+
+      <!-- Search bar -->
+      <div class="filter-search-row" style="margin-bottom:var(--space-sm);">
         <div class="input-group" style="flex:1;min-width:220px;">
           <span class="input-group-icon"><i class="fas fa-search"></i></span>
           {{ search_form.q }}
         </div>
-        {{ search_form.profession }}
-        {{ search_form.level }}
-        {{ search_form.status }}
-        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filter</button>
-        {% if request.GET.q or request.GET.profession or request.GET.level or request.GET.status %}
-        <a href="{% url 'people:index' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Clear</a>
+        <button type="submit" class="btn btn-outline-primary">
+          <i class="fas fa-filter"></i> Filter
+        </button>
+        {% if has_filters %}
+        <a href="{% url 'people:index' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-times"></i> Clear
+        </a>
         {% endif %}
       </div>
+
+      <!-- Row 1: English · Created on · Experience · Salary -->
+      <div class="filter-row">
+
+        <!-- English (multi) -->
+        <div class="ms-wrap" id="ms-english"
+             data-name="english"
+             data-placeholder="English">
+        </div>
+
+        <!-- Created on range -->
+        <div class="range-group">
+          <span class="range-label"><i class="fas fa-calendar-alt" style="margin-right:3px;"></i>Created on</span>
+          <div class="range-inputs">
+            {{ search_form.created_from }}
+            {{ search_form.created_to }}
+          </div>
+        </div>
+
+        <!-- Experience range -->
+        <div class="range-group">
+          <span class="range-label"><i class="fas fa-briefcase" style="margin-right:3px;"></i>Experience (yrs)</span>
+          <div class="range-inputs">
+            {{ search_form.exp_from }}
+            {{ search_form.exp_to }}
+          </div>
+        </div>
+
+        <!-- Salary: currency + range -->
+        <div class="salary-group">
+          <span class="range-label"><i class="fas fa-dollar-sign" style="margin-right:3px;"></i>Salary</span>
+          <div class="salary-inputs">
+            {{ search_form.salary_currency }}
+            {{ search_form.salary_from }}
+            {{ search_form.salary_to }}
+          </div>
+        </div>
+
+      </div><!-- /row 1 -->
+
+      <!-- Row 2: Skills · Level · Region · Working Hours (all multi) -->
+      <div class="filter-row">
+
+        <div class="ms-wrap" id="ms-skills"
+             data-name="skills"
+             data-placeholder="Skills">
+        </div>
+
+        <div class="ms-wrap" id="ms-level"
+             data-name="level"
+             data-placeholder="Level">
+        </div>
+
+        <div class="ms-wrap" id="ms-region"
+             data-name="region"
+             data-placeholder="Region">
+        </div>
+
+        <div class="ms-wrap" id="ms-working_hours"
+             data-name="working_hours"
+             data-placeholder="Working Hours">
+        </div>
+
+      </div><!-- /row 2 -->
+
+      <!--
+        Hidden inputs for multi-select values are injected by JS.
+        The form-rendered CheckboxSelectMultiple widgets below are used
+        only to provide option data to the JS; they are visually hidden.
+      -->
     </form>
   </div>
 </div>
 
-<!-- Table -->
+<!-- Source data for multi-select widgets (outside <form> so checkboxes never submit) -->
+<div style="display:none;" aria-hidden="true" id="ms-source-data">
+  <div data-ms-for="english">{{ search_form.english }}</div>
+  <div data-ms-for="skills">{{ search_form.skills }}</div>
+  <div data-ms-for="level">{{ search_form.level }}</div>
+  <div data-ms-for="region">{{ search_form.region }}</div>
+  <div data-ms-for="working_hours">{{ search_form.working_hours }}</div>
+</div>
+
+<!-- ── Table ────────────────────────────────────────────────────────────── -->
 <div class="card">
   <div class="card-header">
     <h2 class="card-title">
       People
-      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} record{{ total_count|pluralize }}</span>
+      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">
+        {{ total_count }} record{{ total_count|pluralize }}
+      </span>
     </h2>
   </div>
 
@@ -68,20 +153,22 @@
         {% for person in people %}
         <tr data-href="{{ person.get_absolute_url }}">
           <td>
-              <div class="entity-row-info">
-                <div class="entity-row-name">
-                  <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
-                </div>
-                <div class="entity-row-sub">
-                    {{ person.email|default:"" }}
-                </div>
+            <div class="entity-row-info">
+              <div class="entity-row-name">
+                <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
               </div>
+              <div class="entity-row-sub">{{ person.email|default:"" }}</div>
+            </div>
           </td>
           <td class="text-sm">{{ person.profession|default:"—" }}</td>
           <td class="text-sm">{{ person.level|default:"—" }}</td>
           <td style="font-size:var(--font-size-xs);line-height:1.8;">
-            {% if person.phone %}<div><i class="fas fa-phone" style="width:13px;color:var(--color-primary);"></i> {{ person.phone }}</div>{% endif %}
-            {% if person.telegram %}<div><i class="fab fa-telegram" style="width:13px;color:var(--color-primary);"></i> {{ person.telegram }}</div>{% endif %}
+            {% if person.phone %}
+            <div><i class="fas fa-phone" style="width:13px;color:var(--color-primary);"></i> {{ person.phone }}</div>
+            {% endif %}
+            {% if person.telegram %}
+            <div><i class="fab fa-telegram" style="width:13px;color:var(--color-primary);"></i> {{ person.telegram }}</div>
+            {% endif %}
           </td>
           <td>
             {% if person.status == 'active' %}
@@ -91,8 +178,8 @@
             {% endif %}
           </td>
           {% url 'people:edit' person.pk as eu %}
-            {% url 'people:delete' person.pk as du %}
-            {% action_buttons view_url=person.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg="Delete "|add:person.full_name|add:"?" %}
+          {% url 'people:delete' person.pk as du %}
+          {% action_buttons view_url=person.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg="Delete "|add:person.full_name|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>
@@ -104,17 +191,27 @@
     <span>Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
     <ul class="pagination">
       {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-left"></i></a></li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+      </li>
       {% endif %}
       {% for num in page_obj.paginator.page_range %}
         {% if page_obj.number == num %}
         <li class="page-item active"><span class="page-link">{{ num }}</span></li>
         {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a></li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a>
+        </li>
         {% endif %}
       {% endfor %}
       {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i class="fas fa-chevron-right"></i></a></li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </li>
       {% endif %}
     </ul>
   </div>
@@ -124,11 +221,14 @@
   <div class="empty-state">
     <div class="empty-state-icon"><i class="fas fa-user-group"></i></div>
     <div class="empty-state-title">No people found</div>
-    <div class="empty-state-text">{% if request.GET.q %}Try a different search.{% else %}Get started by adding the first person.{% endif %}</div>
+    <div class="empty-state-text">
+      {% if has_filters %}Try different filters or clear them.{% else %}Get started by adding the first person.{% endif %}
+    </div>
     {% if perms.people.add_person %}
     <a href="{% url 'people:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Person</a>
     {% endif %}
   </div>
   {% endif %}
 </div>
+
 {% endblock %}
