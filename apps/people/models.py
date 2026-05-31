@@ -260,17 +260,7 @@ def person_file_upload_to(instance, filename):
 
 
 class PersonFile(models.Model):
-    """
-    An arbitrary file (CV, portfolio, test task, …) attached to a Person.
-    Replaces the old single `cv` FileField on Person.
-    """
-
-    FILE_TYPE_CHOICES = [
-        ('cv',        'CV / Résumé'),
-        ('portfolio', 'Portfolio'),
-        ('test',      'Test Task'),
-        ('other',     'Other'),
-    ]
+    """CV file (PDF only) attached to a Person. Multiple files allowed."""
 
     person      = models.ForeignKey(
         Person,
@@ -280,18 +270,8 @@ class PersonFile(models.Model):
     )
     file        = models.FileField(
         upload_to=person_file_upload_to,
-        verbose_name='File',
-    )
-    file_type   = models.CharField(
-        max_length=20,
-        choices=FILE_TYPE_CHOICES,
-        default='cv',
-        verbose_name='File Type',
-    )
-    description = models.CharField(
-        max_length=255,
-        blank=True,
-        verbose_name='Description',
+        verbose_name='CV (PDF)',
+        help_text='PDF files only',
     )
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='Uploaded At')
 

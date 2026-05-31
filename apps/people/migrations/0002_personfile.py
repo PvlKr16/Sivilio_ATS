@@ -27,21 +27,8 @@ class Migration(migrations.Migration):
                                            serialize=False, verbose_name='ID')),
                 ('file', models.FileField(
                     upload_to=person_file_upload_to,
-                    verbose_name='File',
-                )),
-                ('file_type', models.CharField(
-                    choices=[
-                        ('cv',        'CV / Résumé'),
-                        ('portfolio', 'Portfolio'),
-                        ('test',      'Test Task'),
-                        ('other',     'Other'),
-                    ],
-                    default='cv',
-                    max_length=20,
-                    verbose_name='File Type',
-                )),
-                ('description', models.CharField(
-                    blank=True, max_length=255, verbose_name='Description',
+                    verbose_name='CV (PDF)',
+                    help_text='PDF files only',
                 )),
                 ('uploaded_at', models.DateTimeField(
                     auto_now_add=True, verbose_name='Uploaded At',

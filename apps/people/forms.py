@@ -5,10 +5,10 @@ from django.forms import inlineformset_factory
 from .models import Person, PersonFile, Level, English, Skill, Region, WorkingHours
 
 
-def validate_cv(f):
-    """Enforce PDF-only for CV uploads (kept for backward compat)."""
+def validate_pdf(f):
+    """Enforce PDF-only uploads."""
     if f and hasattr(f, 'name') and not f.name.lower().endswith('.pdf'):
-        raise forms.ValidationError('CV must be a PDF file.')
+        raise forms.ValidationError('Only PDF files are allowed.')
     return f
 
 
@@ -17,14 +17,10 @@ def validate_cv(f):
 class PersonFileForm(forms.ModelForm):
     class Meta:
         model  = PersonFile
-        fields = ['file', 'file_type', 'description']
-        widgets = {
-            'file_type':   forms.Select(attrs={'class': 'form-select form-select-sm'}),
-            'description': forms.TextInput(attrs={
-                'class': 'form-control form-control-sm',
-                'placeholder': 'Short description (optional)',
-            }),
-        }
+        fields = ['file']
+
+    def clean_file(self):
+        return validate_pdf(self.cleaned_data.get('file'))
 
 
 # Inline formset: Person → PersonFile

@@ -246,18 +246,13 @@
 
               <div class="file-row mb-3 p-3 border rounded{% if ff.instance.pk %} existing{% endif %}"
                    style="background:var(--color-bg-subtle,#f8f9fa);">
-                <div class="d-flex gap-3 align-items-start flex-wrap">
+                <div class="d-flex gap-3 align-items-center flex-wrap">
 
                   {# ── File picker (drop zone or existing link) ── #}
                   <div style="flex:1;min-width:220px;">
                     {% if ff.instance.pk %}
-                      {# Existing saved file #}
                       <div class="mb-2 d-flex align-items-center gap-2">
-                        {% if ff.instance.is_pdf %}
-                          <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i>
-                        {% else %}
-                          <i class="fas fa-file" style="color:var(--color-secondary);"></i>
-                        {% endif %}
+                        <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i>
                         <a href="{{ ff.instance.file.url }}" target="_blank"
                            class="text-decoration-none small fw-semibold" title="{{ ff.instance.filename }}">
                           {{ ff.instance.filename }}
@@ -267,35 +262,20 @@
                       <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);" class="mb-1">Replace file:</div>
                     {% endif %}
 
-                    {# Drop zone — wraps the real <input type="file"> from Django #}
                     <div class="cv-drop-zone" data-drop-zone>
                       <i class="fas fa-file-arrow-up cv-drop-icon"></i>
-                      <div class="cv-drop-text">Drag &amp; drop file here</div>
+                      <div class="cv-drop-text">Drag &amp; drop PDF here</div>
                       <div class="cv-drop-hint">or click to choose</div>
                       <div class="cv-drop-filename" style="display:none;"></div>
-                      {# Render Django's file input inside the zone; JS will hook it #}
                       <span class="cv-drop-input-wrap">{{ ff.file }}</span>
                     </div>
-                    {# Mobile fallback: plain input (same Django field, cloned by JS on small screens) #}
                     <div class="cv-mobile-input mt-1">{{ ff.file }}</div>
 
                     {% if ff.file.errors %}<div class="invalid-feedback d-block mt-1">{{ ff.file.errors }}</div>{% endif %}
                   </div>
 
-                  {# ── Type + Description ── #}
-                  <div style="flex:1;min-width:180px;">
-                    <div class="mb-2">
-                      <label class="form-label" style="font-size:var(--font-size-xs);">Type</label>
-                      {{ ff.file_type }}
-                    </div>
-                    <div>
-                      <label class="form-label" style="font-size:var(--font-size-xs);">Description</label>
-                      {{ ff.description }}
-                    </div>
-                  </div>
-
                   {# ── Remove / Delete ── #}
-                  <div class="pt-1">
+                  <div>
                     {% if ff.instance.pk %}
                       <label class="d-flex align-items-center gap-1 text-danger"
                              style="font-size:var(--font-size-xs);cursor:pointer;" title="Mark for deletion">
@@ -309,8 +289,8 @@
                     {% endif %}
                   </div>
 
-                </div>{# /d-flex #}
-              </div>{# /file-row #}
+                </div>
+              </div>
             {% endfor %}
 
           </div>{# /files-rows #}
@@ -341,8 +321,6 @@
   {% with ff=file_formset.empty_form %}
   {% for hidden in ff.hidden_fields %}{{ hidden }}{% endfor %}
   <span class="ef-file">{{ ff.file }}</span>
-  <span class="ef-type">{{ ff.file_type }}</span>
-  <span class="ef-desc">{{ ff.description }}</span>
   {% endwith %}
 </div>
 {% endblock %}
@@ -427,7 +405,6 @@
   const emptySource = document.getElementById('empty-form-source');
 
   function buildNewRow(idx) {
-    /* Clone the hidden empty-form source and patch __prefix__ → idx */
     const src = emptySource.cloneNode(true);
     src.querySelectorAll('[name],[id],[for]').forEach(el => {
       ['name', 'id', 'for'].forEach(attr => {
@@ -436,18 +413,14 @@
       });
     });
 
-    /* Grab field elements */
     const fileSpan = src.querySelector('.ef-file');
-    const typeSpan = src.querySelector('.ef-type');
-    const descSpan = src.querySelector('.ef-desc');
 
-    /* Wrap file input in a drop zone */
     const dropZone = document.createElement('div');
     dropZone.className = 'cv-drop-zone';
     dropZone.setAttribute('data-drop-zone', '');
     dropZone.innerHTML =
       '<i class="fas fa-file-arrow-up cv-drop-icon"></i>' +
-      '<div class="cv-drop-text">Drag &amp; drop file here</div>' +
+      '<div class="cv-drop-text">Drag &amp; drop PDF here</div>' +
       '<div class="cv-drop-hint">or click to choose</div>' +
       '<div class="cv-drop-filename" style="display:none;"></div>';
     const wrap = document.createElement('span');
@@ -455,24 +428,13 @@
     wrap.appendChild(fileSpan);
     dropZone.appendChild(wrap);
 
-    /* Build the row card */
     const row = document.createElement('div');
     row.className = 'file-row mb-3 p-3 border rounded';
     row.style.background = 'var(--color-bg-subtle,#f8f9fa)';
     row.innerHTML = `
-      <div class="d-flex gap-3 align-items-start flex-wrap">
+      <div class="d-flex gap-3 align-items-center flex-wrap">
         <div style="flex:1;min-width:220px;" class="drop-cell"></div>
-        <div style="flex:1;min-width:180px;">
-          <div class="mb-2">
-            <label class="form-label" style="font-size:var(--font-size-xs);">Type</label>
-            <span class="type-cell"></span>
-          </div>
-          <div>
-            <label class="form-label" style="font-size:var(--font-size-xs);">Description</label>
-            <span class="desc-cell"></span>
-          </div>
-        </div>
-        <div class="pt-1">
+        <div>
           <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">
             <i class="fas fa-times"></i>
           </button>
@@ -480,10 +442,6 @@
       </div>`;
 
     row.querySelector('.drop-cell').appendChild(dropZone);
-    row.querySelector('.type-cell').appendChild(typeSpan.firstChild || typeSpan);
-    row.querySelector('.desc-cell').appendChild(descSpan.firstChild || descSpan);
-
-    /* Also append hidden fields (e.g. id field) */
     src.querySelectorAll('input[type="hidden"]').forEach(h => row.appendChild(h));
 
     return row;
