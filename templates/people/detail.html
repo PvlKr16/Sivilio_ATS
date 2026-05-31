@@ -48,7 +48,6 @@
         {% if person.phone %}<div class="detail-contact-item"><i class="fas fa-phone"></i> {{ person.phone }}</div>{% endif %}
         {% if person.telegram %}<div class="detail-contact-item"><i class="fab fa-telegram"></i> {{ person.telegram }}</div>{% endif %}
         {% if person.linkedin %}<div class="detail-contact-item"><i class="fab fa-linkedin"></i> <a href="{{ person.linkedin }}" target="_blank">LinkedIn</a></div>{% endif %}
-        {% if person.cv %}<div class="detail-contact-item"><i class="fas fa-file-pdf danger"></i> <a href="{{ person.cv.url }}" target="_blank">Download CV</a></div>{% endif %}
       </div>
     </div>
 
@@ -63,6 +62,44 @@
       </div>
     </div>
     {% endif %}
+
+    <!-- Files -->
+    {% with files=person.files.all %}
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Files</h3></div>
+      {% if files %}
+      <ul class="list-group list-group-flush">
+        {% for f in files %}
+        <li class="list-group-item d-flex align-items-center gap-2 py-2 px-3">
+          {% if f.is_pdf %}
+            <i class="fas fa-file-pdf" style="color:var(--color-danger);flex-shrink:0;"></i>
+          {% else %}
+            <i class="fas fa-file" style="color:var(--color-secondary);flex-shrink:0;"></i>
+          {% endif %}
+          <div style="min-width:0;flex:1;">
+            <a href="{{ f.file.url }}" target="_blank"
+               class="text-decoration-none d-block text-truncate"
+               title="{{ f.filename }}">{{ f.filename }}</a>
+            <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);">
+              {{ f.get_file_type_display }}{% if f.description %} · {{ f.description }}{% endif %}
+              <span class="ms-1">· {{ f.uploaded_at|date:"d M Y" }}</span>
+            </div>
+          </div>
+          <a href="{{ f.file.url }}" target="_blank"
+             class="btn btn-outline-secondary btn-sm"
+             title="Download" style="flex-shrink:0;">
+            <i class="fas fa-download"></i>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="card-body">
+        <p class="text-muted mb-0" style="font-size:var(--font-size-sm);">No files attached.</p>
+      </div>
+      {% endif %}
+    </div>
+    {% endwith %}
   </div>
 
   <!-- Right: details -->

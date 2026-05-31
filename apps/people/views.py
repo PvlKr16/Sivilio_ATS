@@ -7,12 +7,69 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 
 from .models import Person
-from .forms import PersonForm, PersonSearchForm
+from .forms import PersonForm, PersonSearchForm, PersonFileFormSet
 
+
+# ── Mixin: attach file formset to Create / Update ─────────────────────────────
+
+class PersonFileFormSetMixin:
+    """
+    Adds PersonFileFormSet handling to any CreateView / UpdateView.
+
+    The formset is:
+      • initialised from POST + FILES on POST requests
+      • pre-populated from the instance on GET requests (UpdateView)
+    Template receives it as `{{ file_formset }}`.
+    """
+
+    def get_file_formset(self, **kwargs):
+        instance = getattr(self, 'object', None)   # None on Create
+        if self.request.method in ('POST', 'PUT'):
+            return PersonFileFormSet(
+                self.request.POST,
+                self.request.FILES,
+                instance=instance,
+                prefix='files',
+                **kwargs,
+            )
+        return PersonFileFormSet(
+            instance=instance,
+            prefix='files',
+            **kwargs,
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if 'file_formset' not in ctx:
+            ctx['file_formset'] = self.get_file_formset()
+        return ctx
+
+    def form_valid(self, form):
+        """Save person first, then save formset (needs person PK for FK)."""
+        file_formset = self.get_file_formset()
+
+        if not file_formset.is_valid():
+            # Re-render with both form errors and formset errors
+            return self.render_to_response(
+                self.get_context_data(form=form, file_formset=file_formset)
+            )
+
+        self.object = form.save()           # save Person
+        file_formset.instance = self.object
+        file_formset.save()                 # save / delete PersonFile rows
+
+        messages.success(
+            self.request,
+            f'Person "{self.object.full_name}" saved.',
+        )
+        return HttpResponseRedirect(self.get_success_url())
+
+
+# ── List ──────────────────────────────────────────────────────────────────────
 
 class PersonListView(LoginRequiredMixin, ListView):
     model               = Person
@@ -93,7 +150,6 @@ class PersonListView(LoginRequiredMixin, ListView):
         ctx['search_form'] = PersonSearchForm(self.request.GET)
         ctx['total_count'] = self.get_queryset().count()
 
-        # Pass raw GET values so the template can detect active filters
         g = self.request.GET
         ctx['has_filters'] = any([
             g.get('q'), g.getlist('english'), g.get('created_from'),
@@ -105,6 +161,8 @@ class PersonListView(LoginRequiredMixin, ListView):
         return ctx
 
 
+# ── Detail ────────────────────────────────────────────────────────────────────
+
 class PersonDetailView(LoginRequiredMixin, DetailView):
     model = Person
     template_name = 'people/detail.html'
@@ -113,18 +171,21 @@ class PersonDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return Person.objects.select_related(
             'gender', 'level', 'english', 'region'
-        ).prefetch_related('skills', 'working_hours', 'working_place')
+        ).prefetch_related('skills', 'working_hours', 'working_place', 'files')
 
 
-class PersonCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+# ── Create ────────────────────────────────────────────────────────────────────
+
+class PersonCreateView(
+    PersonFileFormSetMixin,
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    CreateView,
+):
     model = Person
     form_class = PersonForm
     template_name = 'people/form.html'
     permission_required = 'people.add_person'
-
-    def form_valid(self, form):
-        messages.success(self.request, f'Person "{form.instance.full_name}" created.')
-        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -132,21 +193,26 @@ class PersonCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return ctx
 
 
-class PersonUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+# ── Update ────────────────────────────────────────────────────────────────────
+
+class PersonUpdateView(
+    PersonFileFormSetMixin,
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UpdateView,
+):
     model               = Person
     form_class          = PersonForm
     template_name       = 'people/form.html'
     permission_required = 'people.change_person'
-
-    def form_valid(self, form):
-        messages.success(self.request, f'Person "{form.instance.full_name}" updated.')
-        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['action'] = 'Edit'
         return ctx
 
+
+# ── Delete ────────────────────────────────────────────────────────────────────
 
 class PersonDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model               = Person
@@ -159,6 +225,8 @@ class PersonDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         messages.success(self.request, 'Person deleted.')
         return super().form_valid(form)
 
+
+# ── Autocomplete ──────────────────────────────────────────────────────────────
 
 def person_autocomplete(request):
     """JSON autocomplete endpoint for person name search."""

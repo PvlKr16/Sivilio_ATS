@@ -216,12 +216,7 @@ class Person(models.Model):
         verbose_name='Status',
     )
     notes = models.TextField(blank=True, verbose_name='Notes')
-    cv    = models.FileField(
-        upload_to='people/cv/',
-        null=True, blank=True,
-        verbose_name='CV (PDF)',
-        help_text='PDF files only',
-    )
+    # cv field removed — files are now stored in PersonFile (one-to-many)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created At')
 
     class Meta:
@@ -253,3 +248,73 @@ class Person(models.Model):
         if self.salary_desired:
             return f"{self.salary_desired:,.0f} {self.salary_currency}"
         return '—'
+
+
+# ════════════════════════════════════════════════════════════════════════════════
+# PersonFile — multiple attachments per Person
+# ════════════════════════════════════════════════════════════════════════════════
+
+def person_file_upload_to(instance, filename):
+    """Store files under people/<person_pk>/filename."""
+    return f'people/{instance.person_id}/{filename}'
+
+
+class PersonFile(models.Model):
+    """
+    An arbitrary file (CV, portfolio, test task, …) attached to a Person.
+    Replaces the old single `cv` FileField on Person.
+    """
+
+    FILE_TYPE_CHOICES = [
+        ('cv',        'CV / Résumé'),
+        ('portfolio', 'Portfolio'),
+        ('test',      'Test Task'),
+        ('other',     'Other'),
+    ]
+
+    person      = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE,
+        related_name='files',
+        verbose_name='Person',
+    )
+    file        = models.FileField(
+        upload_to=person_file_upload_to,
+        verbose_name='File',
+    )
+    file_type   = models.CharField(
+        max_length=20,
+        choices=FILE_TYPE_CHOICES,
+        default='cv',
+        verbose_name='File Type',
+    )
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name='Description',
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='Uploaded At')
+
+    class Meta:
+        verbose_name        = 'Person File'
+        verbose_name_plural = 'Person Files'
+        ordering            = ['-uploaded_at']
+
+    def __str__(self):
+        import os
+        return os.path.basename(self.file.name) if self.file else '—'
+
+    @property
+    def filename(self):
+        import os
+        return os.path.basename(self.file.name) if self.file else ''
+
+    @property
+    def extension(self):
+        import os
+        _, ext = os.path.splitext(self.file.name)
+        return ext.lower().lstrip('.') if self.file else ''
+
+    @property
+    def is_pdf(self):
+        return self.extension == 'pdf'

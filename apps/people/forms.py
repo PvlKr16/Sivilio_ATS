@@ -1,15 +1,45 @@
 """Forms for the People module."""
 
 from django import forms
-from .models import Person, Level, English, Skill, Region, WorkingHours
+from django.forms import inlineformset_factory
+from .models import Person, PersonFile, Level, English, Skill, Region, WorkingHours
 
 
 def validate_cv(f):
-    """Enforce PDF-only for CV uploads."""
+    """Enforce PDF-only for CV uploads (kept for backward compat)."""
     if f and hasattr(f, 'name') and not f.name.lower().endswith('.pdf'):
         raise forms.ValidationError('CV must be a PDF file.')
     return f
 
+
+# ── Single file row inside the formset ────────────────────────────────────────
+
+class PersonFileForm(forms.ModelForm):
+    class Meta:
+        model  = PersonFile
+        fields = ['file', 'file_type', 'description']
+        widgets = {
+            'file_type':   forms.Select(attrs={'class': 'form-select form-select-sm'}),
+            'description': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Short description (optional)',
+            }),
+        }
+
+
+# Inline formset: Person → PersonFile
+# extra=1  → always show one empty row for new uploads
+# can_delete=True → renders DELETE checkbox so existing files can be removed
+PersonFileFormSet = inlineformset_factory(
+    Person,
+    PersonFile,
+    form=PersonFileForm,
+    extra=1,
+    can_delete=True,
+)
+
+
+# ── Main person form ──────────────────────────────────────────────────────────
 
 class PersonForm(forms.ModelForm):
     """Create / edit form for Person."""
@@ -23,7 +53,8 @@ class PersonForm(forms.ModelForm):
             'salary_desired', 'salary_currency',
             'region', 'working_hours', 'working_place',
             'email', 'phone', 'linkedin', 'telegram',
-            'status', 'notes', 'cv',
+            'status', 'notes',
+            # 'cv' removed — files live in PersonFileFormSet
         ]
         widgets = {
             'birthdate':     forms.DateInput(attrs={'type': 'date'}),
@@ -45,14 +76,13 @@ class PersonForm(forms.ModelForm):
             self.fields[f].required = True
             self.fields[f].widget.attrs['required'] = 'required'
 
-    def clean_cv(self):
-        return validate_cv(self.cleaned_data.get('cv'))
 
+# ── Search / filter form ──────────────────────────────────────────────────────
 
 class PersonSearchForm(forms.Form):
     """Filter form for the people list."""
 
-    # ── Row 0: search bar (kept as-is) ────────────────────────────────────
+    # ── Row 0: search bar ─────────────────────────────────────────────────
     q = forms.CharField(
         required=False, label='',
         widget=forms.TextInput(attrs={

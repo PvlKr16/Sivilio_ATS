@@ -6,6 +6,61 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+<style>
+/* ── Drag & drop zone ────────────────────────────────────────────────────── */
+.cv-drop-zone {
+  position: relative;
+  border: 2px dashed var(--color-border, #ced4da);
+  border-radius: var(--radius, 6px);
+  padding: 18px 16px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--color-bg-subtle, #f8f9fa);
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.cv-drop-zone:hover,
+.cv-drop-zone.dragover { border-color: var(--color-primary, #0d6efd); background: var(--color-primary-subtle, #e8f0fe); }
+.cv-drop-zone.has-file  { border-color: var(--color-success, #198754); background: var(--color-success-subtle, #d1e7dd); }
+
+.cv-drop-icon  { font-size: 1.6rem; color: var(--color-text-muted, #6c757d); line-height: 1; }
+.cv-drop-text  { font-size: var(--font-size-sm, .875rem); color: var(--color-text-muted, #6c757d); }
+.cv-drop-hint  { font-size: var(--font-size-xs, .8rem);  color: var(--color-text-muted, #6c757d); }
+.cv-drop-filename {
+  font-size: var(--font-size-sm, .875rem);
+  font-weight: 600;
+  color: var(--color-text, #212529);
+  word-break: break-all;
+}
+/* The real <input> is invisible but covers the whole zone */
+.cv-drop-input {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+
+/* ── File formset table ──────────────────────────────────────────────────── */
+#files-table { font-size: var(--font-size-sm, .875rem); }
+#files-table th { font-weight: 600; white-space: nowrap; }
+#files-table .file-row td { vertical-align: middle; }
+
+.file-row.to-delete td { opacity: .45; text-decoration: line-through; }
+
+.delete-check-wrap { display: flex; justify-content: center; }
+.delete-check-wrap input[type="checkbox"] { width: 1.1em; height: 1.1em; cursor: pointer; }
+
+/* Mobile: hide drop zone, show plain input */
+.cv-mobile-input { display: none; }
+@media (max-width: 576px) {
+  .cv-drop-zone    { display: none; }
+  .cv-mobile-input { display: block; }
+}
+</style>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -79,8 +134,6 @@
               {{ form.work_experience }}
             </div>
           </div>
-
-          <!-- Skills — Select2 multi -->
           <div class="form-group">
             <label class="form-label">Skills</label>
             <select name="skills" id="id_skills_select2" multiple style="width:100%;">
@@ -161,38 +214,13 @@
           </div>
         </div>
 
-        <!-- Meta -->
+        <!-- Status & Notes -->
         <div class="form-section">
           <div class="form-section-title">Status &amp; Notes</div>
           <div class="form-row form-row-2">
             <div class="form-group">
               <label class="form-label">Status</label>
               {{ form.status }}
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">CV <span class="form-text" style="display:inline;">PDF only</span></label>
-              {% if object and object.cv %}
-              <div style="margin-bottom:6px;font-size:var(--font-size-xs);">
-                <a href="{{ object.cv.url }}" target="_blank">
-                  <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV
-                </a>
-              </div>
-              {% endif %}
-
-              <!-- Desktop: drag & drop zone -->
-              <div id="cvDropZone" class="cv-drop-zone">
-                <i class="fas fa-file-pdf cv-drop-icon"></i>
-                <div class="cv-drop-text">Drag &amp; drop PDF here</div>
-                <div class="cv-drop-hint">or click to choose file</div>
-                <div class="cv-drop-filename" id="cvDropFilename" style="display:none;"></div>
-                <input type="file" name="cv" id="cvFileInput" accept=".pdf" class="cv-drop-input">
-              </div>
-
-              <!-- Mobile: plain file input (shown on small screens) -->
-              <input type="file" name="cv" accept=".pdf" class="form-control cv-mobile-input">
-
-              {% for e in form.cv.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
           </div>
           <div class="form-group">
@@ -201,9 +229,103 @@
           </div>
         </div>
 
-      </div>
+        <!-- Files -->
+        <div class="form-section">
+          <div class="form-section-title">Files</div>
+
+          {{ file_formset.management_form }}
+
+          {% if file_formset.non_form_errors %}
+          <div class="alert alert-danger">{{ file_formset.non_form_errors }}</div>
+          {% endif %}
+
+          <div id="files-rows">
+
+            {% for ff in file_formset %}
+              {% for hidden in ff.hidden_fields %}{{ hidden }}{% endfor %}
+
+              <div class="file-row mb-3 p-3 border rounded{% if ff.instance.pk %} existing{% endif %}"
+                   style="background:var(--color-bg-subtle,#f8f9fa);">
+                <div class="d-flex gap-3 align-items-start flex-wrap">
+
+                  {# ── File picker (drop zone or existing link) ── #}
+                  <div style="flex:1;min-width:220px;">
+                    {% if ff.instance.pk %}
+                      {# Existing saved file #}
+                      <div class="mb-2 d-flex align-items-center gap-2">
+                        {% if ff.instance.is_pdf %}
+                          <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i>
+                        {% else %}
+                          <i class="fas fa-file" style="color:var(--color-secondary);"></i>
+                        {% endif %}
+                        <a href="{{ ff.instance.file.url }}" target="_blank"
+                           class="text-decoration-none small fw-semibold" title="{{ ff.instance.filename }}">
+                          {{ ff.instance.filename }}
+                        </a>
+                        <span class="text-muted small">· {{ ff.instance.uploaded_at|date:"d M Y" }}</span>
+                      </div>
+                      <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);" class="mb-1">Replace file:</div>
+                    {% endif %}
+
+                    {# Drop zone — wraps the real <input type="file"> from Django #}
+                    <div class="cv-drop-zone" data-drop-zone>
+                      <i class="fas fa-file-arrow-up cv-drop-icon"></i>
+                      <div class="cv-drop-text">Drag &amp; drop file here</div>
+                      <div class="cv-drop-hint">or click to choose</div>
+                      <div class="cv-drop-filename" style="display:none;"></div>
+                      {# Render Django's file input inside the zone; JS will hook it #}
+                      <span class="cv-drop-input-wrap">{{ ff.file }}</span>
+                    </div>
+                    {# Mobile fallback: plain input (same Django field, cloned by JS on small screens) #}
+                    <div class="cv-mobile-input mt-1">{{ ff.file }}</div>
+
+                    {% if ff.file.errors %}<div class="invalid-feedback d-block mt-1">{{ ff.file.errors }}</div>{% endif %}
+                  </div>
+
+                  {# ── Type + Description ── #}
+                  <div style="flex:1;min-width:180px;">
+                    <div class="mb-2">
+                      <label class="form-label" style="font-size:var(--font-size-xs);">Type</label>
+                      {{ ff.file_type }}
+                    </div>
+                    <div>
+                      <label class="form-label" style="font-size:var(--font-size-xs);">Description</label>
+                      {{ ff.description }}
+                    </div>
+                  </div>
+
+                  {# ── Remove / Delete ── #}
+                  <div class="pt-1">
+                    {% if ff.instance.pk %}
+                      <label class="d-flex align-items-center gap-1 text-danger"
+                             style="font-size:var(--font-size-xs);cursor:pointer;" title="Mark for deletion">
+                        {{ ff.DELETE }}
+                        <span>Delete</span>
+                      </label>
+                    {% else %}
+                      <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    {% endif %}
+                  </div>
+
+                </div>{# /d-flex #}
+              </div>{# /file-row #}
+            {% endfor %}
+
+          </div>{# /files-rows #}
+
+          <button type="button" class="btn btn-outline-secondary btn-sm mt-1" id="add-file-row">
+            <i class="fas fa-plus"></i> Add file
+          </button>
+
+        </div>{# /form-section Files #}
+
+      </div>{# /card-body #}
+
       <div class="card-footer" style="display:flex;justify-content:space-between;">
-        <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'people:index' %}{% endif %}" class="btn btn-outline-secondary">
+        <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'people:index' %}{% endif %}"
+           class="btn btn-outline-secondary">
           <i class="fas fa-times"></i> Cancel
         </a>
         <button type="submit" class="btn btn-primary">
@@ -213,11 +335,182 @@
     </div>
   </form>
 </div>
+
+{# ── Hidden source for the empty formset row — JS clones & patches __prefix__ #}
+<div id="empty-form-source" style="display:none;" aria-hidden="true">
+  {% with ff=file_formset.empty_form %}
+  {% for hidden in ff.hidden_fields %}{{ hidden }}{% endfor %}
+  <span class="ef-file">{{ ff.file }}</span>
+  <span class="ef-type">{{ ff.file_type }}</span>
+  <span class="ef-desc">{{ ff.description }}</span>
+  {% endwith %}
+</div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- jQuery and Select2 must load before select2_init.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="{% static 'js/select2_init.js' %}"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ══════════════════════════════════════════════════════════════════════
+     1. Drag & drop helper
+        Accepts a drop-zone <div data-drop-zone> that contains an
+        <input type="file"> somewhere inside .cv-drop-input-wrap.
+        On mobile the drop zone is hidden and a plain input is shown.
+  ══════════════════════════════════════════════════════════════════════ */
+  function initDropZone(zone) {
+    const inputWrap = zone.querySelector('.cv-drop-input-wrap');
+    if (!inputWrap) return;
+    const input     = inputWrap.querySelector('input[type="file"]');
+    if (!input) return;
+
+    /* Move the real input inside the zone so it covers the whole area */
+    input.classList.add('cv-drop-input');
+    zone.appendChild(input);   // relocate from span wrapper into zone directly
+
+    const textEl     = zone.querySelector('.cv-drop-text');
+    const hintEl     = zone.querySelector('.cv-drop-hint');
+    const iconEl     = zone.querySelector('.cv-drop-icon');
+    const filenameEl = zone.querySelector('.cv-drop-filename');
+
+    function setFile(name) {
+      if (name) {
+        zone.classList.add('has-file');
+        if (filenameEl) { filenameEl.textContent = name; filenameEl.style.display = ''; }
+        if (textEl) textEl.style.display = 'none';
+        if (hintEl) hintEl.style.display = 'none';
+        if (iconEl) iconEl.className = 'fas fa-check cv-drop-icon';
+      } else {
+        zone.classList.remove('has-file');
+        if (filenameEl) filenameEl.style.display = 'none';
+        if (textEl) textEl.style.display = '';
+        if (hintEl) hintEl.style.display = '';
+        if (iconEl) iconEl.className = 'fas fa-file-arrow-up cv-drop-icon';
+      }
+    }
+
+    input.addEventListener('change', function () {
+      setFile(this.files[0] ? this.files[0].name : '');
+    });
+
+    zone.addEventListener('dragover',  function (e) { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function ()  { zone.classList.remove('dragover'); });
+    zone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) {
+        /* Assign dropped files to the real input via DataTransfer */
+        try {
+          const dt = new DataTransfer();
+          dt.items.add(e.dataTransfer.files[0]);
+          input.files = dt.files;
+          setFile(e.dataTransfer.files[0].name);
+        } catch (_) { /* Safari fallback: can't assign — user sees normal click */ }
+      }
+    });
+  }
+
+  /* Initialise drop zones already in the DOM (existing formset rows) */
+  document.querySelectorAll('[data-drop-zone]').forEach(initDropZone);
+
+
+  /* ══════════════════════════════════════════════════════════════════════
+     2. Add / remove formset rows
+  ══════════════════════════════════════════════════════════════════════ */
+  const PREFIX     = 'files';
+  const totalInput = () => document.getElementById(`id_${PREFIX}-TOTAL_FORMS`);
+  const container  = document.getElementById('files-rows');
+  const emptySource = document.getElementById('empty-form-source');
+
+  function buildNewRow(idx) {
+    /* Clone the hidden empty-form source and patch __prefix__ → idx */
+    const src = emptySource.cloneNode(true);
+    src.querySelectorAll('[name],[id],[for]').forEach(el => {
+      ['name', 'id', 'for'].forEach(attr => {
+        const v = el.getAttribute(attr);
+        if (v) el.setAttribute(attr, v.replace(/__prefix__/g, idx));
+      });
+    });
+
+    /* Grab field elements */
+    const fileSpan = src.querySelector('.ef-file');
+    const typeSpan = src.querySelector('.ef-type');
+    const descSpan = src.querySelector('.ef-desc');
+
+    /* Wrap file input in a drop zone */
+    const dropZone = document.createElement('div');
+    dropZone.className = 'cv-drop-zone';
+    dropZone.setAttribute('data-drop-zone', '');
+    dropZone.innerHTML =
+      '<i class="fas fa-file-arrow-up cv-drop-icon"></i>' +
+      '<div class="cv-drop-text">Drag &amp; drop file here</div>' +
+      '<div class="cv-drop-hint">or click to choose</div>' +
+      '<div class="cv-drop-filename" style="display:none;"></div>';
+    const wrap = document.createElement('span');
+    wrap.className = 'cv-drop-input-wrap';
+    wrap.appendChild(fileSpan);
+    dropZone.appendChild(wrap);
+
+    /* Build the row card */
+    const row = document.createElement('div');
+    row.className = 'file-row mb-3 p-3 border rounded';
+    row.style.background = 'var(--color-bg-subtle,#f8f9fa)';
+    row.innerHTML = `
+      <div class="d-flex gap-3 align-items-start flex-wrap">
+        <div style="flex:1;min-width:220px;" class="drop-cell"></div>
+        <div style="flex:1;min-width:180px;">
+          <div class="mb-2">
+            <label class="form-label" style="font-size:var(--font-size-xs);">Type</label>
+            <span class="type-cell"></span>
+          </div>
+          <div>
+            <label class="form-label" style="font-size:var(--font-size-xs);">Description</label>
+            <span class="desc-cell"></span>
+          </div>
+        </div>
+        <div class="pt-1">
+          <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>`;
+
+    row.querySelector('.drop-cell').appendChild(dropZone);
+    row.querySelector('.type-cell').appendChild(typeSpan.firstChild || typeSpan);
+    row.querySelector('.desc-cell').appendChild(descSpan.firstChild || descSpan);
+
+    /* Also append hidden fields (e.g. id field) */
+    src.querySelectorAll('input[type="hidden"]').forEach(h => row.appendChild(h));
+
+    return row;
+  }
+
+  document.getElementById('add-file-row').addEventListener('click', function () {
+    const idx = parseInt(totalInput().value, 10);
+    const row = buildNewRow(idx);
+    container.appendChild(row);
+    totalInput().value = idx + 1;
+    /* Init drop zone on the freshly added row */
+    initDropZone(row.querySelector('[data-drop-zone]'));
+  });
+
+  /* Remove unsaved row */
+  container.addEventListener('click', function (e) {
+    const btn = e.target.closest('.remove-row');
+    if (btn) btn.closest('.file-row').remove();
+  });
+
+  /* Strike-through on DELETE checkbox */
+  container.addEventListener('change', function (e) {
+    if (e.target.type === 'checkbox' && e.target.name && e.target.name.endsWith('-DELETE')) {
+      e.target.closest('.file-row').classList.toggle('to-delete', e.target.checked);
+    }
+  });
+
+})();
+</script>
 {% endblock %}
