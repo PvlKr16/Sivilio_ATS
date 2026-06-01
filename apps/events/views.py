@@ -21,10 +21,14 @@ class EventListView(LoginRequiredMixin, ListView):
             'candidate', 'vacancy', 'company', 'supervisor'
         ).order_by('-event_date', '-event_time', '-created_at')
 
-        q          = self.request.GET.get('q', '').strip()
-        event_type = self.request.GET.get('event_type', '')
-        company    = self.request.GET.get('company', '')
-        supervisor = self.request.GET.get('supervisor', '')
+        q           = self.request.GET.get('q', '').strip()
+        event_types = self.request.GET.getlist('event_type')
+        companies   = self.request.GET.getlist('company')
+        supervisors = self.request.GET.getlist('supervisor')
+        vacancies   = self.request.GET.getlist('vacancy')
+        candidates  = self.request.GET.getlist('candidate')
+        date_from   = self.request.GET.get('date_from', '').strip()
+        date_to     = self.request.GET.get('date_to', '').strip()
 
         if q:
             qs = qs.filter(
@@ -33,12 +37,20 @@ class EventListView(LoginRequiredMixin, ListView):
                 Q(vacancy__title__icontains=q)         |
                 Q(notes__icontains=q)
             )
-        if event_type:
-            qs = qs.filter(event_type=event_type)
-        if company:
-            qs = qs.filter(company_id=company)
-        if supervisor:
-            qs = qs.filter(supervisor_id=supervisor)
+        if event_types:
+            qs = qs.filter(event_type__in=event_types)
+        if companies:
+            qs = qs.filter(company_id__in=companies)
+        if supervisors:
+            qs = qs.filter(supervisor_id__in=supervisors)
+        if vacancies:
+            qs = qs.filter(vacancy_id__in=vacancies)
+        if candidates:
+            qs = qs.filter(candidate_id__in=candidates)
+        if date_from:
+            qs = qs.filter(event_date__gte=date_from)
+        if date_to:
+            qs = qs.filter(event_date__lte=date_to)
 
         return qs
 
@@ -46,6 +58,16 @@ class EventListView(LoginRequiredMixin, ListView):
         ctx = super().get_context_data(**kwargs)
         ctx['search_form'] = EventSearchForm(self.request.GET)
         ctx['total_count'] = self.get_queryset().count()
+        ctx['has_filters'] = bool(
+            self.request.GET.get('q')                    or
+            self.request.GET.getlist('event_type')       or
+            self.request.GET.getlist('company')          or
+            self.request.GET.getlist('supervisor')       or
+            self.request.GET.getlist('vacancy')          or
+            self.request.GET.getlist('candidate')        or
+            self.request.GET.get('date_from')            or
+            self.request.GET.get('date_to')
+        )
         return ctx
 
 
