@@ -62,10 +62,6 @@
           <tr data-href="{{ person.get_absolute_url }}">
             <td>
               <div class="entity-row">
-                <div class="avatar avatar-sm">
-                  {% if person.avatar %}<img src="{{ person.avatar.url }}" alt="{{ person.full_name }}">
-                  {% else %}{{ person.initials }}{% endif %}
-                </div>
                 <div class="entity-row-info">
                   <div class="entity-row-name">{{ person.full_name }}</div>
                   <div class="entity-row-sub">{{ person.email|default:"" }}</div>

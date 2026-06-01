@@ -108,26 +108,9 @@
             </a>
             {% else %}<span class="info-item-value empty">—</span>{% endif %}
           </td>
-          <td class="actions-cell">
-            <div class="btn-group">
-              <a href="{% url 'accounts:user_detail' u.pk %}" class="btn btn-sm btn-outline-secondary" title="View">
-                <i class="fas fa-eye"></i>
-              </a>
-              {% if perms.accounts.change_user %}
-              <a href="{% url 'accounts:user_edit' u.pk %}" class="btn btn-sm btn-outline-primary" title="Edit">
-                <i class="fas fa-pen"></i>
-              </a>
-              {% endif %}
-              {% if request.user.is_superuser or request.user.role.name == 'Superman' %}
-              <a href="{% url 'accounts:user_delete' u.pk %}"
-                 class="btn btn-sm btn-outline-danger"
-                 data-confirm="Delete user {{ u.username }}? This cannot be undone."
-                 title="Delete">
-                <i class="fas fa-trash"></i>
-              </a>
-              {% endif %}
-            </div>
-          </td>
+          {% url 'accounts:user_edit' u.pk as eu %}
+          {% url 'accounts:user_delete' u.pk as du %}
+          {% action_buttons edit_url=eu delete_url=du edit_perm=perms.accounts.change_user delete_perm=perms.accounts.delete_user confirm_msg="Delete "|add:u.username|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>
