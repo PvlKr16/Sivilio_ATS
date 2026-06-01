@@ -179,7 +179,7 @@
           </td>
           {% url 'people:edit' person.pk as eu %}
           {% url 'people:delete' person.pk as du %}
-          {% action_buttons view_url=person.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg="Delete "|add:person.full_name|add:"?" %}
+          {% action_buttons edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg="Delete "|add:person.full_name|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>

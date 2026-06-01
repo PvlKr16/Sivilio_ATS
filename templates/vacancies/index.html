@@ -161,7 +161,7 @@
           </td>
           {% url 'vacancies:edit' vacancy.pk as eu %}
           {% url 'vacancies:delete' vacancy.pk as du %}
-          {% action_buttons view_url=vacancy.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.vacancies.change_vacancy delete_perm=perms.vacancies.delete_vacancy confirm_msg="Delete "|add:vacancy.title|add:"?" %}
+          {% action_buttons edit_url=eu delete_url=du edit_perm=perms.vacancies.change_vacancy delete_perm=perms.vacancies.delete_vacancy confirm_msg="Delete "|add:vacancy.title|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>

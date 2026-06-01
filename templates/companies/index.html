@@ -69,7 +69,6 @@
         <tr data-href="{{ company.get_absolute_url }}">
           <td>
             <div class="entity-row">
-              <div class="avatar avatar-sm avatar-square">{{ company.initials }}</div>
               <div class="entity-row-info">
                 <div class="entity-row-name">
                   <a href="{{ company.get_absolute_url }}">{{ company.name }}</a>
@@ -96,7 +95,7 @@
           </td>
             {% url 'companies:edit' company.pk as eu %}
             {% url 'companies:delete' company.pk as du %}
-            {% action_buttons view_url=company.get_absolute_url edit_url=eu delete_url=du edit_perm=perms.companies.change_company delete_perm=perms.companies.delete_company confirm_msg="Delete "|add:company.name|add:"?" %}
+            {% action_buttons edit_url=eu delete_url=du edit_perm=perms.companies.change_company delete_perm=perms.companies.delete_company confirm_msg="Delete "|add:company.name|add:"?" %}
         </tr>
         {% endfor %}
       </tbody>

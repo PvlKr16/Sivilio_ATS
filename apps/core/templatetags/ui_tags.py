@@ -9,7 +9,7 @@ register = template.Library()
 
 
 @register.inclusion_tag('partials/action_buttons.html')
-def action_buttons(view_url, edit_url, delete_url,
+def action_buttons(edit_url, delete_url,
                    edit_perm=False, delete_perm=False,
                    confirm_msg='Are you sure?'):
     """
@@ -18,7 +18,6 @@ def action_buttons(view_url, edit_url, delete_url,
     Usage in templates:
         {% load ui_tags %}
         {% action_buttons
-            view_url=obj.get_absolute_url
             edit_url=edit_url_variable
             delete_url=delete_url_variable
             edit_perm=perms.app.change_model
@@ -30,7 +29,6 @@ def action_buttons(view_url, edit_url, delete_url,
     before calling this tag.
     """
     return {
-        'view_url':    view_url,
         'edit_url':    edit_url,
         'delete_url':  delete_url,
         'edit_perm':   edit_perm,
