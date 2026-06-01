@@ -34,24 +34,23 @@ class CompanySearchForm(forms.Form):
             'class': 'form-control',
         })
     )
-    status = forms.ChoiceField(
+    status = forms.MultipleChoiceField(
         required=False,
         choices=[
-            ('', 'All statuses'),
             ('active',   'Active'),
             ('inactive', 'Inactive'),
             ('lead',     'Lead'),
             ('paused',   'Paused'),
         ],
-        widget=forms.Select(attrs={'class': 'form-select'}),
+        widget=forms.CheckboxSelectMultiple,
     )
-    payment_options = forms.ChoiceField(
+    payment_options = forms.MultipleChoiceField(
         required=False,
         choices=[
-            ('', 'All payment options'),
             ('50_50',   '50/50'),
             ('on_fact', 'По факту'),
             ('prepaid', 'Предоплата'),
         ],
-        widget=forms.Select(attrs={'class': 'form-select'}),
+        widget=forms.CheckboxSelectMultiple,
     )
+    

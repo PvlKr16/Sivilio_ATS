@@ -18,22 +18,27 @@ class CompanyListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = Company.objects.order_by('name')
-        q = self.request.GET.get('q', '').strip()
-        status = self.request.GET.get('status', '')
-        payment_options = self.request.GET.get('payment_options', '')
+        q               = self.request.GET.get('q', '').strip()
+        statuses        = self.request.GET.getlist('status')
+        payment_options = self.request.GET.getlist('payment_options')
 
         if q:
             qs = qs.filter(Q(name__icontains=q) | Q(email__icontains=q))
-        if status:
-            qs = qs.filter(status=status)
+        if statuses:
+            qs = qs.filter(status__in=statuses)
         if payment_options:
-            qs = qs.filter(payment_options=payment_options)
+            qs = qs.filter(payment_options__in=payment_options)
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['search_form'] = CompanySearchForm(self.request.GET)
         ctx['total_count'] = self.get_queryset().count()
+        ctx['has_filters'] = bool(
+            self.request.GET.get('q') or
+            self.request.GET.getlist('status') or
+            self.request.GET.getlist('payment_options')
+        )
         return ctx
 
 
