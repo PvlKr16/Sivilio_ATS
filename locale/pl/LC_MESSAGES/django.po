@@ -1,0 +1,337 @@
+# Polish translation for Sivilio ATS
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "English"
+msgstr "Angielski"
+
+msgid "HR Platform"
+msgstr "Platforma HR"
+
+msgid "IT People & Companies"
+msgstr "Pracownicy IT i firmy"
+
+msgid "Main"
+msgstr "Główne"
+
+msgid "Dashboard"
+msgstr "Panel główny"
+
+msgid "Administration"
+msgstr "Administracja"
+
+msgid "People"
+msgstr "Osoby"
+
+msgid "Companies"
+msgstr "Firmy"
+
+msgid "Vacancies"
+msgstr "Oferty pracy"
+
+msgid "Events"
+msgstr "Zdarzenia"
+
+msgid "System"
+msgstr "System"
+
+msgid "Users"
+msgstr "Użytkownicy"
+
+msgid "Admin Panel"
+msgstr "Panel administratora"
+
+msgid "Logout"
+msgstr "Wyloguj"
+
+msgid "Home"
+msgstr "Strona główna"
+
+msgid "Toggle sidebar"
+msgstr "Pokaż/ukryj pasek boczny"
+
+msgid "Main navigation"
+msgstr "Nawigacja główna"
+
+msgid "Breadcrumb"
+msgstr "Ścieżka nawigacji"
+
+msgid "Select language"
+msgstr "Wybierz język"
+
+msgid "Close"
+msgstr "Zamknij"
+
+msgid "HR IT Platform — People & Company Management"
+msgstr "Platforma HR IT — zarządzanie pracownikami i firmami"
+
+msgid "Add Person"
+msgstr "Dodaj osobę"
+
+msgid "Filter"
+msgstr "Filtruj"
+
+msgid "Clear"
+msgstr "Wyczyść"
+
+msgid "Created on"
+msgstr "Data dodania"
+
+msgid "Experience (yrs)"
+msgstr "Doświadczenie (lata)"
+
+msgid "Salary"
+msgstr "Wynagrodzenie"
+
+msgid "Skills"
+msgstr "Umiejętności"
+
+msgid "Level"
+msgstr "Poziom"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Working Hours"
+msgstr "Godziny pracy"
+
+msgid "Name"
+msgstr "Imię i nazwisko"
+
+msgid "Profession"
+msgstr "Zawód"
+
+msgid "Contacts"
+msgstr "Kontakty"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Actions"
+msgstr "Akcje"
+
+msgid "Active"
+msgstr "Aktywny"
+
+msgid "Inactive"
+msgstr "Nieaktywny"
+
+msgid "No people found"
+msgstr "Nie znaleziono osób"
+
+msgid "Try different filters or clear them."
+msgstr "Spróbuj innych filtrów lub wyczyść je."
+
+msgid "Get started by adding the first person."
+msgstr "Zacznij od dodania pierwszej osoby."
+
+msgid "%(counter)s record"
+msgid_plural "%(counter)s records"
+msgstr[0] "%(counter)s rekord"
+msgstr[1] "%(counter)s rekordy"
+msgstr[2] "%(counter)s rekordów"
+
+msgid "Showing %(start)s–%(end)s of %(total)s"
+msgstr "Wyświetlono %(start)s–%(end)s z %(total)s"
+
+msgid "First Name"
+msgstr "Imię"
+
+msgid "Last Name"
+msgstr "Nazwisko"
+
+msgid "Gender"
+msgstr "Płeć"
+
+msgid "Genders"
+msgstr "Płcie"
+
+msgid "Birthdate"
+msgstr "Data urodzenia"
+
+msgid "Education"
+msgstr "Wykształcenie"
+
+msgid "Work Experience (years)"
+msgstr "Doświadczenie zawodowe (lata)"
+
+msgid "Salary Desired"
+msgstr "Oczekiwane wynagrodzenie"
+
+msgid "Currency"
+msgstr "Waluta"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "Notes"
+msgstr "Notatki"
+
+msgid "Created At"
+msgstr "Data utworzenia"
+
+msgid "Person"
+msgstr "Osoba"
+
+msgid "Person File"
+msgstr "Plik osoby"
+
+msgid "Person Files"
+msgstr "Pliki osoby"
+
+msgid "CV (PDF)"
+msgstr "CV (PDF)"
+
+msgid "PDF files only"
+msgstr "Tylko pliki PDF"
+
+msgid "Uploaded At"
+msgstr "Data przesłania"
+
+msgid "English Level"
+msgstr "Poziom angielskiego"
+
+msgid "English Levels"
+msgstr "Poziomy angielskiego"
+
+msgid "A1 — Beginner"
+msgstr "A1 — Początkujący"
+
+msgid "A2 — Elementary"
+msgstr "A2 — Podstawowy"
+
+msgid "B1 — Intermediate"
+msgstr "B1 — Średniozaawansowany"
+
+msgid "B2 — Upper-Intermediate"
+msgstr "B2 — Wyższy średniozaawansowany"
+
+msgid "C1 — Advanced"
+msgstr "C1 — Zaawansowany"
+
+msgid "C2 — Proficient"
+msgstr "C2 — Biegły"
+
+msgid "Junior"
+msgstr "Junior"
+
+msgid "Middle"
+msgstr "Middle"
+
+msgid "Senior"
+msgstr "Senior"
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Head of"
+msgstr "Kierownik"
+
+msgid "Architect"
+msgstr "Architekt"
+
+msgid "Skill"
+msgstr "Umiejętność"
+
+msgid "Regions"
+msgstr "Regiony"
+
+msgid "Working Place"
+msgstr "Miejsce pracy"
+
+msgid "Working Places"
+msgstr "Miejsca pracy"
+
+msgid "Order"
+msgstr "Kolejność"
+
+msgid "Person \"%(name)s\" saved."
+msgstr "Osoba \"%(name)s\" została zapisana."
+
+msgid "Person deleted."
+msgstr "Osoba została usunięta."
+
+msgid "Create"
+msgstr "Utwórz"
+
+msgid "Edit"
+msgstr "Edytuj"
+
+msgid "In Progress"
+msgstr "W toku"
+
+msgid "Stop"
+msgstr "Zatrzymana"
+
+msgid "Title"
+msgstr "Tytuł"
+
+msgid "Company"
+msgstr "Firma"
+
+msgid "Skills Required"
+msgstr "Wymagane umiejętności"
+
+msgid "Salary Offered"
+msgstr "Oferowane wynagrodzenie"
+
+msgid "Screening"
+msgstr "Screening"
+
+msgid "Interview questions, screening criteria, notes"
+msgstr "Pytania rekrutacyjne, kryteria screeningu, notatki"
+
+msgid "For Freelancers"
+msgstr "Dla freelancerów"
+
+msgid "Supervisors"
+msgstr "Przełożeni"
+
+msgid "Updated At"
+msgstr "Data aktualizacji"
+
+msgid "Vacancy"
+msgstr "Oferta pracy"
+
+msgid "Vacancy \"%(title)s\" created."
+msgstr "Oferta \"%(title)s\" została utworzona."
+
+msgid "Vacancy \"%(title)s\" updated."
+msgstr "Oferta \"%(title)s\" została zaktualizowana."
+
+msgid "Vacancy deleted."
+msgstr "Oferta została usunięta."
+
+msgid "Search by title, company…"
+msgstr "Szukaj po tytule, firmie…"
+
+msgid "Supervisor"
+msgstr "Przełożony"
+
+msgid "Any"
+msgstr "Dowolna"
+
+msgid "Salary from"
+msgstr "Wynagrodzenie od"
+
+msgid "Salary to"
+msgstr "Wynagrodzenie do"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Do"

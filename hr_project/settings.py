@@ -5,6 +5,7 @@ Django settings for HR IT platform.
 import os
 from pathlib import Path
 from decouple import config
+from django.utils.translation import gettext_lazy as _   # ← ДОБАВЛЕНО
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,6 +45,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',      # ← после SessionMiddleware, до CommonMiddleware ✓
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -100,8 +102,23 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-LANGUAGE_CODE = 'ru-ru'
-TIME_ZONE = 'Europe/Moscow'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Русский')),
+    ('be', _('Беларуская')),
+    ('de', _('Deutsch')),
+    ('pl', _('Polski')),
+    ('uk', _('Українська')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+TIME_ZONE = 'Europe/Minsk'
+
 USE_I18N = True
 USE_TZ = True
 

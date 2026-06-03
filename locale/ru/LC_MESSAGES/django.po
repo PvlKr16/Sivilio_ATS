@@ -1,0 +1,337 @@
+# Russian translation for Sivilio ATS
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "HR Platform"
+msgstr "HR Платформа"
+
+msgid "IT People & Companies"
+msgstr "IT Люди и компании"
+
+msgid "Main"
+msgstr "Главное"
+
+msgid "Dashboard"
+msgstr "Панель управления"
+
+msgid "Administration"
+msgstr "Управление"
+
+msgid "People"
+msgstr "Люди"
+
+msgid "Companies"
+msgstr "Компании"
+
+msgid "Vacancies"
+msgstr "Вакансии"
+
+msgid "Events"
+msgstr "События"
+
+msgid "System"
+msgstr "Система"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Admin Panel"
+msgstr "Панель администратора"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "Toggle sidebar"
+msgstr "Скрыть/показать меню"
+
+msgid "Main navigation"
+msgstr "Основная навигация"
+
+msgid "Breadcrumb"
+msgstr "Навигационная цепочка"
+
+msgid "Select language"
+msgstr "Выбрать язык"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "HR IT Platform — People & Company Management"
+msgstr "HR IT Платформа — управление людьми и компаниями"
+
+msgid "Add Person"
+msgstr "Добавить человека"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "Clear"
+msgstr "Сбросить"
+
+msgid "Created on"
+msgstr "Дата добавления"
+
+msgid "Experience (yrs)"
+msgstr "Опыт (лет)"
+
+msgid "Salary"
+msgstr "Зарплата"
+
+msgid "Skills"
+msgstr "Навыки"
+
+msgid "Level"
+msgstr "Уровень"
+
+msgid "Region"
+msgstr "Регион"
+
+msgid "Working Hours"
+msgstr "Часы работы"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Profession"
+msgstr "Профессия"
+
+msgid "Contacts"
+msgstr "Контакты"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "Active"
+msgstr "Активный"
+
+msgid "Inactive"
+msgstr "Неактивный"
+
+msgid "No people found"
+msgstr "Люди не найдены"
+
+msgid "Try different filters or clear them."
+msgstr "Попробуйте изменить фильтры или сбросить их."
+
+msgid "Get started by adding the first person."
+msgstr "Начните с добавления первого человека."
+
+msgid "%(counter)s record"
+msgid_plural "%(counter)s records"
+msgstr[0] "%(counter)s запись"
+msgstr[1] "%(counter)s записи"
+msgstr[2] "%(counter)s записей"
+
+msgid "Showing %(start)s–%(end)s of %(total)s"
+msgstr "Показано %(start)s–%(end)s из %(total)s"
+
+msgid "First Name"
+msgstr "Имя"
+
+msgid "Last Name"
+msgstr "Фамилия"
+
+msgid "Gender"
+msgstr "Пол"
+
+msgid "Genders"
+msgstr "Полы"
+
+msgid "Birthdate"
+msgstr "Дата рождения"
+
+msgid "Education"
+msgstr "Образование"
+
+msgid "Work Experience (years)"
+msgstr "Опыт работы (лет)"
+
+msgid "Salary Desired"
+msgstr "Желаемая зарплата"
+
+msgid "Currency"
+msgstr "Валюта"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "E-mail"
+msgstr "Эл. почта"
+
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "Notes"
+msgstr "Заметки"
+
+msgid "Created At"
+msgstr "Дата создания"
+
+msgid "Person"
+msgstr "Человек"
+
+msgid "Person File"
+msgstr "Файл человека"
+
+msgid "Person Files"
+msgstr "Файлы человека"
+
+msgid "CV (PDF)"
+msgstr "Резюме (PDF)"
+
+msgid "PDF files only"
+msgstr "Только PDF файлы"
+
+msgid "Uploaded At"
+msgstr "Дата загрузки"
+
+msgid "English Level"
+msgstr "Уровень английского"
+
+msgid "English Levels"
+msgstr "Уровни английского"
+
+msgid "A1 — Beginner"
+msgstr "A1 — Начальный"
+
+msgid "A2 — Elementary"
+msgstr "A2 — Элементарный"
+
+msgid "B1 — Intermediate"
+msgstr "B1 — Средний"
+
+msgid "B2 — Upper-Intermediate"
+msgstr "B2 — Выше среднего"
+
+msgid "C1 — Advanced"
+msgstr "C1 — Продвинутый"
+
+msgid "C2 — Proficient"
+msgstr "C2 — Свободное владение"
+
+msgid "Junior"
+msgstr "Джуниор"
+
+msgid "Middle"
+msgstr "Мидл"
+
+msgid "Senior"
+msgstr "Сеньор"
+
+msgid "Lead"
+msgstr "Лид"
+
+msgid "Head of"
+msgstr "Руководитель"
+
+msgid "Architect"
+msgstr "Архитектор"
+
+msgid "Skill"
+msgstr "Навык"
+
+msgid "Regions"
+msgstr "Регионы"
+
+msgid "Working Place"
+msgstr "Место работы"
+
+msgid "Working Places"
+msgstr "Места работы"
+
+msgid "Order"
+msgstr "Порядок"
+
+msgid "Person \"%(name)s\" saved."
+msgstr "Человек \"%(name)s\" сохранён."
+
+msgid "Person deleted."
+msgstr "Человек удалён."
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "In Progress"
+msgstr "В работе"
+
+msgid "Stop"
+msgstr "Стоп"
+
+msgid "Title"
+msgstr "Название"
+
+msgid "Company"
+msgstr "Компания"
+
+msgid "Skills Required"
+msgstr "Требуемые навыки"
+
+msgid "Salary Offered"
+msgstr "Предлагаемая зарплата"
+
+msgid "Screening"
+msgstr "Скрининг"
+
+msgid "Interview questions, screening criteria, notes"
+msgstr "Вопросы для интервью, критерии скрининга, заметки"
+
+msgid "For Freelancers"
+msgstr "Для фрилансеров"
+
+msgid "Supervisors"
+msgstr "Супервайзеры"
+
+msgid "Updated At"
+msgstr "Дата обновления"
+
+msgid "Vacancy"
+msgstr "Вакансия"
+
+msgid "Vacancy \"%(title)s\" created."
+msgstr "Вакансия \"%(title)s\" создана."
+
+msgid "Vacancy \"%(title)s\" updated."
+msgstr "Вакансия \"%(title)s\" обновлена."
+
+msgid "Vacancy deleted."
+msgstr "Вакансия удалена."
+
+msgid "Search by title, company…"
+msgstr "Поиск по названию, компании…"
+
+msgid "Supervisor"
+msgstr "Супервайзер"
+
+msgid "Any"
+msgstr "Любая"
+
+msgid "Salary from"
+msgstr "Зарплата от"
+
+msgid "Salary to"
+msgstr "Зарплата до"
+
+msgid "From"
+msgstr "От"
+
+msgid "To"
+msgstr "До"

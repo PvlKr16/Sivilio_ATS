@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _   # ← ДОБАВЛЕНО
 
 from .models import Vacancy
 from .forms import VacancyForm, VacancySearchForm
@@ -25,7 +26,6 @@ class VacancyListView(LoginRequiredMixin, ListView):
 
         g = self.request.GET
 
-        # ── Full-text search ──────────────────────────────────────────────
         q = g.get('q', '').strip()
         if q:
             qs = qs.filter(
@@ -33,7 +33,6 @@ class VacancyListView(LoginRequiredMixin, ListView):
                 Q(company__name__icontains=q)
             )
 
-        # ── Row 1 ─────────────────────────────────────────────────────────
         supervisors = g.getlist('supervisors')
         if supervisors:
             qs = qs.filter(supervisors__id__in=supervisors).distinct()
@@ -46,7 +45,6 @@ class VacancyListView(LoginRequiredMixin, ListView):
         if company:
             qs = qs.filter(company_id__in=company)
 
-        # ── Row 2 ─────────────────────────────────────────────────────────
         salary_currency = g.get('salary_currency', '').strip()
         salary_from     = g.get('salary_from', '').strip()
         salary_to       = g.get('salary_to', '').strip()
@@ -106,12 +104,16 @@ class VacancyCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     permission_required = 'vacancies.add_vacancy'
 
     def form_valid(self, form):
-        messages.success(self.request, f'Vacancy "{form.instance.title}" created.')
+        # ИСПРАВЛЕНО: % форматирование вместо f-строки
+        messages.success(
+            self.request,
+            _('Vacancy "%(title)s" created.') % {'title': form.instance.title},
+        )
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Create'
+        ctx['action'] = _('Create')   # ИСПРАВЛЕНО
         return ctx
 
 
@@ -122,12 +124,16 @@ class VacancyUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     permission_required = 'vacancies.change_vacancy'
 
     def form_valid(self, form):
-        messages.success(self.request, f'Vacancy "{form.instance.title}" updated.')
+        # ИСПРАВЛЕНО: % форматирование вместо f-строки
+        messages.success(
+            self.request,
+            _('Vacancy "%(title)s" updated.') % {'title': form.instance.title},
+        )
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Edit'
+        ctx['action'] = _('Edit')     # ИСПРАВЛЕНО
         return ctx
 
 
@@ -139,5 +145,5 @@ class VacancyDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     context_object_name = 'vacancy'
 
     def form_valid(self, form):
-        messages.success(self.request, 'Vacancy deleted.')
+        messages.success(self.request, _('Vacancy deleted.'))   # ИСПРАВЛЕНО
         return super().form_valid(form)

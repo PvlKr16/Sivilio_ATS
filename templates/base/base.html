@@ -1,13 +1,12 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HR IT Platform — People & Company Management">
-  <title>{% block title %}HR Platform{% endblock %}</title>
+  <meta name="description" content="{% trans "HR IT Platform — People & Company Management" %}">
+  <title>{% block title %}{% trans "HR Platform" %}{% endblock %}</title>
 
-  <!-- Stylesheets (order matters: base → layout → components → forms → page) -->
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/layout.css' %}">
   <link rel="stylesheet" href="{% static 'css/components.css' %}">
@@ -15,7 +14,6 @@
   <link rel="stylesheet" href="{% static 'css/pages.css' %}">
   {% block extra_css %}{% endblock %}
 
-  <!-- Font Awesome icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
 </head>
 <body>
@@ -23,31 +21,29 @@
 <div class="app-wrapper">
 
   <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
-  <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+  <nav class="sidebar" id="sidebar" aria-label="{% trans "Main navigation" %}">
 
     <a class="sidebar-brand" href="{% url 'core:dashboard' %}">
       <div class="sidebar-brand-icon"><i class="fas fa-users-gear"></i></div>
       <div>
-        <div class="sidebar-brand-text">HR Platform</div>
-        <div class="sidebar-brand-sub">IT People & Companies</div>
+        <div class="sidebar-brand-text">{% trans "HR Platform" %}</div>
+        <div class="sidebar-brand-sub">{% trans "IT People & Companies" %}</div>
       </div>
     </a>
 
     <div class="sidebar-nav">
-      <!-- Main section -->
-      <div class="sidebar-section-label">Main</div>
+      <div class="sidebar-section-label">{% trans "Main" %}</div>
 
       <a class="sidebar-link" href="{% url 'core:dashboard' %}">
         <i class="fas fa-gauge-high"></i>
-        <span>Dashboard</span>
+        <span>{% trans "Dashboard" %}</span>
       </a>
 
-      <!-- Administration section -->
-      <div class="sidebar-section-label">Administration</div>
+      <div class="sidebar-section-label">{% trans "Administration" %}</div>
 
       <a class="sidebar-link" href="{% url 'people:index' %}">
         <i class="fas fa-user-group"></i>
-        <span>People</span>
+        <span>{% trans "People" %}</span>
         {% if nav_people_count %}
           <span class="sidebar-badge">{{ nav_people_count }}</span>
         {% endif %}
@@ -55,7 +51,7 @@
 
       <a class="sidebar-link" href="{% url 'companies:index' %}">
         <i class="fas fa-building"></i>
-        <span>Companies</span>
+        <span>{% trans "Companies" %}</span>
         {% if nav_companies_count %}
           <span class="sidebar-badge">{{ nav_companies_count }}</span>
         {% endif %}
@@ -63,7 +59,7 @@
 
       <a class="sidebar-link" href="{% url 'vacancies:index' %}">
         <i class="fas fa-briefcase"></i>
-        <span>Vacancies</span>
+        <span>{% trans "Vacancies" %}</span>
         {% if nav_vacancies_count %}
           <span class="sidebar-badge">{{ nav_vacancies_count }}</span>
         {% endif %}
@@ -71,7 +67,7 @@
 
       <a class="sidebar-link" href="{% url 'events:index' %}">
         <i class="fas fa-calendar-check"></i>
-        <span>Events</span>
+        <span>{% trans "Events" %}</span>
         {% if nav_events_count %}
           <span class="sidebar-badge">{{ nav_events_count }}</span>
         {% endif %}
@@ -79,16 +75,17 @@
 
       <!-- System section (staff only) -->
       {% if user.is_staff %}
-      <div class="sidebar-section-label">System</div>
+      {# ИСПРАВЛЕНО: "System" теперь переводится #}
+      <div class="sidebar-section-label">{% trans "System" %}</div>
 
       <a class="sidebar-link" href="{% url 'accounts:user_list' %}">
         <i class="fas fa-shield-halved"></i>
-        <span>Users</span>
+        <span>{% trans "Users" %}</span>
       </a>
 
       <a class="sidebar-link" href="{% url 'admin:index' %}">
         <i class="fas fa-screwdriver-wrench"></i>
-        <span>Admin Panel</span>
+        <span>{% trans "Admin Panel" %}</span>
       </a>
       {% endif %}
     </div>
@@ -103,7 +100,7 @@
         {% csrf_token %}
         <button type="submit" class="sidebar-link">
           <i class="fas fa-right-from-bracket"></i>
-          <span>Logout</span>
+          <span>{% trans "Logout" %}</span>
         </button>
       </form>
     </div>
@@ -118,16 +115,16 @@
     <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <!-- Mobile sidebar toggle -->
-        <button class="sidebar-toggle topbar-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+        <button class="sidebar-toggle topbar-btn" id="sidebarToggle" aria-label="{% trans "Toggle sidebar" %}">
           <i class="fas fa-bars"></i>
         </button>
 
         <div>
-          <h1 class="topbar-title">{% block page_title %}Dashboard{% endblock %}</h1>
-          <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+          {# ИСПРАВЛЕНО: дефолтный заголовок через {% trans %} #}
+          <h1 class="topbar-title">{% block page_title %}{% trans "Dashboard" %}{% endblock %}</h1>
+          <nav class="topbar-breadcrumb" aria-label="{% trans "Breadcrumb" %}">
             {% block breadcrumb %}
-            <a href="{% url 'core:dashboard' %}">Home</a>
+            <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
             {% endblock %}
           </nav>
         </div>
@@ -136,7 +133,21 @@
       <div class="topbar-right">
         {% block topbar_actions %}{% endblock %}
 
-        <!-- User dropdown trigger -->
+        <!-- Language switcher -->
+        <form action="{% url 'set_language' %}" method="post">
+          {% csrf_token %}
+          <input name="next" type="hidden" value="{{ request.path }}">
+          <select name="language" onchange="this.form.submit()" class="form-select form-select-sm" aria-label="{% trans "Select language" %}">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% for code, name in LANGUAGES %}
+              <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>
+                {{ name }}
+              </option>
+            {% endfor %}
+          </select>
+        </form>
+
         <div class="user-avatar-sm" title="{{ user.display_name }}">
           {{ user.display_name|slice:":2"|upper }}
         </div>
@@ -149,7 +160,7 @@
       <div class="alert alert-{{ message.tags|default:'info' }}" data-auto-dismiss="4000" role="alert">
         <i class="fas {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'error' or message.tags == 'danger' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
         <span>{{ message }}</span>
-        <button class="alert-close" aria-label="Close">&times;</button>
+        <button class="alert-close" aria-label="{% trans "Close" %}">&times;</button>
       </div>
       {% endfor %}
     </div>
@@ -162,7 +173,6 @@
   </div><!-- /.main-content -->
 </div><!-- /.app-wrapper -->
 
-<!-- JavaScript (order: sidebar → ui → tables → forms → page) -->
 <script src="{% static 'js/sidebar.js' %}"></script>
 <script src="{% static 'js/ui.js' %}"></script>
 <script src="{% static 'js/tables.js' %}"></script>

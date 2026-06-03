@@ -1,20 +1,20 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n %}
 {% load ui_tags %}
 
-{% block title %}People — HR Platform{% endblock %}
-{% block page_title %}People{% endblock %}
+{% block title %}{% trans "People" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{% trans "People" %}{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<span class="current">People</span>
+<span class="current">{% trans "People" %}</span>
 {% endblock %}
 
 {% block topbar_actions %}
 {% if perms.people.add_person %}
 <a href="{% url 'people:create' %}" class="btn btn-primary btn-sm">
-  <i class="fas fa-plus"></i> Add Person
+  <i class="fas fa-plus"></i> {% trans "Add Person" %}
 </a>
 {% endif %}
 {% endblock %}
@@ -34,11 +34,11 @@
           {{ search_form.q }}
         </div>
         <button type="submit" class="btn btn-outline-primary">
-          <i class="fas fa-filter"></i> Filter
+          <i class="fas fa-filter"></i> {% trans "Filter" %}
         </button>
         {% if has_filters %}
         <a href="{% url 'people:index' %}" class="btn btn-outline-secondary">
-          <i class="fas fa-times"></i> Clear
+          <i class="fas fa-times"></i> {% trans "Clear" %}
         </a>
         {% endif %}
       </div>
@@ -46,33 +46,29 @@
       <!-- Row 1: English · Created on · Experience · Salary -->
       <div class="filter-row">
 
-        <!-- English (multi) -->
         <div class="ms-wrap" id="ms-english"
              data-name="english"
-             data-placeholder="English">
+             data-placeholder="{% trans "English" %}">
         </div>
 
-        <!-- Created on range -->
         <div class="range-group">
-          <span class="range-label"><i class="fas fa-calendar-alt" style="margin-right:3px;"></i>Created on</span>
+          <span class="range-label"><i class="fas fa-calendar-alt" style="margin-right:3px;"></i>{% trans "Created on" %}</span>
           <div class="range-inputs">
             {{ search_form.created_from }}
             {{ search_form.created_to }}
           </div>
         </div>
 
-        <!-- Experience range -->
         <div class="range-group">
-          <span class="range-label"><i class="fas fa-briefcase" style="margin-right:3px;"></i>Experience (yrs)</span>
+          <span class="range-label"><i class="fas fa-briefcase" style="margin-right:3px;"></i>{% trans "Experience (yrs)" %}</span>
           <div class="range-inputs">
             {{ search_form.exp_from }}
             {{ search_form.exp_to }}
           </div>
         </div>
 
-        <!-- Salary: currency + range -->
         <div class="salary-group">
-          <span class="range-label"><i class="fas fa-dollar-sign" style="margin-right:3px;"></i>Salary</span>
+          <span class="range-label"><i class="fas fa-dollar-sign" style="margin-right:3px;"></i>{% trans "Salary" %}</span>
           <div class="salary-inputs">
             {{ search_form.salary_currency }}
             {{ search_form.salary_from }}
@@ -82,41 +78,36 @@
 
       </div><!-- /row 1 -->
 
-      <!-- Row 2: Skills · Level · Region · Working Hours (all multi) -->
+      <!-- Row 2: Skills · Level · Region · Working Hours -->
       <div class="filter-row">
 
         <div class="ms-wrap" id="ms-skills"
              data-name="skills"
-             data-placeholder="Skills">
+             data-placeholder="{% trans "Skills" %}">
         </div>
 
         <div class="ms-wrap" id="ms-level"
              data-name="level"
-             data-placeholder="Level">
+             data-placeholder="{% trans "Level" %}">
         </div>
 
         <div class="ms-wrap" id="ms-region"
              data-name="region"
-             data-placeholder="Region">
+             data-placeholder="{% trans "Region" %}">
         </div>
 
         <div class="ms-wrap" id="ms-working_hours"
              data-name="working_hours"
-             data-placeholder="Working Hours">
+             data-placeholder="{% trans "Working Hours" %}">
         </div>
 
       </div><!-- /row 2 -->
 
-      <!--
-        Hidden inputs for multi-select values are injected by JS.
-        The form-rendered CheckboxSelectMultiple widgets below are used
-        only to provide option data to the JS; they are visually hidden.
-      -->
     </form>
   </div>
 </div>
 
-<!-- Source data for multi-select widgets (outside <form> so checkboxes never submit) -->
+<!-- Source data for multi-select widgets -->
 <div style="display:none;" aria-hidden="true" id="ms-source-data">
   <div data-ms-for="english">{{ search_form.english }}</div>
   <div data-ms-for="skills">{{ search_form.skills }}</div>
@@ -129,9 +120,14 @@
 <div class="card">
   <div class="card-header">
     <h2 class="card-title">
-      People
+      {% trans "People" %}
       <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">
-        {{ total_count }} record{{ total_count|pluralize }}
+        {# ИСПРАВЛЕНО: pluralize не работает для ru/be/uk — используем blocktrans с count #}
+        {% blocktrans count counter=total_count %}
+          {{ counter }} record
+        {% plural %}
+          {{ counter }} records
+        {% endblocktrans %}
       </span>
     </h2>
   </div>
@@ -141,12 +137,12 @@
     <table class="data-table" id="peopleTable">
       <thead>
         <tr>
-          <th data-sortable>Name</th>
-          <th data-sortable>Profession</th>
-          <th data-sortable>Level</th>
-          <th>Contacts</th>
-          <th>Status</th>
-          <th style="width:100px;">Actions</th>
+          <th data-sortable>{% trans "Name" %}</th>
+          <th data-sortable>{% trans "Profession" %}</th>
+          <th data-sortable>{% trans "Level" %}</th>
+          <th>{% trans "Contacts" %}</th>
+          <th>{% trans "Status" %}</th>
+          <th style="width:100px;">{% trans "Actions" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -171,15 +167,17 @@
             {% endif %}
           </td>
           <td>
+            {# ИСПРАВЛЕНО: статусы через {% trans %} #}
             {% if person.status == 'active' %}
-            <span class="badge badge-success">Active</span>
+            <span class="badge badge-success">{% trans "Active" %}</span>
             {% else %}
-            <span class="badge badge-secondary">Inactive</span>
+            <span class="badge badge-secondary">{% trans "Inactive" %}</span>
             {% endif %}
           </td>
           {% url 'people:edit' person.pk as eu %}
           {% url 'people:delete' person.pk as du %}
-          {% action_buttons edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg="Delete "|add:person.full_name|add:"?" %}
+          {# ИСПРАВЛЕНО: confirm_msg через blocktrans невозможен в тегах — используем data-атрибут и JS #}
+          {% action_buttons edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg=person.full_name %}
         </tr>
         {% endfor %}
       </tbody>
@@ -188,7 +186,11 @@
 
   {% if is_paginated %}
   <div class="pagination-wrapper">
-    <span>Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</span>
+    <span>
+      {% blocktrans with start=page_obj.start_index end=page_obj.end_index total=page_obj.paginator.count %}
+        Showing {{ start }}–{{ end }} of {{ total }}
+      {% endblocktrans %}
+    </span>
     <ul class="pagination">
       {% if page_obj.has_previous %}
       <li class="page-item">
@@ -220,12 +222,18 @@
   {% else %}
   <div class="empty-state">
     <div class="empty-state-icon"><i class="fas fa-user-group"></i></div>
-    <div class="empty-state-title">No people found</div>
+    <div class="empty-state-title">{% trans "No people found" %}</div>
     <div class="empty-state-text">
-      {% if has_filters %}Try different filters or clear them.{% else %}Get started by adding the first person.{% endif %}
+      {% if has_filters %}
+        {% trans "Try different filters or clear them." %}
+      {% else %}
+        {% trans "Get started by adding the first person." %}
+      {% endif %}
     </div>
     {% if perms.people.add_person %}
-    <a href="{% url 'people:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Person</a>
+    <a href="{% url 'people:create' %}" class="btn btn-primary">
+      <i class="fas fa-plus"></i> {% trans "Add Person" %}
+    </a>
     {% endif %}
   </div>
   {% endif %}

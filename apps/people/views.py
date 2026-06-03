@@ -9,6 +9,8 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib import messages
+# ДОБАВЛЕНО: импорт для переводов во views
+from django.utils.translation import gettext_lazy as _
 
 from .models import Person
 from .forms import PersonForm, PersonSearchForm, PersonFileFormSet
@@ -19,15 +21,10 @@ from .forms import PersonForm, PersonSearchForm, PersonFileFormSet
 class PersonFileFormSetMixin:
     """
     Adds PersonFileFormSet handling to any CreateView / UpdateView.
-
-    The formset is:
-      • initialised from POST + FILES on POST requests
-      • pre-populated from the instance on GET requests (UpdateView)
-    Template receives it as `{{ file_formset }}`.
     """
 
     def get_file_formset(self, **kwargs):
-        instance = getattr(self, 'object', None)   # None on Create
+        instance = getattr(self, 'object', None)
         if self.request.method in ('POST', 'PUT'):
             return PersonFileFormSet(
                 self.request.POST,
@@ -49,22 +46,21 @@ class PersonFileFormSetMixin:
         return ctx
 
     def form_valid(self, form):
-        """Save person first, then save formset (needs person PK for FK)."""
         file_formset = self.get_file_formset()
 
         if not file_formset.is_valid():
-            # Re-render with both form errors and formset errors
             return self.render_to_response(
                 self.get_context_data(form=form, file_formset=file_formset)
             )
 
-        self.object = form.save()           # save Person
+        self.object = form.save()
         file_formset.instance = self.object
-        file_formset.save()                 # save / delete PersonFile rows
+        file_formset.save()
 
+        # ИСПРАВЛЕНО: используем % форматирование — f-строки не работают с lazy translations
         messages.success(
             self.request,
-            f'Person "{self.object.full_name}" saved.',
+            _('Person "%(name)s" saved.') % {'name': self.object.full_name},
         )
         return HttpResponseRedirect(self.get_success_url())
 
@@ -86,7 +82,6 @@ class PersonListView(LoginRequiredMixin, ListView):
 
         g = self.request.GET
 
-        # ── Full-text search ──────────────────────────────────────────────
         q = g.get('q', '').strip()
         if q:
             qs = qs.filter(
@@ -97,7 +92,6 @@ class PersonListView(LoginRequiredMixin, ListView):
                 Q(telegram__icontains=q)
             )
 
-        # ── Row 1 filters ─────────────────────────────────────────────────
         english = g.getlist('english')
         if english:
             qs = qs.filter(english_id__in=english)
@@ -126,7 +120,6 @@ class PersonListView(LoginRequiredMixin, ListView):
         if salary_to:
             qs = qs.filter(salary_desired__lte=int(salary_to))
 
-        # ── Row 2 filters ─────────────────────────────────────────────────
         skills = g.getlist('skills')
         if skills:
             qs = qs.filter(skills__id__in=skills).distinct()
@@ -189,7 +182,8 @@ class PersonCreateView(
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Create'
+        # ИСПРАВЛЕНО: строка контекста через _()
+        ctx['action'] = _('Create')
         return ctx
 
 
@@ -208,7 +202,8 @@ class PersonUpdateView(
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Edit'
+        # ИСПРАВЛЕНО: строка контекста через _()
+        ctx['action'] = _('Edit')
         return ctx
 
 
@@ -222,7 +217,8 @@ class PersonDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     context_object_name = 'person'
 
     def form_valid(self, form):
-        messages.success(self.request, 'Person deleted.')
+        # ИСПРАВЛЕНО: через _()
+        messages.success(self.request, _('Person deleted.'))
         return super().form_valid(form)
 
 

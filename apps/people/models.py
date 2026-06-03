@@ -11,6 +11,7 @@ Person-specific:
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 # ── Currency choices for salary ───────────────────────────────────────────────
@@ -26,8 +27,9 @@ class CurrencyChoices(models.TextChoices):
 # ── Person status ─────────────────────────────────────────────────────────────
 
 class PersonStatus(models.TextChoices):
-    ACTIVE   = 'active',   'Active'
-    INACTIVE = 'inactive', 'Inactive'
+    # ИСПРАВЛЕНО: ключи (значения БД) — обычные строки, только label через _()
+    ACTIVE   = 'active',   _('Active')
+    INACTIVE = 'inactive', _('Inactive')
 
 
 # ════════════════════════════════════════════════════════════════════════════════
@@ -35,11 +37,12 @@ class PersonStatus(models.TextChoices):
 # ════════════════════════════════════════════════════════════════════════════════
 
 class Gender(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name='Gender')
+    # ИСПРАВЛЕНО: verbose_name поля через _()
+    name = models.CharField(max_length=50, unique=True, verbose_name=_('Name'))
 
     class Meta:
-        verbose_name = 'Gender'
-        verbose_name_plural = 'Genders'
+        verbose_name = _('Gender')
+        verbose_name_plural = _('Genders')
         ordering = ['name']
 
     def __str__(self):
@@ -47,21 +50,22 @@ class Gender(models.Model):
 
 
 class Level(models.Model):
+    # ИСПРАВЛЕНО: labels в choices через _()
     LEVEL_CHOICES = [
-        ('junior',     'Junior'),
-        ('middle',     'Middle'),
-        ('senior',     'Senior'),
-        ('lead',       'Lead'),
-        ('head_of',    'Head of'),
-        ('architect',  'Architect'),
+        ('junior',    _('Junior')),
+        ('middle',    _('Middle')),
+        ('senior',    _('Senior')),
+        ('lead',      _('Lead')),
+        ('head_of',   _('Head of')),
+        ('architect', _('Architect')),
     ]
     name  = models.CharField(max_length=20, choices=LEVEL_CHOICES,
-                             unique=True, verbose_name='Level')
-    order = models.PositiveSmallIntegerField(default=0)
+                             unique=True, verbose_name=_('Level'))
+    order = models.PositiveSmallIntegerField(default=0, verbose_name=_('Order'))
 
     class Meta:
-        verbose_name = 'Level'
-        verbose_name_plural = 'Levels'
+        verbose_name = _('Level')
+        verbose_name_plural = _('Levels')
         ordering = ['order']
 
     def __str__(self):
@@ -69,11 +73,11 @@ class Level(models.Model):
 
 
 class Skill(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Skill')
+    name = models.CharField(max_length=100, unique=True, verbose_name=_('Name'))
 
     class Meta:
-        verbose_name = 'Skill'
-        verbose_name_plural = 'Skills'
+        verbose_name = _('Skill')
+        verbose_name_plural = _('Skills')
         ordering = ['name']
 
     def __str__(self):
@@ -81,11 +85,11 @@ class Skill(models.Model):
 
 
 class WorkingHours(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Working Hours')
+    name = models.CharField(max_length=100, unique=True, verbose_name=_('Name'))
 
     class Meta:
-        verbose_name = 'Working Hours'
-        verbose_name_plural = 'Working Hours'
+        verbose_name = _('Working Hours')
+        verbose_name_plural = _('Working Hours')
         ordering = ['name']
 
     def __str__(self):
@@ -93,11 +97,11 @@ class WorkingHours(models.Model):
 
 
 class Region(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Region')
+    name = models.CharField(max_length=100, unique=True, verbose_name=_('Name'))
 
     class Meta:
-        verbose_name = 'Region'
-        verbose_name_plural = 'Regions'
+        verbose_name = _('Region')
+        verbose_name_plural = _('Regions')
         ordering = ['name']
 
     def __str__(self):
@@ -105,45 +109,34 @@ class Region(models.Model):
 
 
 class WorkingPlace(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Working Place')
+    name = models.CharField(max_length=100, unique=True, verbose_name=_('Name'))
 
     class Meta:
-        verbose_name = 'Working Place'
-        verbose_name_plural = 'Working Places'
+        verbose_name = _('Working Place')
+        verbose_name_plural = _('Working Places')
         ordering = ['name']
 
     def __str__(self):
         return self.name
 
 
-# class Profession(models.Model):
-#     name = models.CharField(max_length=100, unique=True, verbose_name='Profession')
-#
-#     class Meta:
-#         verbose_name = 'Profession'
-#         verbose_name_plural = 'Professions'
-#         ordering = ['name']
-#
-#     def __str__(self):
-#         return self.name
-
-
 class English(models.Model):
+    # ИСПРАВЛЕНО: labels через _()
     LEVEL_CHOICES = [
-        ('a1', 'A1 — Beginner'),
-        ('a2', 'A2 — Elementary'),
-        ('b1', 'B1 — Intermediate'),
-        ('b2', 'B2 — Upper-Intermediate'),
-        ('c1', 'C1 — Advanced'),
-        ('c2', 'C2 — Proficient'),
+        ('a1', _('A1 — Beginner')),
+        ('a2', _('A2 — Elementary')),
+        ('b1', _('B1 — Intermediate')),
+        ('b2', _('B2 — Upper-Intermediate')),
+        ('c1', _('C1 — Advanced')),
+        ('c2', _('C2 — Proficient')),
     ]
     name  = models.CharField(max_length=10, choices=LEVEL_CHOICES,
-                             unique=True, verbose_name='English Level')
-    order = models.PositiveSmallIntegerField(default=0)
+                             unique=True, verbose_name=_('Name'))
+    order = models.PositiveSmallIntegerField(default=0, verbose_name=_('Order'))
 
     class Meta:
-        verbose_name = 'English Level'
-        verbose_name_plural = 'English Levels'
+        verbose_name = _('English Level')
+        verbose_name_plural = _('English Levels')
         ordering = ['order']
 
     def __str__(self):
@@ -161,67 +154,67 @@ class Person(models.Model):
     """
 
     # ── Identity ──────────────────────────────────────────────────────────────
-    first_name = models.CharField(max_length=150, verbose_name='First Name')
-    last_name = models.CharField(max_length=150, verbose_name='Last Name')
-    gender = models.ForeignKey(Gender, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Gender',)
-    birthdate = models.DateField(null=True, blank=True, verbose_name='Birthdate')
+    first_name = models.CharField(max_length=150, verbose_name=_('First Name'))
+    last_name  = models.CharField(max_length=150, verbose_name=_('Last Name'))
+    gender     = models.ForeignKey(Gender, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Gender'))
+    birthdate  = models.DateField(null=True, blank=True, verbose_name=_('Birthdate'))
 
     # ── Professional ──────────────────────────────────────────────────────────
-    profession = models.CharField(max_length=150, blank=True, verbose_name='Profession',)
-    level = models.ForeignKey(Level, on_delete=models.SET_NULL,null=True, blank=True, verbose_name='Level',)
-    skills = models.ManyToManyField(Skill, blank=True, related_name='people', verbose_name='Skills', )
-    english = models.ForeignKey(English, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='English',)
-    education = models.CharField(max_length=255, blank=True, verbose_name='Education',)
-    work_experience = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Work Experience (years)',)
+    profession      = models.CharField(max_length=150, blank=True, verbose_name=_('Profession'))
+    level           = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Level'))
+    skills          = models.ManyToManyField(Skill, blank=True, related_name='people', verbose_name=_('Skills'))
+    english         = models.ForeignKey(English, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('English'))
+    education       = models.CharField(max_length=255, blank=True, verbose_name=_('Education'))
+    work_experience = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name=_('Work Experience (years)'))
 
     # ── Salary ────────────────────────────────────────────────────────────────
-    salary_desired  = models.DecimalField(
+    salary_desired = models.DecimalField(
         max_digits=10, decimal_places=2,
         null=True, blank=True,
-        verbose_name='Salary Desired',
+        verbose_name=_('Salary Desired'),
     )
     salary_currency = models.CharField(
         max_length=3,
         choices=CurrencyChoices.choices,
         default=CurrencyChoices.USD,
         blank=True,
-        verbose_name='Currency',
+        verbose_name=_('Currency'),
     )
 
     # ── Location & schedule ───────────────────────────────────────────────────
     region = models.ForeignKey(
         Region, on_delete=models.SET_NULL,
-        null=True, blank=True, verbose_name='Region',
+        null=True, blank=True, verbose_name=_('Region'),
     )
     working_hours = models.ManyToManyField(
         WorkingHours, blank=True,
-        verbose_name='Working Hours',
+        verbose_name=_('Working Hours'),
     )
     working_place = models.ManyToManyField(
         WorkingPlace, blank=True,
-        verbose_name='Working Place',
+        verbose_name=_('Working Place'),
     )
 
     # ── Contacts ──────────────────────────────────────────────────────────────
-    email    = models.EmailField(unique=True, null=True, blank=True, verbose_name='E-mail')
-    phone    = models.CharField(max_length=50, blank=True, verbose_name='Phone')
-    linkedin = models.URLField(blank=True, verbose_name='LinkedIn')
-    telegram = models.CharField(max_length=100, blank=True, verbose_name='Telegram')
+    # ИСПРАВЛЕНО: добавлены _() для email, linkedin, telegram
+    email    = models.EmailField(unique=True, null=True, blank=True, verbose_name=_('E-mail'))
+    phone    = models.CharField(max_length=50, blank=True, verbose_name=_('Phone'))
+    linkedin = models.URLField(blank=True, verbose_name=_('LinkedIn'))
+    telegram = models.CharField(max_length=100, blank=True, verbose_name=_('Telegram'))
 
     # ── Status & meta ─────────────────────────────────────────────────────────
     status = models.CharField(
         max_length=10,
         choices=PersonStatus.choices,
         default=PersonStatus.ACTIVE,
-        verbose_name='Status',
+        verbose_name=_('Status'),
     )
-    notes = models.TextField(blank=True, verbose_name='Notes')
-    # cv field removed — files are now stored in PersonFile (one-to-many)
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created At')
+    notes      = models.TextField(blank=True, verbose_name=_('Notes'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
 
     class Meta:
-        verbose_name = 'Person'
-        verbose_name_plural = 'People'
+        verbose_name = _('Person')
+        verbose_name_plural = _('People')
         ordering = ['last_name', 'first_name']
         permissions = [
             ('export_person', 'Can export people data'),
@@ -262,22 +255,23 @@ def person_file_upload_to(instance, filename):
 class PersonFile(models.Model):
     """CV file (PDF only) attached to a Person. Multiple files allowed."""
 
-    person      = models.ForeignKey(
+    person = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
         related_name='files',
-        verbose_name='Person',
+        verbose_name=_('Person'),
     )
-    file        = models.FileField(
+    # ИСПРАВЛЕНО: verbose_name и help_text через _()
+    file = models.FileField(
         upload_to=person_file_upload_to,
-        verbose_name='CV (PDF)',
-        help_text='PDF files only',
+        verbose_name=_('CV (PDF)'),
+        help_text=_('PDF files only'),
     )
-    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='Uploaded At')
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Uploaded At'))
 
     class Meta:
-        verbose_name        = 'Person File'
-        verbose_name_plural = 'Person Files'
+        verbose_name        = _('Person File')
+        verbose_name_plural = _('Person Files')
         ordering            = ['-uploaded_at']
 
     def __str__(self):

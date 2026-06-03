@@ -2,6 +2,7 @@
 
 from django import forms
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _   # ← ДОБАВЛЕНО
 from .models import Vacancy, VacancyStatus, CurrencyChoices
 from apps.people.models import Level, English, WorkingHours
 
@@ -50,35 +51,33 @@ class VacancyForm(forms.ModelForm):
 class VacancySearchForm(forms.Form):
     """Filter form for the vacancies list."""
 
-    # ── Search bar ────────────────────────────────────────────────────────
+    # ИСПРАВЛЕНО: все label и placeholder через _()
     q = forms.CharField(
         required=False, label='',
         widget=forms.TextInput(attrs={
-            'placeholder': 'Search by title, company…',
+            'placeholder': _('Search by title, company…'),
             'class': 'form-control',
         })
     )
 
-    # ── Row 1 ─────────────────────────────────────────────────────────────
     supervisors = forms.ModelMultipleChoiceField(
-        queryset=None, required=False, label='Supervisor',
+        queryset=None, required=False, label=_('Supervisor'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
     status = forms.MultipleChoiceField(
-        required=False, label='Status',
+        required=False, label=_('Status'),
         choices=VacancyStatus.choices,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
     company = forms.ModelMultipleChoiceField(
-        queryset=None, required=False, label='Company',
+        queryset=None, required=False, label=_('Company'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
 
-    # ── Row 2 ─────────────────────────────────────────────────────────────
     salary_currency = forms.ChoiceField(
-        required=False, label='Currency',
+        required=False, label=_('Currency'),
         choices=[
-            ('', 'Any'),
+            ('',    _('Any')),
             ('USD', 'USD ($)'),
             ('EUR', 'EUR (€)'),
             ('UAH', 'UAH (₴)'),
@@ -88,27 +87,27 @@ class VacancySearchForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'}),
     )
     salary_from = forms.IntegerField(
-        required=False, label='Salary from', min_value=0,
+        required=False, label=_('Salary from'), min_value=0,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'From', 'class': 'form-control', 'min': '0',
+            'placeholder': _('From'), 'class': 'form-control', 'min': '0',
         }),
     )
     salary_to = forms.IntegerField(
-        required=False, label='Salary to', min_value=0,
+        required=False, label=_('Salary to'), min_value=0,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'To', 'class': 'form-control', 'min': '0',
+            'placeholder': _('To'), 'class': 'form-control', 'min': '0',
         }),
     )
     level = forms.ModelMultipleChoiceField(
-        queryset=None, required=False, label='Level',
+        queryset=None, required=False, label=_('Level'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
     english = forms.ModelMultipleChoiceField(
-        queryset=None, required=False, label='English',
+        queryset=None, required=False, label=_('English'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
     working_hours = forms.ModelMultipleChoiceField(
-        queryset=None, required=False, label='Working Hours',
+        queryset=None, required=False, label=_('Working Hours'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
 
@@ -118,7 +117,7 @@ class VacancySearchForm(forms.Form):
         self.fields['supervisors'].queryset = User.objects.filter(
             role__name='Supervisor'
         ).order_by('last_name', 'first_name')
-        self.fields['company'].queryset      = Company.objects.all()
-        self.fields['level'].queryset        = Level.objects.all()
-        self.fields['english'].queryset      = English.objects.all()
+        self.fields['company'].queryset       = Company.objects.all()
+        self.fields['level'].queryset         = Level.objects.all()
+        self.fields['english'].queryset       = English.objects.all()
         self.fields['working_hours'].queryset = WorkingHours.objects.all()
