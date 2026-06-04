@@ -1,13 +1,13 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}{{ person.full_name }} — HR Platform{% endblock %}
 {% block page_title %}{{ person.full_name }}{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'people:index' %}">People</a>
+<a href="{% url 'people:index' %}">{% trans "People" %}</a>
 <span class="sep">/</span>
 <span class="current">{{ person.full_name }}</span>
 {% endblock %}
@@ -15,7 +15,7 @@
 {% block topbar_actions %}
 <div class="btn-group">
   {% if perms.people.change_person %}
-  <a href="{% url 'people:edit' person.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i> Edit</a>
+  <a href="{% url 'people:edit' person.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i>{% trans "Edit" %}</a>
   {% endif %}
   {% if perms.people.delete_person %}
   <a href="{% url 'people:delete' person.pk %}" class="btn btn-outline-danger btn-sm"
@@ -37,8 +37,8 @@
         {% if person.profession %}<p class="detail-profile-sub">{{ person.profession }}</p>{% endif %}
         <div class="detail-profile-badges">
           {% if person.level %}<span class="badge badge-primary">{{ person.level }}</span>{% endif %}
-          {% if person.status == 'active' %}<span class="badge badge-success">Active</span>
-          {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+          {% if person.status == 'active' %}<span class="badge badge-success">{% trans "Active" %}</span>
+          {% else %}<span class="badge badge-secondary">{% trans "Inactive" %}</span>{% endif %}
         </div>
       </div>
 
@@ -54,7 +54,7 @@
     <!-- Skills -->
     {% if person.skills.all %}
     <div class="card">
-      <div class="card-header"><h3 class="card-title">Skills</h3></div>
+      <div class="card-header"><h3 class="card-title">{% trans "Skills" %}</h3></div>
       <div class="card-body detail-skills">
         {% for skill in person.skills.all %}
         <span class="badge badge-secondary">{{ skill }}</span>
@@ -66,7 +66,7 @@
     <!-- Files -->
     {% with files=person.files.all %}
     <div class="card">
-      <div class="card-header"><h3 class="card-title">Files</h3></div>
+      <div class="card-header"><h3 class="card-title">{% trans "Files" %}</h3></div>
       {% if files %}
       <ul class="list-group list-group-flush">
         {% for f in files %}
@@ -95,7 +95,7 @@
       </ul>
       {% else %}
       <div class="card-body">
-        <p class="text-muted mb-0" style="font-size:var(--font-size-sm);">No files attached.</p>
+        <p class="text-muted mb-0" style="font-size:var(--font-size-sm);">{% trans "No files attached." %}</p>
       </div>
       {% endif %}
     </div>
@@ -104,34 +104,34 @@
 
   <!-- Right: details -->
   <div class="card">
-    <div class="card-header"><h2 class="card-title">Details</h2></div>
+    <div class="card-header"><h2 class="card-title">{% trans "Details" %}</h2></div>
     <div class="card-body">
       <div class="detail-fields-grid">
 
         <!-- Column 1 -->
         <div class="detail-fields">
           <div class="detail-field">
-            <span class="detail-label">Gender</span>
+            <span class="detail-label">{% trans "Gender" %}</span>
             <span class="detail-value">{{ person.gender|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Birthdate</span>
+            <span class="detail-label">{% trans "Birthdate" %}</span>
             <span class="detail-value">{{ person.birthdate|date:"d M Y"|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Education</span>
+            <span class="detail-label">{% trans "Education" %}</span>
             <span class="detail-value">{{ person.education|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">English</span>
+            <span class="detail-label">{% trans "English" %}</span>
             <span class="detail-value">{{ person.english|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Experience</span>
+            <span class="detail-label">{% trans "Experience" %}</span>
             <span class="detail-value">{% if person.work_experience %}{{ person.work_experience }} yr{% else %}—{% endif %}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Salary</span>
+            <span class="detail-label">{% trans "Salary" %}</span>
             <span class="detail-value">{{ person.salary_display }}</span>
           </div>
         </div>
@@ -139,23 +139,23 @@
         <!-- Column 2 -->
         <div class="detail-fields">
           <div class="detail-field">
-            <span class="detail-label">Region</span>
+            <span class="detail-label">{% trans "Region" %}</span>
             <span class="detail-value">{{ person.region|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Working Hours</span>
+            <span class="detail-label">{% trans "Working Hours" %}</span>
             <span class="detail-value">
               {% for wh in person.working_hours.all %}{{ wh }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
             </span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Working Place</span>
+            <span class="detail-label">{% trans "Working Place" %}</span>
             <span class="detail-value">
               {% for wp in person.working_place.all %}{{ wp }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
             </span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Created</span>
+            <span class="detail-label">{% trans "Created" %}</span>
             <span class="detail-value">{{ person.created_at|date:"d M Y" }}</span>
           </div>
         </div>
@@ -163,7 +163,7 @@
 
       {% if person.notes %}
       <div class="detail-notes">
-        <div class="detail-label">Notes</div>
+        <div class="detail-label">{% trans "Notes" %}</div>
         <p class="detail-notes-text">{{ person.notes }}</p>
       </div>
       {% endif %}

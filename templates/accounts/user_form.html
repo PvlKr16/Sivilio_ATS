@@ -1,13 +1,13 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}{{ action }} User — HR Platform{% endblock %}
 {% block page_title %}{{ action }} User{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'accounts:user_list' %}">Users</a>
+<a href="{% url 'accounts:user_list' %}">{% trans "Users" %}</a>
 <span class="sep">/</span>
 <span class="current">{{ action }}</span>
 {% endblock %}
@@ -18,7 +18,7 @@
     {% csrf_token %}
     <div class="card">
       <div class="card-header">
-        <h2 class="card-title">{{ action }} User{% if object %} — {{ object.username }}{% endif %}</h2>
+        <h2 class="card-title">{{ action }} {% trans "User" %} {% if object %} — {{ object.username }}{% endif %}</h2>
       </div>
 
       <div class="card-body">
@@ -29,21 +29,21 @@
 
         <!-- Account: username + passwords in one row -->
         <div class="form-section">
-          <div class="form-section-title">Account</div>
+          <div class="form-section-title">{% trans "Account" %}</div>
           {% if form.password1 %}
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label" for="{{ form.username.id_for_label }}">Username <span class="required">*</span></label>
+              <label class="form-label" for="{{ form.username.id_for_label }}">{% trans "Username" %} <span class="required">*</span></label>
               {{ form.username }}
               {% for err in form.username.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.password1.id_for_label }}">Password <span class="required">*</span></label>
+              <label class="form-label" for="{{ form.password1.id_for_label }}">{% trans "Password" %} <span class="required">*</span></label>
               {{ form.password1 }}
               {% for err in form.password1.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm Password <span class="required">*</span></label>
+              <label class="form-label" for="{{ form.password2.id_for_label }}">{% trans "Confirm Password" %} <span class="required">*</span></label>
               {{ form.password2 }}
               {% for err in form.password2.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
@@ -51,7 +51,7 @@
           {% else %}
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label" for="{{ form.username.id_for_label }}">Username <span class="required">*</span></label>
+              <label class="form-label" for="{{ form.username.id_for_label }}">{% trans "Username" %} <span class="required">*</span></label>
               {{ form.username }}
               {% for err in form.username.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
             </div>
@@ -61,14 +61,14 @@
 
         <!-- Personal: first name + last name + email in one row -->
         <div class="form-section">
-          <div class="form-section-title">Personal Info</div>
+          <div class="form-section-title">{% trans "Personal Info" %}</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name <span class="required">*</span></label>
+              <label class="form-label" for="{{ form.first_name.id_for_label }}">{% trans "First Name" %} <span class="required">*</span></label>
               {{ form.first_name }}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name <span class="required">*</span></label>
+              <label class="form-label" for="{{ form.last_name.id_for_label }}">{% trans "Last Name" %} <span class="required">*</span></label>
               {{ form.last_name }}
             </div>
             <div class="form-group">
@@ -84,7 +84,7 @@
           <div class="form-section-title">Contacts</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+              <label class="form-label" for="{{ form.phone.id_for_label }}">{% trans "Phone" %}</label>
               <div class="input-group"><span class="input-group-icon"><i class="fas fa-phone"></i></span>{{ form.phone }}</div>
             </div>
             <div class="form-group">
@@ -100,18 +100,18 @@
 
         <!-- HR Role & Status -->
         <div class="form-section">
-          <div class="form-section-title">HR Role &amp; Status</div>
+          <div class="form-section-title">{% trans "HR Role" %} &amp; {% trans "Status" %}</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label" for="{{ form.role.id_for_label }}">Role <span class="required">*</span></label>
+              <label class="form-label" for="{{ form.role.id_for_label }}">{% trans "Role" %} <span class="required">*</span></label>
               {{ form.role }}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
+              <label class="form-label" for="{{ form.status.id_for_label }}">{% trans "Status" %}</label>
               {{ form.status }}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.works_since.id_for_label }}">Works Since</label>
+              <label class="form-label" for="{{ form.works_since.id_for_label }}">{% trans "Works Since" %}</label>
               {{ form.works_since }}
             </div>
           </div>
@@ -119,11 +119,11 @@
 
         <!-- Files + Permissions in same section row -->
         <div class="form-section">
-          <div class="form-section-title">Avatar &amp; CV</div>
+          <div class="form-section-title">{% trans "Avatar & CV" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
               <label class="form-label">
-                Avatar <span class="form-text">max 3 MB</span>
+                {% trans "Avatar" %} <span class="form-text">{% trans "max 3 MB" %}</span>
               </label>
               <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 {% if object and object.avatar %}
@@ -142,12 +142,12 @@
             </div>
             <div class="form-group">
               <label class="form-label">
-                CV <span class="form-text">PDF only</span>
+                CV <span class="form-text">{% trans "PDF only" %}</span>
               </label>
               {% if object and object.cv %}
               <div style="margin-bottom:5px;font-size:12px;">
                 <a href="{{ object.cv.url }}" target="_blank" style="color:var(--color-primary);text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
-                  <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV
+                  <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> {% trans "Current CV" %}
                 </a>
               </div>
               {% endif %}
@@ -159,15 +159,15 @@
 
         <!-- Permissions -->
         <div class="form-section" style="margin-bottom:4px;">
-          <div class="form-section-title">Permissions</div>
+          <div class="form-section-title">{% trans "Permissions" %}</div>
           <div style="display:flex;gap:20px;">
             <div class="form-check">
               {{ form.is_active }}
-              <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Active</label>
+              <label class="form-check-label" for="{{ form.is_active.id_for_label }}">{% trans "Active" %}</label>
             </div>
             <div class="form-check">
               {{ form.is_staff }}
-              <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">Staff <span style="color:var(--text-muted);font-size:11.5px;">(admin)</span></label>
+              <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">{% trans "Staff" %} <span style="color:var(--text-muted);font-size:11.5px;">(admin)</span></label>
             </div>
           </div>
         </div>
@@ -176,10 +176,10 @@
 
       <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center;">
         <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary">
-          <i class="fas fa-arrow-left"></i> Back
+          <i class="fas fa-arrow-left"></i> {% trans "Back" %}
         </a>
         <button type="submit" class="btn btn-primary">
-          {% if object %}Save Changes{% else %}Create User{% endif %} <i class="fas fa-check"></i>
+          {% if object %}Save Changes{% else %}{% trans "Create User" %}{% endif %} <i class="fas fa-check"></i>
         </button>
       </div>
     </div>

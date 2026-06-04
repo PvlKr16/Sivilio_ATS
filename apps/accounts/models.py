@@ -15,12 +15,13 @@ Extra fields added on top of the standard set:
 """
 
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 
 class UserStatus(models.TextChoices):
-    WORKING  = 'working',  'Working'
-    SLEEPING = 'sleeping', 'Sleeping'
+    WORKING  = 'working',  _('Working')
+    SLEEPING = 'sleeping', _('Sleeping')
 
 
 class User(AbstractUser):
@@ -35,17 +36,17 @@ class User(AbstractUser):
         upload_to='users/avatars/',
         null=True,
         blank=True,
-        verbose_name='Avatar',
+        verbose_name=_('Avatar'),
         help_text='Profile photo, max 3 MB',
     )
-    email = models.EmailField(blank=False, max_length=254, unique=True, verbose_name='email address')
-    phone = models.CharField(max_length=50, blank=True, verbose_name='Phone',)
-    viber = models.CharField(max_length=100, blank=True, verbose_name='Viber', help_text='Viber number or link',)
+    email = models.EmailField(blank=False, max_length=254, unique=True, verbose_name=_('email address'))
+    phone = models.CharField(max_length=50, blank=True, verbose_name=_('Phone',))
+    viber = models.CharField(max_length=100, blank=True, verbose_name=_('Viber'), help_text=_('Viber number or link',))
     telegram = models.CharField(
         max_length=100,
         blank=True,
         verbose_name='Telegram',
-        help_text='@username or phone number',
+        help_text=_('@username or phone number'),
     )
     # Single business role — FK to Django's built-in auth.Group
     role = models.ForeignKey(
@@ -54,31 +55,31 @@ class User(AbstractUser):
         null=True,
         blank=True,
         related_name='role_users',
-        verbose_name='Role',
-        help_text='Business role: Superman, Supervisor, Recruiter, Client, Intern',
+        verbose_name=_('Role'),
+        help_text=_('Business role: Superman, Supervisor, Recruiter, Client, Intern'),
     )
     status = models.CharField(
         max_length=20,
         choices=UserStatus.choices,
         default=UserStatus.WORKING,
-        verbose_name='Status',
+        verbose_name=_('Status'),
     )
     works_since = models.DateField(
         null=True,
         blank=True,
-        verbose_name='Works Since',
+        verbose_name=_('Works Since'),
     )
     cv = models.FileField(
         upload_to='users/cv/',
         null=True,
         blank=True,
         verbose_name='CV (PDF)',
-        help_text='Curriculum vitae, PDF format only',
+        help_text=_('Curriculum vitae, PDF format only'),
     )
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
         ordering = ['last_name', 'first_name']
 
     def __str__(self):

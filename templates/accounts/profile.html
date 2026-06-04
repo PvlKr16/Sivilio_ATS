@@ -1,13 +1,13 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}My Profile — HR Platform{% endblock %}
 {% block page_title %}My Profile{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<span class="current">Profile</span>
+<span class="current">{% trans "Profile" %}</span>
 {% endblock %}
 
 {% block content %}
@@ -31,23 +31,23 @@
       {% endif %}
       <br>
       {% if user.status == 'working' %}
-      <span class="badge badge-success">Working</span>
+      <span class="badge badge-success">{% trans "Working" %}</span>
       {% else %}
-      <span class="badge badge-secondary">Sleeping</span>
+      <span class="badge badge-secondary">{% trans "Sleeping" %}</span>
       {% endif %}
     </div>
     <div class="card-footer" style="font-size:var(--font-size-xs);color:var(--text-muted);text-align:left;display:flex;flex-direction:column;gap:4px;">
-      {% if user.works_since %}<div><i class="fas fa-calendar" style="width:14px;"></i> Since {{ user.works_since|date:"d M Y" }}</div>{% endif %}
+      {% if user.works_since %}<div><i class="fas fa-calendar" style="width:14px;"></i> {% trans "Since" %} {{ user.works_since|date:"d M Y" }}</div>{% endif %}
       {% if user.phone %}<div><i class="fas fa-phone" style="width:14px;"></i> {{ user.phone }}</div>{% endif %}
       {% if user.viber %}<div><i class="fas fa-mobile" style="width:14px;"></i> {{ user.viber }}</div>{% endif %}
       {% if user.telegram %}<div><i class="fab fa-telegram" style="width:14px;"></i> {{ user.telegram }}</div>{% endif %}
-      {% if user.cv %}<div><a href="{{ user.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="width:14px;color:var(--color-danger);"></i> View CV</a></div>{% endif %}
+      {% if user.cv %}<div><a href="{{ user.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="width:14px;color:var(--color-danger);"></i> {% trans "View CV" %}</a></div>{% endif %}
     </div>
   </div>
 
   <!-- Right: edit form -->
   <div class="card">
-    <div class="card-header"><h2 class="card-title">Edit Profile</h2></div>
+    <div class="card-header"><h2 class="card-title">{% trans "Edit Profile" %}</h2></div>
     <form method="post" enctype="multipart/form-data" data-submit-once>
       {% csrf_token %}
       <div class="card-body">
@@ -56,14 +56,14 @@
         {% endif %}
 
         <div class="form-section">
-          <div class="form-section-title">Personal Info</div>
+          <div class="form-section-title">{% trans "Personal Info" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name</label>
+              <label class="form-label" for="{{ form.first_name.id_for_label }}">{% trans "First Name" %}</label>
               {{ form.first_name }}
             </div>
             <div class="form-group">
-              <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name</label>
+              <label class="form-label" for="{{ form.last_name.id_for_label }}">{% trans "Last Name" %}</label>
               {{ form.last_name }}
             </div>
             <div class="form-group" style="grid-column:span 2;">
@@ -75,10 +75,10 @@
         </div>
 
         <div class="form-section">
-          <div class="form-section-title">Contacts</div>
+          <div class="form-section-title">{% trans "Contacts" %}</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+              <label class="form-label" for="{{ form.phone.id_for_label }}">{% trans "Phone" %}</label>
               <div class="input-group">
                 <span class="input-group-icon"><i class="fas fa-phone"></i></span>
                 {{ form.phone }}
@@ -102,22 +102,22 @@
         </div>
 
         <div class="form-section">
-          <div class="form-section-title">Avatar &amp; CV</div>
+          <div class="form-section-title">{% trans "Avatar &amp; CV" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label">Avatar <span class="form-text" style="display:inline;">max 3 MB</span></label>
+              <label class="form-label">{% trans "Avatar" %} <span class="form-text" style="display:inline;">max 3 MB</span></label>
               <input type="file" name="avatar" accept="image/*"
                      class="form-control" id="{{ form.avatar.id_for_label }}"
                      data-preview-target="avatarPreview">
               {% for err in form.avatar.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
-              {% if user.avatar %}<div style="margin-top:4px;font-size:var(--font-size-xs);color:var(--text-muted);">Current: {{ user.avatar.name|truncatechars:30 }}</div>{% endif %}
+              {% if user.avatar %}<div style="margin-top:4px;font-size:var(--font-size-xs);color:var(--text-muted);">{% trans "Current:" %} {{ user.avatar.name|truncatechars:30 }}</div>{% endif %}
             </div>
             <div class="form-group">
-              <label class="form-label">CV <span class="form-text" style="display:inline;">PDF only</span></label>
+              <label class="form-label">CV <span class="form-text" style="display:inline;">{% trans "PDF only" %}</span></label>
               <input type="file" name="cv" accept=".pdf"
                      class="form-control" id="{{ form.cv.id_for_label }}">
               {% for err in form.cv.errors %}<div class="invalid-feedback" style="display:block;">{{ err }}</div>{% endfor %}
-              {% if user.cv %}<div style="margin-top:4px;font-size:var(--font-size-xs);"><a href="{{ user.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> Current CV</a></div>{% endif %}
+              {% if user.cv %}<div style="margin-top:4px;font-size:var(--font-size-xs);"><a href="{{ user.cv.url }}" target="_blank"><i class="fas fa-file-pdf" style="color:var(--color-danger);"></i> {% trans "Current CV" %}</a></div>{% endif %}
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@
 
       <div class="card-footer" style="display:flex;justify-content:flex-end;">
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-check"></i> Save Changes
+          <i class="fas fa-check"></i> {% trans "Save Changes" %}
         </button>
       </div>
     </form>

@@ -104,11 +104,7 @@ class VacancyCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     permission_required = 'vacancies.add_vacancy'
 
     def form_valid(self, form):
-        # ИСПРАВЛЕНО: % форматирование вместо f-строки
-        messages.success(
-            self.request,
-            _('Vacancy "%(title)s" created.') % {'title': form.instance.title},
-        )
+        messages.success(self.request, _('Vacancy "%(title)s" created.') % {'title': form.instance.title},)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

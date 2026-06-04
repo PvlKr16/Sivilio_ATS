@@ -1,16 +1,17 @@
 {% extends "base/base.html" %}
+{% load i18n %}
 
 {% block title %}Delete Event — HR Platform{% endblock %}
 {% block page_title %}Delete Event{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'events:index' %}">Events</a>
+<a href="{% url 'events:index' %}">{% trans "Events" %}</a>
 <span class="sep">/</span>
 <a href="{{ event.get_absolute_url }}">{{ event.get_event_type_display }}</a>
 <span class="sep">/</span>
-<span class="current">Delete</span>
+<span class="current">{% trans "Delete" %}</span>
 {% endblock %}
 
 {% block content %}
@@ -18,7 +19,7 @@
   <div class="card">
     <div class="card-header">
       <h2 class="card-title" style="color:var(--color-danger);">
-        <i class="fas fa-circle-exclamation"></i> Confirm Deletion
+        <i class="fas fa-circle-exclamation"></i> {% trans "Confirm Deletion" %}
       </h2>
     </div>
     <div class="card-body">
@@ -27,23 +28,23 @@
           {{ event.get_event_type_display }}
         </span>
         <div style="margin-top:var(--space-sm);font-size:var(--font-size-sm);color:var(--text-secondary);">
-          Candidate: <strong>{{ event.candidate.full_name }}</strong>
+          {% trans "Candidate:" %} <strong>{{ event.candidate.full_name }}</strong>
           {% if event.event_date %} · {{ event.event_date|date:"d M Y" }}{% endif %}
         </div>
       </div>
       <p style="color:var(--text-secondary);">
-        Are you sure you want to permanently delete this event?
-        This action <strong>cannot be undone</strong>.
+        {% trans "Are you sure you want to permanently delete this event?" %}
+        {% trans "This action" %} <strong>{% trans "cannot be undone" %}</strong>.
       </p>
     </div>
     <div class="card-footer" style="display:flex;justify-content:space-between;">
       <a href="{{ event.get_absolute_url }}" class="btn btn-outline-secondary">
-        <i class="fas fa-arrow-left"></i> Cancel
+        <i class="fas fa-arrow-left"></i> {% trans "Cancel" %}
       </a>
       <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">
-          <i class="fas fa-trash"></i> Yes, Delete
+          <i class="fas fa-trash"></i> {% trans "Yes, Delete" %}
         </button>
       </form>
     </div>

@@ -1,19 +1,20 @@
 {% extends "base/base.html" %}
+{% load i18n %}
 {% load ui_tags %}
 
 {% block title %}Users — HR Platform{% endblock %}
 {% block page_title %}Users{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<span class="current">Users</span>
+<span class="current">{% trans "Users" %}</span>
 {% endblock %}
 
 {% block topbar_actions %}
 {% if perms.accounts.add_user %}
 <a href="{% url 'accounts:user_create' %}" class="btn btn-primary btn-sm">
-  <i class="fas fa-plus"></i> Add User
+  <i class="fas fa-plus"></i> {% trans "Add User" %}
 </a>
 {% endif %}
 {% endblock %}
@@ -31,20 +32,20 @@
                  class="form-control" placeholder="Search by name, email...">
         </div>
         <select name="role" class="form-select" style="min-width:140px;">
-          <option value="">All roles</option>
+          <option value="">{% trans "All roles" %}</option>
           {% for role in roles %}
           <option value="{{ role.pk }}" {% if request.GET.role == role.pk|stringformat:"s" %}selected{% endif %}>{{ role.name }}</option>
           {% endfor %}
         </select>
         <select name="status" class="form-select" style="min-width:130px;">
-          <option value="">All statuses</option>
+          <option value="">{% trans "All statuses" %}</option>
           {% for val, label in status_choices %}
           <option value="{{ val }}" {% if request.GET.status == val %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
-        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filter</button>
+        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i>{% trans "Filter" %}</button>
         {% if request.GET.q or request.GET.role or request.GET.status %}
-        <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Clear</a>
+        <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i>{% trans "Clear" %}</a>
         {% endif %}
       </div>
     </form>
@@ -53,7 +54,7 @@
 
 <div class="card">
   <div class="card-header">
-    <h2 class="card-title">System Users</h2>
+    <h2 class="card-title">{% trans "System Users" %}</h2>
   </div>
 
   {% if users %}
@@ -61,13 +62,13 @@
     <table class="data-table">
       <thead>
         <tr>
-          <th data-sortable>Name</th>
-          <th>Contacts</th>
-          <th data-sortable>Role</th>
-          <th>Status</th>
-          <th>Works Since</th>
+          <th data-sortable>{% trans "Name" %}</th>
+          <th>{% trans "Contacts" %}</th>
+          <th data-sortable>{% trans "Role" %}</th>
+          <th data-sortable>{% trans "Status" %}</th>
+          <th>{% trans "Works Since" %}</th>
           <th>CV</th>
-          <th style="width:110px;">Actions</th>
+          <th style="width:110px;">{% trans "Actions" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -81,7 +82,9 @@
               </div>
               <div class="entity-row-info">
                 <div class="entity-row-name">{{ u.display_name }}</div>
-                <div class="entity-row-sub">{{ u.username }}{% if not u.is_active %} · <span style="color:var(--color-danger);">Inactive</span>{% endif %}{% if u.is_staff %} · <span style="color:var(--color-warning);">Staff</span>{% endif %}</div>
+                <div class="entity-row-sub">{{ u.username }}{% if not u.is_active %} · <span style="color:var(--color-danger);">
+                    {% trans "Inactive" %}</span>{% endif %}{% if u.is_staff %} · <span style="color:var(--color-warning);">
+                    {% trans "Staff" %}</span>{% endif %}</div>
               </div>
             </div>
           </td>
@@ -95,9 +98,9 @@
           </td>
           <td>
             {% if u.status == 'working' %}
-            <span class="badge badge-success">Working</span>
+            <span class="badge badge-success">{% trans "Working" %}</span>
             {% else %}
-            <span class="badge badge-secondary">Sleeping</span>
+            <span class="badge badge-secondary">{% trans "Sleeping" %}</span>
             {% endif %}
           </td>
           <td class="info-item-value">{{ u.works_since|date:"d M Y"|default:"—" }}</td>
@@ -134,7 +137,7 @@
   {% else %}
   <div class="empty-state">
     <div class="empty-state-icon"><i class="fas fa-users"></i></div>
-    <div class="empty-state-title">No users found</div>
+    <div class="empty-state-title">{% trans "No users found" %}</div>
   </div>
   {% endif %}
 </div>

@@ -5,6 +5,7 @@ from django.views.generic import ListView, UpdateView, CreateView, DetailView, D
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 
 from .models import User
 from .forms import UserCreateForm, UserUpdateForm, ProfileUpdateForm
@@ -22,7 +23,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, 'Profile updated successfully.')
+        messages.success(self.request, _('Profile updated successfully.'))
         return super().form_valid(form)
 
 
@@ -69,12 +70,12 @@ class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     success_url         = reverse_lazy('accounts:user_list')
 
     def form_valid(self, form):
-        messages.success(self.request, f'User "{form.instance.username}" created.')
+        messages.success(self.request, _('User "%(username)s" created.') % {'username': form.instance.username})
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Create'
+        ctx['action'] = _('Create')
         return ctx
 
 
@@ -87,12 +88,12 @@ class UserUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     success_url         = reverse_lazy('accounts:user_list')
 
     def form_valid(self, form):
-        messages.success(self.request, f'User "{form.instance.username}" updated.')
+        messages.success(self.request, _('User "% (title)s updated.') % {'title': form.instance.username}, )
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Edit'
+        ctx['action'] = _('Edit')
         return ctx
 
 
@@ -110,5 +111,5 @@ class UserDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     context_object_name = 'user_obj'
 
     def form_valid(self, form):
-        messages.success(self.request, f'User "{self.object.username}" deleted.')
+        messages.success(self.request, _('User deleted.'))
         return super().form_valid(form)

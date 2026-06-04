@@ -1,5 +1,5 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n%}
 
 {% block title %}{{ action }} Vacancy — HR Platform{% endblock %}
 {% block page_title %}{{ action }} Vacancy{% endblock %}
@@ -44,9 +44,9 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'vacancies:index' %}">Vacancies</a>
+<a href="{% url 'vacancies:index' %}">{% trans "Vacancies" %}</a>
 <span class="sep">/</span>
 {% if object %}<a href="{{ object.get_absolute_url }}">{{ object.title }}</a><span class="sep">/</span>{% endif %}
 <span class="current">{{ action }}</span>
@@ -57,7 +57,7 @@
   <form method="post" data-submit-once>
     {% csrf_token %}
     <div class="card">
-      <div class="card-header"><h2 class="card-title">{{ action }} Vacancy</h2></div>
+      <div class="card-header"><h2 class="card-title">{{ action }}{% trans "Vacancy" %}</h2></div>
       <div class="card-body">
 
         {% if form.non_field_errors %}
@@ -66,19 +66,19 @@
 
         <!-- Main -->
         <div class="form-section">
-          <div class="form-section-title">Main Info</div>
+          <div class="form-section-title">{% trans "Main Info" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label">Status</label>
+              <label class="form-label">{% trans "Status" %}</label>
               {{ form.status }}
             </div>
             <div class="form-group">
-              <label class="form-label">Company <span class="required">*</span></label>
+              <label class="form-label">{% trans "Company" %}<span class="required">*</span></label>
               {{ form.company }}
               {% for e in form.company.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
             <div class="form-group" style="grid-column:span 2;">
-              <label class="form-label">Title <span class="required">*</span></label>
+              <label class="form-label">{% trans "Title" %} <span class="required">*</span></label>
               {{ form.title }}
               {% for e in form.title.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
@@ -87,21 +87,21 @@
 
         <!-- Requirements -->
         <div class="form-section">
-          <div class="form-section-title">Requirements</div>
+          <div class="form-section-title">{% trans "Requirements" %}</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label">Level</label>
+              <label class="form-label">{% trans "Level" %}</label>
               {{ form.level }}
             </div>
             <div class="form-group">
-              <label class="form-label">English</label>
+              <label class="form-label">{% trans "English" %}</label>
               {{ form.english }}
             </div>
           </div>
 
           <!-- Skills Select2 -->
           <div class="form-group">
-            <label class="form-label">Skills Required</label>
+            <label class="form-label">{% trans "Skills Required" %}</label>
             <select name="skills" id="id_vacancy_skills" multiple style="width:100%;">
               {% for skill in form.skills.field.queryset %}
               <option value="{{ skill.pk }}"
@@ -115,14 +115,14 @@
 
         <!-- Salary -->
         <div class="form-section">
-          <div class="form-section-title">Salary</div>
+          <div class="form-section-title">{% trans "Salary" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label">Salary Offered</label>
+              <label class="form-label">{% trans "Salary Offered" %}</label>
               {{ form.salary_offered }}
             </div>
             <div class="form-group">
-              <label class="form-label">Currency</label>
+              <label class="form-label">{% trans "Currency" %}</label>
               {{ form.salary_currency }}
             </div>
           </div>
@@ -130,10 +130,10 @@
 
         <!-- Schedule & Location -->
         <div class="form-section">
-          <div class="form-section-title">Schedule &amp; Location</div>
+          <div class="form-section-title">{% trans "Schedule &amp; Location" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label">Working Hours</label>
+              <label class="form-label">{% trans "Working Hours" %}</label>
               <select name="working_hours" id="id_vacancy_working_hours" multiple style="width:100%;">
                 {% for wh in form.working_hours.field.queryset %}
                 <option value="{{ wh.pk }}"
@@ -144,7 +144,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Working Place</label>
+              <label class="form-label">{% trans "Working Place" %}</label>
               <select name="working_place" id="id_vacancy_working_place" multiple style="width:100%;">
                 {% for wp in form.working_place.field.queryset %}
                 <option value="{{ wp.pk }}"
@@ -159,7 +159,7 @@
 
         <!-- Supervisors -->
         <div class="form-section">
-          <div class="form-section-title">Supervisors</div>
+          <div class="form-section-title">{% trans "Supervisors" %}</div>
           <div class="form-group">
             <select name="supervisors" id="id_vacancy_supervisors" multiple style="width:100%;">
               {% for sup in form.supervisors.field.queryset %}
@@ -172,8 +172,8 @@
             {% if not form.supervisors.field.queryset %}
             <div class="form-text" style="color:var(--color-warning);">
               <i class="fas fa-triangle-exclamation"></i>
-              No users with role "Supervisor" found. Add supervisors in
-              <a href="{% url 'accounts:user_list' %}">Users</a>.
+              {% trans "No users with role "Supervisor" found. Add supervisors in" %}
+              <a href="{% url 'accounts:user_list' %}">{% trans "Users" %}</a>.
             </div>
             {% endif %}
           </div>
@@ -181,17 +181,17 @@
 
         <!-- Details -->
         <div class="form-section">
-          <div class="form-section-title">Details</div>
+          <div class="form-section-title">{% trans "Details" %}</div>
           <div class="form-group">
             <div class="form-check">
               {{ form.for_freelancers }}
               <label class="form-check-label" for="{{ form.for_freelancers.id_for_label }}">
-                Open for freelancers
+                {% trans "Open for freelancers" %}
               </label>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Screening</label>
+            <label class="form-label">{% trans "Screening" %}</label>
             {{ form.screening }}
           </div>
         </div>
@@ -199,10 +199,10 @@
       </div>
       <div class="card-footer" style="display:flex;justify-content:space-between;">
         <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'vacancies:index' %}{% endif %}" class="btn btn-outline-secondary">
-          <i class="fas fa-times"></i> Cancel
+          <i class="fas fa-times"></i>{% trans "Cancel" %}
         </a>
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create Vacancy{% endif %}
+          <i class="fas fa-check"></i> {% if object %}{% trans "Save Changes" %}{% else %}{% trans "Create Vacancy" %}{% endif %}
         </button>
       </div>
     </div>

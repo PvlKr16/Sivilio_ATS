@@ -1,12 +1,13 @@
 {% extends "base/base.html" %}
+{% load i18n %}
 
 {% block title %}{{ company.name }} — HR Platform{% endblock %}
 {% block page_title %}{{ company.name }}{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'companies:index' %}">Companies</a>
+<a href="{% url 'companies:index' %}">{% trans "Companies" %}</a>
 <span class="sep">/</span>
 <span class="current">{{ company.name }}</span>
 {% endblock %}
@@ -14,12 +15,12 @@
 {% block topbar_actions %}
 <div class="btn-group">
   {% if perms.companies.change_company %}
-  <a href="{% url 'companies:edit' company.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i> Edit</a>
+  <a href="{% url 'companies:edit' company.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i>{% trans "Edit" %}</a>
   {% endif %}
   {% if perms.companies.delete_company %}
   <a href="{% url 'companies:delete' company.pk %}" class="btn btn-outline-danger btn-sm"
      data-confirm="Delete {{ company.name }}? This cannot be undone.">
-    <i class="fas fa-trash"></i> Delete
+    <i class="fas fa-trash"></i> {% trans "Delete" %}
   </a>
   {% endif %}
 </div>
@@ -35,10 +36,10 @@
         <div class="avatar avatar-xl avatar-square">{{ company.initials }}</div>
       </div>
       <h2 style="font-size:var(--font-size-xl);margin-bottom:var(--space-sm);">{{ company.name }}</h2>
-      {% if company.status == 'active' %}<span class="badge badge-success">Active</span>
-      {% elif company.status == 'lead' %}<span class="badge badge-primary">Lead</span>
-      {% elif company.status == 'paused' %}<span class="badge badge-warning">Paused</span>
-      {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+      {% if company.status == 'active' %}<span class="badge badge-success">{% trans "Active" %}</span>
+      {% elif company.status == 'lead' %}<span class="badge badge-primary">{% trans "Lead" %}</span>
+      {% elif company.status == 'paused' %}<span class="badge badge-warning">{% trans "Paused" %}</span>
+      {% else %}<span class="badge badge-secondary">{% trans "Inactive" %}</span>{% endif %}
     </div>
     <div class="card-footer" style="text-align:left;display:flex;flex-direction:column;gap:5px;font-size:var(--font-size-xs);">
       {% if company.email %}<div><i class="fas fa-envelope" style="width:14px;color:var(--color-primary);"></i> <a href="mailto:{{ company.email }}">{{ company.email }}</a></div>{% endif %}
@@ -49,11 +50,11 @@
 
   <!-- Right: details -->
   <div class="card">
-    <div class="card-header"><h2 class="card-title">Details</h2></div>
+    <div class="card-header"><h2 class="card-title">{% trans "Details" %}</h2></div>
     <div class="card-body">
       <div class="detail-fields">
         <div class="detail-field">
-          <span class="detail-label">Contact Person</span>
+          <span class="detail-label">{% trans "Contact Person" %}</span>
           <span class="detail-value">
             {% if company.contact_person %}
                 {{ company.contact_person }}
@@ -61,22 +62,22 @@
           </span>
         </div>
         <div class="detail-field">
-          <span class="detail-label">Payment Options</span>
+          <span class="detail-label">{% trans "Payment Options" %}</span>
           <span class="detail-value">{{ company.get_payment_options_display|default:"—" }}</span>
         </div>
         <div class="detail-field">
-          <span class="detail-label">Amount</span>
+          <span class="detail-label">{% trans "Amount" %}</span>
           <span class="detail-value">
             {% if company.amount %}{{ company.amount|floatformat:2 }}{% else %}—{% endif %}
           </span>
         </div>
         <div class="detail-field">
-          <span class="detail-label">Status</span>
+          <span class="detail-label">{% trans "Status" %}</span>
           <span class="detail-value">{{ company.get_status_display }}</span>
         </div>
         {% if company.notes %}
         <div class="detail-field">
-          <span class="detail-label">Notes</span>
+          <span class="detail-label">{% trans "Notes" %}</span>
           <span class="detail-value" style="white-space:pre-wrap;">{{ company.notes }}</span>
         </div>
         {% endif %}

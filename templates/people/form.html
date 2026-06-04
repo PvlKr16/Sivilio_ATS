@@ -1,5 +1,5 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}{{ action }} Person — HR Platform{% endblock %}
 {% block page_title %}{{ action }} Person{% endblock %}
@@ -64,9 +64,9 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'people:index' %}">People</a>
+<a href="{% url 'people:index' %}">{% trans "People" %}</a>
 <span class="sep">/</span>
 {% if object %}<a href="{{ object.get_absolute_url }}">{{ object.full_name }}</a><span class="sep">/</span>{% endif %}
 <span class="current">{{ action }}</span>
@@ -77,7 +77,7 @@
   <form method="post" enctype="multipart/form-data" data-submit-once>
     {% csrf_token %}
     <div class="card">
-      <div class="card-header"><h2 class="card-title">{{ action }} Person</h2></div>
+      <div class="card-header"><h2 class="card-title">{{ action }}{% trans "Person" %}</h2></div>
       <div class="card-body">
 
         {% if form.non_field_errors %}
@@ -86,24 +86,24 @@
 
         <!-- Identity -->
         <div class="form-section">
-          <div class="form-section-title">Identity</div>
+          <div class="form-section-title">{% trans "Identity" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label">First Name <span class="required">*</span></label>
+              <label class="form-label">{% trans "First Name" %}<span class="required">*</span></label>
               {{ form.first_name }}
               {% for e in form.first_name.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label">Last Name <span class="required">*</span></label>
+              <label class="form-label">{% trans "Last Name" %}<span class="required">*</span></label>
               {{ form.last_name }}
               {% for e in form.last_name.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label">Gender</label>
+              <label class="form-label">{% trans "Gender" %}</label>
               {{ form.gender }}
             </div>
             <div class="form-group">
-              <label class="form-label">Birthdate</label>
+              <label class="form-label">{% trans "Birthdate" %}</label>
               {{ form.birthdate }}
             </div>
           </div>
@@ -111,26 +111,26 @@
 
         <!-- Professional -->
         <div class="form-section">
-          <div class="form-section-title">Professional</div>
+          <div class="form-section-title">{% trans "Professional" %}</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label">Profession</label>
+              <label class="form-label">{% trans "Profession" %}</label>
               {{ form.profession }}
             </div>
             <div class="form-group">
-              <label class="form-label">Level</label>
+              <label class="form-label">{% trans "Level" %}</label>
               {{ form.level }}
             </div>
             <div class="form-group">
-              <label class="form-label">English</label>
+              <label class="form-label">{% trans "English" %}</label>
               {{ form.english }}
             </div>
             <div class="form-group">
-              <label class="form-label">Education</label>
+              <label class="form-label">{% trans "Education" %}</label>
               {{ form.education }}
             </div>
             <div class="form-group">
-              <label class="form-label">Work Experience (years)</label>
+              <label class="form-label">{% trans "Work Experience (years)" %}</label>
               {{ form.work_experience }}
             </div>
           </div>
@@ -149,24 +149,24 @@
 
         <!-- Salary & Location -->
         <div class="form-section">
-          <div class="form-section-title">Salary &amp; Location</div>
+          <div class="form-section-title">{% trans "Salary &amp; Location" %}</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label">Salary Desired</label>
+              <label class="form-label">{% trans "Salary Desired" %}</label>
               {{ form.salary_desired }}
             </div>
             <div class="form-group">
-              <label class="form-label">Currency</label>
+              <label class="form-label">{% trans "Currency" %}</label>
               {{ form.salary_currency }}
             </div>
             <div class="form-group">
-              <label class="form-label">Region</label>
+              <label class="form-label">{% trans "Region" %}</label>
               {{ form.region }}
             </div>
           </div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label">Working Hours</label>
+              <label class="form-label">{% trans "Working Hours" %}</label>
               <select name="working_hours" id="id_working_hours_select2" multiple style="width:100%;">
                 {% for wh in form.working_hours.field.queryset %}
                 <option value="{{ wh.pk }}"
@@ -177,7 +177,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Working Place</label>
+              <label class="form-label">{% trans "Working Place" %}</label>
               <select name="working_place" id="id_working_place_select2" multiple style="width:100%;">
                 {% for wp in form.working_place.field.queryset %}
                 <option value="{{ wp.pk }}"
@@ -192,7 +192,7 @@
 
         <!-- Contacts -->
         <div class="form-section">
-          <div class="form-section-title">Contacts</div>
+          <div class="form-section-title">{% trans "Contacts" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
               <label class="form-label">E-mail</label>
@@ -200,7 +200,7 @@
               {% for e in form.email.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label">Phone</label>
+              <label class="form-label">{% trans "Phone" %}</label>
               {{ form.phone }}
             </div>
             <div class="form-group">
@@ -216,22 +216,22 @@
 
         <!-- Status & Notes -->
         <div class="form-section">
-          <div class="form-section-title">Status &amp; Notes</div>
+          <div class="form-section-title">{% trans "Status &amp; Notes" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group">
-              <label class="form-label">Status</label>
+              <label class="form-label">{% trans "Status" %}</label>
               {{ form.status }}
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Notes</label>
+            <label class="form-label">{% trans "Notes" %}</label>
             {{ form.notes }}
           </div>
         </div>
 
         <!-- Files -->
         <div class="form-section">
-          <div class="form-section-title">Files</div>
+          <div class="form-section-title">{% trans "Files" %}</div>
 
           {{ file_formset.management_form }}
 
@@ -259,13 +259,13 @@
                         </a>
                         <span class="text-muted small">· {{ ff.instance.uploaded_at|date:"d M Y" }}</span>
                       </div>
-                      <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);" class="mb-1">Replace file:</div>
+                      <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);" class="mb-1">{% trans "Replace file:" %}</div>
                     {% endif %}
 
                     <div class="cv-drop-zone" data-drop-zone>
                       <i class="fas fa-file-arrow-up cv-drop-icon"></i>
-                      <div class="cv-drop-text">Drag &amp; drop PDF here</div>
-                      <div class="cv-drop-hint">or click to choose</div>
+                      <div class="cv-drop-text">{% trans "Drag &amp; drop PDF here" %}</div>
+                      <div class="cv-drop-hint">{% trans "or click to choose" %}</div>
                       <div class="cv-drop-filename" style="display:none;"></div>
                       <span class="cv-drop-input-wrap">{{ ff.file }}</span>
                     </div>
@@ -280,7 +280,7 @@
                       <label class="d-flex align-items-center gap-1 text-danger"
                              style="font-size:var(--font-size-xs);cursor:pointer;" title="Mark for deletion">
                         {{ ff.DELETE }}
-                        <span>Delete</span>
+                        <span>{% trans "Delete" %}</span>
                       </label>
                     {% else %}
                       <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">
@@ -296,7 +296,7 @@
           </div>{# /files-rows #}
 
           <button type="button" class="btn btn-outline-secondary btn-sm mt-1" id="add-file-row">
-            <i class="fas fa-plus"></i> Add file
+            <i class="fas fa-plus"></i> {% trans "Add file" %}
           </button>
 
         </div>{# /form-section Files #}
@@ -306,10 +306,10 @@
       <div class="card-footer" style="display:flex;justify-content:space-between;">
         <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'people:index' %}{% endif %}"
            class="btn btn-outline-secondary">
-          <i class="fas fa-times"></i> Cancel
+          <i class="fas fa-times"></i> {% trans "Cancel" %}
         </a>
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create Person{% endif %}
+          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}{% trans "Create Person" %}{% endif %}
         </button>
       </div>
     </div>

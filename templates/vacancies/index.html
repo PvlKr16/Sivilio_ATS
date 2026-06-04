@@ -1,20 +1,20 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n%}
 {% load ui_tags %}
 
 {% block title %}Vacancies — HR Platform{% endblock %}
 {% block page_title %}Vacancies{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<span class="current">Vacancies</span>
+<span class="current">{% trans "Vacancies" %}</span>
 {% endblock %}
 
 {% block topbar_actions %}
 {% if perms.vacancies.add_vacancy %}
 <a href="{% url 'vacancies:create' %}" class="btn btn-primary btn-sm">
-  <i class="fas fa-plus"></i> Add Vacancy
+  <i class="fas fa-plus"></i> {% trans "Add Vacancy" %}
 </a>
 {% endif %}
 {% endblock %}
@@ -33,11 +33,11 @@
           {{ search_form.q }}
         </div>
         <button type="submit" class="btn btn-outline-primary">
-          <i class="fas fa-filter"></i> Filter
+          <i class="fas fa-filter"></i> {% trans "Filter" %}
         </button>
         {% if has_filters %}
         <a href="{% url 'vacancies:index' %}" class="btn btn-outline-secondary">
-          <i class="fas fa-times"></i> Clear
+          <i class="fas fa-times"></i> {% trans "Clear" %}
         </a>
         {% endif %}
       </div>
@@ -67,7 +67,7 @@
 
         <!-- Salary: currency + range -->
         <div class="salary-group">
-          <span class="range-label"><i class="fas fa-dollar-sign" style="margin-right:3px;"></i>Salary</span>
+          <span class="range-label"><i class="fas fa-dollar-sign" style="margin-right:3px;"></i>{% trans "Salary" %}</span>
           <div class="salary-inputs">
             {{ search_form.salary_currency }}
             {{ search_form.salary_from }}
@@ -110,7 +110,7 @@
 <div class="card">
   <div class="card-header">
     <h2 class="card-title">
-      Vacancies
+      {% trans "Vacancies" %}
       <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">
         {{ total_count }} record{{ total_count|pluralize }}
       </span>
@@ -122,13 +122,13 @@
     <table class="data-table">
       <thead>
         <tr>
-          <th data-sortable>Title</th>
-          <th data-sortable>Company</th>
-          <th>Level</th>
-          <th>Salary</th>
-          <th>Freelance</th>
-          <th>Status</th>
-          <th style="width:100px;">Actions</th>
+          <th data-sortable>{% trans "Title" %}</th>
+          <th data-sortable>{% trans "Company" %}</th>
+          <th>{% trans "Level" %}</th>
+          <th>{% trans "Salary" %}</th>
+          <th>{% trans "Freelance" %}</th>
+          <th>{% trans "Status" %}</th>
+          <th style="width:100px;">{% trans "Actions" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -149,14 +149,14 @@
           <td class="text-sm">{{ vacancy.salary_display }}</td>
           <td>
             {% if vacancy.for_freelancers %}
-            <span class="badge badge-info">Yes</span>
+            <span class="badge badge-info">{% trans "Yes" %}</span>
             {% else %}—{% endif %}
           </td>
           <td>
             {% if vacancy.status == 'in_progress' %}
-            <span class="badge badge-success">В работе</span>
+            <span class="badge badge-success">{% trans "in progress" %}</span>
             {% else %}
-            <span class="badge badge-secondary">Стоп</span>
+            <span class="badge badge-secondary">{% trans "stop" %}</span>
             {% endif %}
           </td>
           {% url 'vacancies:edit' vacancy.pk as eu %}
@@ -202,12 +202,12 @@
   {% else %}
   <div class="empty-state">
     <div class="empty-state-icon"><i class="fas fa-briefcase"></i></div>
-    <div class="empty-state-title">No vacancies found</div>
+    <div class="empty-state-title">{% trans "No vacancies found" %}</div>
     <div class="empty-state-text">
-      {% if has_filters %}Try different filters or clear them.{% else %}Add the first vacancy to get started.{% endif %}
+      {% if has_filters %}{% trans "Try different filters or clear them." %}{% else %}{% trans "Add the first vacancy to get started." %}{% endif %}
     </div>
     {% if perms.vacancies.add_vacancy %}
-    <a href="{% url 'vacancies:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Vacancy</a>
+    <a href="{% url 'vacancies:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i>{% trans "Add Vacancy" %}</a>
     {% endif %}
   </div>
   {% endif %}

@@ -1,6 +1,7 @@
 """Forms for the Companies module."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from .models import Company
 
 
@@ -28,19 +29,19 @@ class CompanyForm(forms.ModelForm):
 class CompanySearchForm(forms.Form):
     """Filter form for the company list."""
     q = forms.CharField(
-        required=False, label='',
+        required=False, label=_('Search'),
         widget=forms.TextInput(attrs={
-            'placeholder': 'Search by name, email...',
+            'placeholder': _('Search by name, email...'),
             'class': 'form-control',
         })
     )
     status = forms.MultipleChoiceField(
         required=False,
         choices=[
-            ('active',   'Active'),
-            ('inactive', 'Inactive'),
-            ('lead',     'Lead'),
-            ('paused',   'Paused'),
+            ('active',   _('Active')),
+            ('inactive', _('Inactive')),
+            ('lead',     _('Lead')),
+            ('paused',   _('Paused')),
         ],
         widget=forms.CheckboxSelectMultiple,
     )
@@ -48,8 +49,8 @@ class CompanySearchForm(forms.Form):
         required=False,
         choices=[
             ('50_50',   '50/50'),
-            ('on_fact', 'По факту'),
-            ('prepaid', 'Предоплата'),
+            ('on_fact', _('After')),
+            ('prepaid', _('Prepayment')),
         ],
         widget=forms.CheckboxSelectMultiple,
     )

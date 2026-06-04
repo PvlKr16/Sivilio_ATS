@@ -1,12 +1,13 @@
 {% extends "base/base.html" %}
+{% load i18n %}
 
 {% block title %}{{ action }} Company — HR Platform{% endblock %}
 {% block page_title %}{{ action }} Company{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'companies:index' %}">Companies</a>
+<a href="{% url 'companies:index' %}">{% trans "Companies" %}</a>
 <span class="sep">/</span>
 {% if object %}<a href="{{ object.get_absolute_url }}">{{ object.name }}</a><span class="sep">/</span>{% endif %}
 <span class="current">{{ action }}</span>
@@ -17,7 +18,7 @@
   <form method="post" data-submit-once>
     {% csrf_token %}
     <div class="card">
-      <div class="card-header"><h2 class="card-title">{{ action }} Company</h2></div>
+      <div class="card-header"><h2 class="card-title">{{ action }}{% trans "Company" %}</h2></div>
       <div class="card-body">
 
         {% if form.non_field_errors %}
@@ -26,10 +27,10 @@
 
         <!-- Identity -->
         <div class="form-section">
-          <div class="form-section-title">Company Info</div>
+          <div class="form-section-title">{% trans "Company Info" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group" style="grid-column:span 2;">
-              <label class="form-label">Name <span class="required">*</span></label>
+              <label class="form-label">{% trans "Name" %}<span class="required">*</span></label>
               {{ form.name }}
               {% for e in form.name.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
@@ -39,11 +40,11 @@
               {% for e in form.email.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>
             <div class="form-group">
-              <label class="form-label">Phone</label>
+              <label class="form-label">{% trans "Phone" %}</label>
               {{ form.phone }}
             </div>
             <div class="form-group" style="grid-column:span 2;">
-              <label class="form-label">Contact Person</label>
+              <label class="form-label">{% trans "Contact Person" %}</label>
               {{ form.contact_person }}
             </div>
           </div>
@@ -51,18 +52,18 @@
 
         <!-- Commercial -->
         <div class="form-section">
-          <div class="form-section-title">Commercial</div>
+          <div class="form-section-title">{% trans "Payment" %}</div>
           <div class="form-row form-row-3">
             <div class="form-group">
-              <label class="form-label">Payment Options</label>
+              <label class="form-label">{% trans "Payment Options" %}</label>
               {{ form.payment_options }}
             </div>
             <div class="form-group">
-              <label class="form-label">Amount</label>
+              <label class="form-label">{% trans "Amount" %}</label>
               {{ form.amount }}
             </div>
             <div class="form-group">
-              <label class="form-label">Status</label>
+              <label class="form-label">{% trans "Status" %}</label>
               {{ form.status }}
             </div>
           </div>
@@ -70,7 +71,7 @@
 
         <!-- Notes -->
         <div class="form-section">
-          <div class="form-section-title">Notes</div>
+          <div class="form-section-title">{% trans "Notes" %}</div>
           <div class="form-group">
             {{ form.notes }}
           </div>
@@ -79,10 +80,10 @@
       </div>
       <div class="card-footer" style="display:flex;justify-content:space-between;">
         <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'companies:index' %}{% endif %}" class="btn btn-outline-secondary">
-          <i class="fas fa-times"></i> Cancel
+          <i class="fas fa-times"></i> {% trans "Cancel" %}
         </a>
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}Create Company{% endif %}
+          <i class="fas fa-check"></i> {% if object %}{% trans "Save Changes" %}{% else %}{% trans "Create Company" %}{% endif %}
         </button>
       </div>
     </div>

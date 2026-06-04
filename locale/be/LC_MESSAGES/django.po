@@ -1,337 +1,1238 @@
 # Belarusian translation for Sivilio ATS
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-04 20:42+0300\n"
+"Language: be\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: be\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "English"
-msgstr "Англійская"
+#: apps/accounts/models.py:23 templates/accounts/profile.html:34
+#: templates/accounts/user_detail.html:48 templates/accounts/user_list.html:101
+msgid "Working"
+msgstr "Працуе"
 
-msgid "HR Platform"
-msgstr "HR Платформа"
+#: apps/accounts/models.py:24 templates/accounts/profile.html:36
+#: templates/accounts/user_detail.html:50 templates/accounts/user_list.html:103
+msgid "Sleeping"
+msgstr "Спіць"
 
-msgid "IT People & Companies"
-msgstr "IT Людзі і кампаніі"
+#: apps/accounts/models.py:39 templates/accounts/profile.html:108
+#: templates/accounts/user_form.html:126
+msgid "Avatar"
+msgstr "Аватар"
 
-msgid "Main"
-msgstr "Галоўнае"
+#: apps/accounts/models.py:42
+msgid "email address"
+msgstr "адрас e-mail"
 
-msgid "Dashboard"
-msgstr "Панэль кіравання"
-
-msgid "Administration"
-msgstr "Кіраванне"
-
-msgid "People"
-msgstr "Людзі"
-
-msgid "Companies"
-msgstr "Кампаніі"
-
-msgid "Vacancies"
-msgstr "Вакансіі"
-
-msgid "Events"
-msgstr "Падзеі"
-
-msgid "System"
-msgstr "Сістэма"
-
-msgid "Users"
-msgstr "Карыстальнікі"
-
-msgid "Admin Panel"
-msgstr "Панэль адміністратара"
-
-msgid "Logout"
-msgstr "Выйсці"
-
-msgid "Home"
-msgstr "Галоўная"
-
-msgid "Toggle sidebar"
-msgstr "Схаваць/паказаць меню"
-
-msgid "Main navigation"
-msgstr "Асноўная навігацыя"
-
-msgid "Breadcrumb"
-msgstr "Навігацыйны ланцужок"
-
-msgid "Select language"
-msgstr "Выбраць мову"
-
-msgid "Close"
-msgstr "Закрыць"
-
-msgid "HR IT Platform — People & Company Management"
-msgstr "HR IT Платформа — кіраванне людзьмі і кампаніямі"
-
-msgid "Add Person"
-msgstr "Дадаць чалавека"
-
-msgid "Filter"
-msgstr "Фільтр"
-
-msgid "Clear"
-msgstr "Скінуць"
-
-msgid "Created on"
-msgstr "Дата дадання"
-
-msgid "Experience (yrs)"
-msgstr "Досвед (гадоў)"
-
-msgid "Salary"
-msgstr "Зарплата"
-
-msgid "Skills"
-msgstr "Навыкі"
-
-msgid "Level"
-msgstr "Узровень"
-
-msgid "Region"
-msgstr "Рэгіён"
-
-msgid "Working Hours"
-msgstr "Гадзіны працы"
-
-msgid "Name"
-msgstr "Імя"
-
-msgid "Profession"
-msgstr "Прафесія"
-
-msgid "Contacts"
-msgstr "Кантакты"
-
-msgid "Status"
-msgstr "Статус"
-
-msgid "Actions"
-msgstr "Дзеянні"
-
-msgid "Active"
-msgstr "Актыўны"
-
-msgid "Inactive"
-msgstr "Неактыўны"
-
-msgid "No people found"
-msgstr "Людзі не знойдзены"
-
-msgid "Try different filters or clear them."
-msgstr "Паспрабуйце змяніць фільтры або скінуць іх."
-
-msgid "Get started by adding the first person."
-msgstr "Пачніце з дадання першага чалавека."
-
-msgid "%(counter)s record"
-msgid_plural "%(counter)s records"
-msgstr[0] "%(counter)s запіс"
-msgstr[1] "%(counter)s запісы"
-msgstr[2] "%(counter)s запісаў"
-
-msgid "Showing %(start)s–%(end)s of %(total)s"
-msgstr "Паказана %(start)s–%(end)s з %(total)s"
-
-msgid "First Name"
-msgstr "Імя"
-
-msgid "Last Name"
-msgstr "Прозвішча"
-
-msgid "Gender"
-msgstr "Пол"
-
-msgid "Genders"
-msgstr "Палы"
-
-msgid "Birthdate"
-msgstr "Дата нараджэння"
-
-msgid "Education"
-msgstr "Адукацыя"
-
-msgid "Work Experience (years)"
-msgstr "Досвед працы (гадоў)"
-
-msgid "Salary Desired"
-msgstr "Жаданая зарплата"
-
-msgid "Currency"
-msgstr "Валюта"
-
+#: apps/accounts/models.py:43 apps/companies/models.py:28
+#: apps/people/models.py:201 templates/accounts/profile.html:81
+#: templates/accounts/user_form.html:87 templates/companies/form.html:43
+#: templates/people/form.html:203
 msgid "Phone"
 msgstr "Тэлефон"
 
-msgid "E-mail"
-msgstr "Эл. пошта"
+#: apps/accounts/models.py:44
+msgid "Viber"
+msgstr "Viber"
 
-msgid "LinkedIn"
-msgstr "LinkedIn"
+#: apps/accounts/models.py:44
+msgid "Viber number or link"
+msgstr "нумар Viber ці спасылка"
 
-msgid "Telegram"
-msgstr "Telegram"
+#: apps/accounts/models.py:49
+msgid "@username or phone number"
+msgstr "@карыстальнік ці нумар тэлефона"
 
-msgid "Notes"
-msgstr "Нататкі"
+#: apps/accounts/models.py:58 templates/accounts/user_form.html:106
+#: templates/accounts/user_list.html:67
+msgid "Role"
+msgstr "Роля"
 
-msgid "Created At"
-msgstr "Дата стварэння"
+#: apps/accounts/models.py:59
+msgid "Business role: Superman, Supervisor, Recruiter, Client, Intern"
+msgstr "Бізнес-роля: Superman, Supervisor, Recruiter, Client, Intern"
 
-msgid "Person"
-msgstr "Чалавек"
+#: apps/accounts/models.py:65 apps/companies/models.py:56
+#: apps/people/models.py:210 apps/vacancies/forms.py:68
+#: apps/vacancies/models.py:32 templates/accounts/user_form.html:103
+#: templates/accounts/user_form.html:110 templates/accounts/user_list.html:68
+#: templates/companies/detail.html:75 templates/companies/form.html:66
+#: templates/companies/index.html:89 templates/core/dashboard.html:57
+#: templates/people/form.html:222 templates/people/index.html:144
+#: templates/vacancies/form.html:72 templates/vacancies/index.html:130
+msgid "Status"
+msgstr "Статус"
 
-msgid "Person File"
-msgstr "Файл чалавека"
+#: apps/accounts/models.py:70 templates/accounts/user_detail.html:71
+#: templates/accounts/user_form.html:114 templates/accounts/user_list.html:69
+msgid "Works Since"
+msgstr "Працуе з"
 
-msgid "Person Files"
-msgstr "Файлы чалавека"
+#: apps/accounts/models.py:77
+msgid "Curriculum vitae, PDF format only"
+msgstr "CV, толькі pdf"
 
-msgid "CV (PDF)"
-msgstr "Рэзюмэ (PDF)"
+#: apps/accounts/models.py:81 templates/accounts/user_form.html:21
+msgid "User"
+msgstr "Карыстальнік"
 
-msgid "PDF files only"
-msgstr "Толькі PDF файлы"
+#: apps/accounts/models.py:82 templates/accounts/user_confirm_delete.html:10
+#: templates/accounts/user_detail.html:10 templates/accounts/user_form.html:10
+#: templates/accounts/user_list.html:11 templates/base/base.html:82
+#: templates/vacancies/form.html:176
+msgid "Users"
+msgstr "Карыстальнікі"
 
-msgid "Uploaded At"
-msgstr "Дата загрузкі"
+#: apps/accounts/views.py:26
+msgid "Profile updated successfully."
+msgstr "профіль паспяхова адноўлены"
 
-msgid "English Level"
-msgstr "Узровень англійскай"
+#: apps/accounts/views.py:73
+#, fuzzy, python-format
+#| msgid "User \"%(username)s\" created."
+msgid "User \"%(username)s\" created."
+msgstr "Карыстальнік \"%(title)s\" створаны."
 
-msgid "English Levels"
-msgstr "Узроўні англійскай"
-
-msgid "A1 — Beginner"
-msgstr "A1 — Пачатковы"
-
-msgid "A2 — Elementary"
-msgstr "A2 — Элементарны"
-
-msgid "B1 — Intermediate"
-msgstr "B1 — Сярэдні"
-
-msgid "B2 — Upper-Intermediate"
-msgstr "B2 — Вышэй сярэдняга"
-
-msgid "C1 — Advanced"
-msgstr "C1 — Прасунуты"
-
-msgid "C2 — Proficient"
-msgstr "C2 — Вольнае валоданне"
-
-msgid "Junior"
-msgstr "Джуніёр"
-
-msgid "Middle"
-msgstr "Мідл"
-
-msgid "Senior"
-msgstr "Сеньёр"
-
-msgid "Lead"
-msgstr "Лід"
-
-msgid "Head of"
-msgstr "Кіраўнік"
-
-msgid "Architect"
-msgstr "Архітэктар"
-
-msgid "Skill"
-msgstr "Навык"
-
-msgid "Regions"
-msgstr "Рэгіёны"
-
-msgid "Working Place"
-msgstr "Месца працы"
-
-msgid "Working Places"
-msgstr "Месцы працы"
-
-msgid "Order"
-msgstr "Парадак"
-
-msgid "Person \"%(name)s\" saved."
-msgstr "Чалавек \"%(name)s\" захаваны."
-
-msgid "Person deleted."
-msgstr "Чалавек выдалены."
-
+#: apps/accounts/views.py:78 apps/companies/views.py:67
+#: apps/events/views.py:107 apps/people/views.py:180
+#: apps/vacancies/views.py:112
 msgid "Create"
 msgstr "Стварыць"
 
+#: apps/accounts/views.py:91
+msgid "User \"% (title)s updated."
+msgstr "Карыстальнік \"%(title)s\" адноўлены."
+
+#: apps/accounts/views.py:96 apps/companies/views.py:83
+#: apps/events/views.py:123 apps/people/views.py:199
+#: apps/vacancies/views.py:132 templates/accounts/user_detail.html:19
+#: templates/companies/detail.html:18 templates/events/detail.html:19
+#: templates/people/detail.html:18 templates/vacancies/detail.html:18
 msgid "Edit"
 msgstr "Рэдагаваць"
 
-msgid "In Progress"
-msgstr "У рабоце"
+#: apps/accounts/views.py:114
+msgid "User deleted."
+msgstr "Кандыдат выдалены."
 
-msgid "Stop"
-msgstr "Стоп"
+#: apps/companies/forms.py:32
+msgid "Search"
+msgstr "Шукаць"
 
-msgid "Title"
-msgstr "Назва"
+#: apps/companies/forms.py:34
+msgid "Search by name, email..."
+msgstr "Пошук па імені, e-mail..."
 
+#: apps/companies/forms.py:41 apps/companies/models.py:17
+#: apps/people/models.py:31 templates/accounts/user_form.html:166
+#: templates/companies/detail.html:39 templates/companies/index.html:117
+#: templates/core/dashboard.html:75 templates/people/detail.html:40
+#: templates/people/index.html:171
+msgid "Active"
+msgstr "Актыўны"
+
+#: apps/companies/forms.py:42 apps/companies/models.py:18
+#: apps/people/models.py:32 templates/accounts/user_list.html:86
+#: templates/companies/detail.html:42 templates/companies/index.html:120
+#: templates/core/dashboard.html:77 templates/people/detail.html:41
+#: templates/people/index.html:173
+msgid "Inactive"
+msgstr "Неактыўны"
+
+#: apps/companies/forms.py:43 apps/companies/models.py:19
+#: apps/people/models.py:58 templates/companies/detail.html:40
+#: templates/companies/index.html:118
+msgid "Lead"
+msgstr "Лід"
+
+#: apps/companies/forms.py:44 apps/companies/models.py:20
+#: templates/companies/detail.html:41 templates/companies/index.html:119
+msgid "Paused"
+msgstr "Паўза"
+
+#: apps/companies/forms.py:52 apps/companies/models.py:12
+msgid "After"
+msgstr "Пасля"
+
+#: apps/companies/forms.py:53 apps/companies/models.py:13
+msgid "Prepayment"
+msgstr "Перадаплата"
+
+#: apps/companies/models.py:26 apps/people/models.py:41
+#: apps/people/models.py:76 apps/people/models.py:88 apps/people/models.py:100
+#: apps/people/models.py:112 apps/people/models.py:134
+#: templates/accounts/user_list.html:65 templates/companies/form.html:33
+#: templates/core/dashboard.html:54 templates/people/index.html:140
+msgid "Name"
+msgstr "Імя"
+
+#: apps/companies/models.py:35 templates/companies/detail.html:57
+#: templates/companies/form.html:47 templates/companies/index.html:86
+msgid "Contact Person"
+msgstr "Кантактная персона"
+
+#: apps/companies/models.py:43 templates/companies/detail.html:65
+#: templates/companies/form.html:58
+msgid "Payment Options"
+msgstr "Варыянты аплаты"
+
+#: apps/companies/models.py:50 templates/companies/detail.html:69
+#: templates/companies/form.html:62 templates/companies/index.html:88
+msgid "Amount"
+msgstr "Памер"
+
+#: apps/companies/models.py:58 apps/people/models.py:212
+#: templates/companies/detail.html:80 templates/companies/form.html:74
+#: templates/events/detail.html:112 templates/events/form.html:88
+#: templates/people/detail.html:166 templates/people/form.html:227
+msgid "Notes"
+msgstr "Нататкі"
+
+#: apps/companies/models.py:59 apps/people/models.py:213
+#: apps/vacancies/models.py:107
+msgid "Created At"
+msgstr "Дата стварэння"
+
+#: apps/companies/models.py:62 apps/events/models.py:54
+#: apps/vacancies/forms.py:73 apps/vacancies/models.py:38
+#: templates/companies/form.html:21 templates/events/detail.html:90
+#: templates/events/form.html:54 templates/events/index.html:119
+#: templates/vacancies/form.html:76 templates/vacancies/index.html:126
 msgid "Company"
 msgstr "Кампанія"
 
-msgid "Skills Required"
-msgstr "Патрабаваныя навыкі"
+#: apps/companies/models.py:63 templates/base/base.html:54
+#: templates/companies/confirm_delete.html:10
+#: templates/companies/detail.html:10 templates/companies/form.html:10
+#: templates/companies/index.html:6 templates/companies/index.html:11
+#: templates/companies/index.html:74
+msgid "Companies"
+msgstr "Кампаніі"
 
-msgid "Salary Offered"
-msgstr "Прапанаваная зарплата"
+#: apps/companies/views.py:62
+msgid "Company \"%(title}s\" created."
+msgstr "Кампанія \"%(title)s\" створаная."
 
-msgid "Screening"
-msgstr "Скрынінг"
+#: apps/companies/views.py:78
+msgid "Company \"%(title}s\" updated."
+msgstr "Кампанія \"%(title)s\" адноўленая."
 
-msgid "Interview questions, screening criteria, notes"
-msgstr "Пытанні для інтэрв'ю, крытэрыі скрынінгу, нататкі"
+#: apps/companies/views.py:95
+msgid "Company deleted."
+msgstr "Кампанія выдаленая."
 
-msgid "For Freelancers"
-msgstr "Для фрылансераў"
+#: apps/events/models.py:13
+msgid "Candidate processed"
+msgstr "Кандыдат ў апрацоўцы"
 
-msgid "Supervisors"
-msgstr "Супервайзары"
+#: apps/events/models.py:14
+msgid "CV review"
+msgstr "Прагляд CV"
 
-msgid "Updated At"
-msgstr "Дата абнаўлення"
+#: apps/events/models.py:15
+msgid "Phone interview"
+msgstr "Інтэрвью па тэлефоне"
 
+#: apps/events/models.py:16
+msgid "Interview"
+msgstr "Інтэрвью"
+
+#: apps/events/models.py:17
+msgid "Test assignment"
+msgstr "Тэставае заданне"
+
+#: apps/events/models.py:18
+msgid "Offer"
+msgstr "Прапанова"
+
+#: apps/events/models.py:38 templates/events/form.html:33
+msgid "Event Type"
+msgstr "Тып Падзеі"
+
+#: apps/events/models.py:46 apps/vacancies/models.py:111
+#: templates/events/detail.html:81 templates/events/form.html:50
+#: templates/events/index.html:118 templates/vacancies/form.html:60
 msgid "Vacancy"
 msgstr "Вакансія"
 
-msgid "Vacancy \"%(title)s\" created."
-msgstr "Вакансія \"%(title)s\" створана."
+#: apps/events/models.py:60 templates/events/detail.html:64
+#: templates/events/form.html:38 templates/events/index.html:117
+msgid "Candidate"
+msgstr "Кандыдат"
 
-msgid "Vacancy \"%(title)s\" updated."
-msgstr "Вакансія \"%(title)s\" абноўлена."
+#: apps/events/models.py:65 templates/events/form.html:65
+msgid "Event Date"
+msgstr "Дата Падзеі"
 
-msgid "Vacancy deleted."
-msgstr "Вакансія выдалена."
+#: apps/events/models.py:70 templates/events/form.html:69
+msgid "Event Time"
+msgstr "Час Падзеі"
 
-msgid "Search by title, company…"
-msgstr "Пошук па назве, кампаніі…"
-
+#: apps/events/models.py:79 apps/vacancies/forms.py:64
+#: templates/events/detail.html:99 templates/events/form.html:73
+#: templates/events/index.html:121
 msgid "Supervisor"
 msgstr "Супервайзар"
 
+#: apps/events/models.py:85
+msgid "Event"
+msgstr "Падзея"
+
+#: apps/events/models.py:86 templates/base/base.html:70
+#: templates/events/confirm_delete.html:10 templates/events/detail.html:10
+#: templates/events/form.html:10 templates/events/index.html:11
+#: templates/events/index.html:106
+msgid "Events"
+msgstr "Падзеі"
+
+#: apps/events/views.py:102
+#, python-format
+msgid "Event \"%(title)s\" created."
+msgstr "Падзея \"%(title)s\" створаная."
+
+#: apps/events/views.py:118
+#, python-format
+msgid "Event \"%(title)s\" updated."
+msgstr "Падзея \"%(title)s\" адноўленая."
+
+#: apps/events/views.py:135
+msgid "Event deleted."
+msgstr "Падзея выдаленая."
+
+#: apps/people/models.py:44 apps/people/models.py:159
+#: templates/people/detail.html:114 templates/people/form.html:102
+msgid "Gender"
+msgstr "Пол"
+
+#: apps/people/models.py:45
+msgid "Genders"
+msgstr "Палы"
+
+#: apps/people/models.py:55
+msgid "Junior"
+msgstr "Джуніёр"
+
+#: apps/people/models.py:56
+msgid "Middle"
+msgstr "Мідл"
+
+#: apps/people/models.py:57
+msgid "Senior"
+msgstr "Сеньёр"
+
+#: apps/people/models.py:59
+msgid "Head of"
+msgstr "Кіраўнік"
+
+#: apps/people/models.py:60
+msgid "Architect"
+msgstr "Архітэктар"
+
+#: apps/people/models.py:63 apps/people/models.py:67 apps/people/models.py:164
+#: apps/vacancies/forms.py:102 apps/vacancies/models.py:69
+#: templates/core/dashboard.html:56 templates/people/form.html:121
+#: templates/people/index.html:91 templates/people/index.html:142
+#: templates/vacancies/detail.html:100 templates/vacancies/form.html:93
+#: templates/vacancies/index.html:127
+msgid "Level"
+msgstr "Узровень"
+
+#: apps/people/models.py:64 apps/people/models.py:135
+msgid "Order"
+msgstr "Парадак"
+
+#: apps/people/models.py:68
+msgid "Levels"
+msgstr "Узроўні"
+
+#: apps/people/models.py:79
+msgid "Skill"
+msgstr "Навык"
+
+#: apps/people/models.py:80 apps/people/models.py:165
+#: templates/people/detail.html:57 templates/people/index.html:86
+msgid "Skills"
+msgstr "Навыкі"
+
+#: apps/people/models.py:91 apps/people/models.py:92 apps/people/models.py:191
+#: apps/vacancies/forms.py:110 apps/vacancies/models.py:86
+#: templates/people/detail.html:146 templates/people/form.html:169
+#: templates/people/index.html:101 templates/vacancies/detail.html:115
+#: templates/vacancies/form.html:136
+msgid "Working Hours"
+msgstr "Гадзіны працы"
+
+#: apps/people/models.py:103 apps/people/models.py:187
+#: templates/people/detail.html:142 templates/people/form.html:163
+#: templates/people/index.html:96
+msgid "Region"
+msgstr "Рэгіён"
+
+#: apps/people/models.py:104
+msgid "Regions"
+msgstr "Рэгіёны"
+
+#: apps/people/models.py:115 apps/people/models.py:195
+#: apps/vacancies/models.py:81 templates/people/detail.html:152
+#: templates/people/form.html:180 templates/vacancies/detail.html:121
+#: templates/vacancies/form.html:147
+msgid "Working Place"
+msgstr "Месца працы"
+
+#: apps/people/models.py:116
+msgid "Working Places"
+msgstr "Месцы працы"
+
+#: apps/people/models.py:126
+msgid "A1 — Beginner"
+msgstr "A1 — Пачатковы"
+
+#: apps/people/models.py:127
+msgid "A2 — Elementary"
+msgstr "A2 — Элементарны"
+
+#: apps/people/models.py:128
+msgid "B1 — Intermediate"
+msgstr "B1 — Сярэдні"
+
+#: apps/people/models.py:129
+msgid "B2 — Upper-Intermediate"
+msgstr "B2 — Вышэй сярэдняга"
+
+#: apps/people/models.py:130
+msgid "C1 — Advanced"
+msgstr "C1 — Прасунуты"
+
+#: apps/people/models.py:131
+msgid "C2 — Proficient"
+msgstr "C2 — Вольнае валоданне"
+
+#: apps/people/models.py:138
+msgid "English Level"
+msgstr "Узровень англійскай"
+
+#: apps/people/models.py:139
+msgid "English Levels"
+msgstr "Узроўні англійскай"
+
+#: apps/people/models.py:157 templates/accounts/profile.html:62
+#: templates/accounts/user_form.html:67 templates/people/form.html:92
+msgid "First Name"
+msgstr "Імя"
+
+#: apps/people/models.py:158 templates/accounts/profile.html:66
+#: templates/accounts/user_form.html:71 templates/people/form.html:97
+msgid "Last Name"
+msgstr "Прозвішча"
+
+#: apps/people/models.py:160 templates/people/detail.html:118
+#: templates/people/form.html:106
+msgid "Birthdate"
+msgstr "Дата нараджэння"
+
+#: apps/people/models.py:163 templates/core/dashboard.html:55
+#: templates/people/form.html:117 templates/people/index.html:141
+msgid "Profession"
+msgstr "Прафесія"
+
+#: apps/people/models.py:166 apps/vacancies/forms.py:106
+#: apps/vacancies/models.py:76 hr_project/settings.py:110
+#: templates/people/detail.html:126 templates/people/form.html:125
+#: templates/people/index.html:51 templates/vacancies/detail.html:104
+#: templates/vacancies/form.html:97
+msgid "English"
+msgstr "Англійская"
+
+#: apps/people/models.py:167 templates/people/detail.html:122
+#: templates/people/form.html:129
+msgid "Education"
+msgstr "Адукацыя"
+
+#: apps/people/models.py:168 templates/people/form.html:133
+msgid "Work Experience (years)"
+msgstr "Досьвед працы (гадоў)"
+
+#: apps/people/models.py:174 templates/people/form.html:155
+msgid "Salary Desired"
+msgstr "Жаданая зарплата"
+
+#: apps/people/models.py:181 apps/vacancies/forms.py:78
+#: apps/vacancies/models.py:61 templates/people/form.html:159
+#: templates/vacancies/form.html:125
+msgid "Currency"
+msgstr "Валюта"
+
+#: apps/people/models.py:200
+msgid "E-mail"
+msgstr "Эл. пошта"
+
+#: apps/people/models.py:202
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: apps/people/models.py:203
+msgid "Telegram"
+msgstr "Telegram"
+
+#: apps/people/models.py:216 apps/people/models.py:262
+#: templates/people/form.html:80
+msgid "Person"
+msgstr "Кандыдат"
+
+#: apps/people/models.py:217 templates/base/base.html:46
+#: templates/people/confirm_delete.html:10 templates/people/detail.html:10
+#: templates/people/form.html:69 templates/people/index.html:5
+#: templates/people/index.html:6 templates/people/index.html:11
+#: templates/people/index.html:123
+msgid "People"
+msgstr "Людзі"
+
+#: apps/people/models.py:267
+msgid "CV (PDF)"
+msgstr "Рэзюмэ (PDF)"
+
+#: apps/people/models.py:268
+msgid "PDF files only"
+msgstr "Толькі PDF файлы"
+
+#: apps/people/models.py:270
+msgid "Uploaded At"
+msgstr "Дата загрузкі"
+
+#: apps/people/models.py:273
+msgid "Person File"
+msgstr "Файл чалавека"
+
+#: apps/people/models.py:274
+msgid "Person Files"
+msgstr "Файлы чалавека"
+
+#: apps/people/views.py:60
+#, python-format
+msgid "Person \"%(name)s\" saved."
+msgstr "Чалавек \"%(name)s\" захаваны."
+
+#: apps/people/views.py:214
+msgid "Person deleted."
+msgstr "Кандыдат выдалены."
+
+#: apps/vacancies/forms.py:58
+msgid "Search by title, company…"
+msgstr "Пошук па назве, кампаніі…"
+
+#: apps/vacancies/forms.py:80
 msgid "Any"
 msgstr "Любая"
 
+#: apps/vacancies/forms.py:90
 msgid "Salary from"
 msgstr "Зарплата ад"
 
-msgid "Salary to"
-msgstr "Зарплата да"
-
+#: apps/vacancies/forms.py:92
 msgid "From"
 msgstr "Ад"
 
+#: apps/vacancies/forms.py:96
+msgid "Salary to"
+msgstr "Зарплата да"
+
+#: apps/vacancies/forms.py:98
 msgid "To"
 msgstr "Да"
+
+#: apps/vacancies/models.py:13
+msgid "In Progress"
+msgstr "У рабоце"
+
+#: apps/vacancies/models.py:14 templates/vacancies/detail.html:48
+msgid "Stop"
+msgstr "Стоп"
+
+#: apps/vacancies/models.py:40 templates/vacancies/form.html:81
+#: templates/vacancies/index.html:125
+msgid "Title"
+msgstr "Назва"
+
+#: apps/vacancies/models.py:46 templates/vacancies/detail.html:82
+#: templates/vacancies/form.html:104
+msgid "Skills Required"
+msgstr "Патрабаваныя навыкі"
+
+#: apps/vacancies/models.py:54 templates/vacancies/form.html:121
+msgid "Salary Offered"
+msgstr "Прапанаваная зарплата"
+
+#: apps/vacancies/models.py:91 templates/vacancies/detail.html:138
+#: templates/vacancies/form.html:194
+msgid "Screening"
+msgstr "Скрынінг"
+
+#: apps/vacancies/models.py:92
+msgid "Interview questions, screening criteria, notes"
+msgstr "Пытанні для інтэрв'ю, крытэрыі скрынінгу, нататкі"
+
+#: apps/vacancies/models.py:96 templates/vacancies/detail.html:127
+msgid "For Freelancers"
+msgstr "Для фрылансераў"
+
+#: apps/vacancies/models.py:103 templates/vacancies/form.html:162
+msgid "Supervisors"
+msgstr "Супервайзары"
+
+#: apps/vacancies/models.py:108
+msgid "Updated At"
+msgstr "Дата абнаўлення"
+
+#: apps/vacancies/models.py:112 templates/base/base.html:62
+#: templates/vacancies/confirm_delete.html:10
+#: templates/vacancies/detail.html:10 templates/vacancies/form.html:49
+#: templates/vacancies/index.html:11 templates/vacancies/index.html:113
+msgid "Vacancies"
+msgstr "Вакансіі"
+
+#: apps/vacancies/views.py:107
+#, python-format
+msgid "Vacancy \"%(title)s\" created."
+msgstr "Вакансія \"%(title)s\" створана."
+
+#: apps/vacancies/views.py:126
+#, python-format
+msgid "Vacancy \"%(title)s\" updated."
+msgstr "Вакансія \"%(title)s\" абноўленая."
+
+#: apps/vacancies/views.py:144
+msgid "Vacancy deleted."
+msgstr "Вакансія выдалена."
+
+#: hr_project/settings.py:108
+msgid "Беларуская"
+msgstr "Беларуская"
+
+#: hr_project/settings.py:109
+msgid "Deutsch"
+msgstr "Нямецкая"
+
+#: hr_project/settings.py:111
+msgid "Polski"
+msgstr "Польская"
+
+#: hr_project/settings.py:112
+msgid "Русский"
+msgstr "Рускі"
+
+#: hr_project/settings.py:113
+msgid "Українська"
+msgstr "Украінская"
+
+#: templates/accounts/login.html:16 templates/base/base.html:8
+#: templates/base/base.html:29 templates/people/index.html:5
+msgid "HR Platform"
+msgstr "HR Платформа"
+
+#: templates/accounts/login.html:17
+msgid "IT People"
+msgstr "Людзі IT"
+
+#: templates/accounts/login.html:17
+msgid "Company Management"
+msgstr "Кіраванне кампаніяй"
+
+#: templates/accounts/login.html:23
+msgid "Invalid username or password. Please try again."
+msgstr "Неправільнае імя ці пароль. Паспрабуйце яшчэ"
+
+#: templates/accounts/login.html:42 templates/accounts/user_form.html:41
+msgid "Password"
+msgstr "Пароль"
+
+#: templates/accounts/login.html:52
+msgid "Sign In"
+msgstr "Увайсці"
+
+#: templates/accounts/profile.html:8
+#: templates/accounts/user_confirm_delete.html:8
+#: templates/accounts/user_detail.html:8 templates/accounts/user_form.html:8
+#: templates/accounts/user_list.html:9 templates/base/base.html:126
+#: templates/companies/confirm_delete.html:8 templates/companies/detail.html:8
+#: templates/companies/form.html:8 templates/companies/index.html:9
+#: templates/events/confirm_delete.html:8 templates/events/detail.html:8
+#: templates/events/form.html:8 templates/events/index.html:9
+#: templates/people/confirm_delete.html:8 templates/people/detail.html:8
+#: templates/people/form.html:67 templates/people/index.html:9
+#: templates/vacancies/confirm_delete.html:8 templates/vacancies/detail.html:8
+#: templates/vacancies/form.html:47 templates/vacancies/index.html:9
+msgid "Home"
+msgstr "Галоўная"
+
+#: templates/accounts/profile.html:10
+msgid "Profile"
+msgstr "профіль"
+
+#: templates/accounts/profile.html:40
+msgid "Since"
+msgstr "З"
+
+#: templates/accounts/profile.html:44
+msgid "View CV"
+msgstr "Паглядзець CV"
+
+#: templates/accounts/profile.html:50
+msgid "Edit Profile"
+msgstr "Рэдагаваць профіль"
+
+#: templates/accounts/profile.html:59 templates/accounts/user_form.html:64
+msgid "Personal Info"
+msgstr "Асабістыя дадзеныя"
+
+#: templates/accounts/profile.html:78 templates/accounts/user_list.html:66
+#: templates/people/form.html:195 templates/people/index.html:143
+msgid "Contacts"
+msgstr "Кантакты"
+
+#: templates/accounts/profile.html:105
+msgid "Avatar &amp; CV"
+msgstr "Аватар &amp; CV"
+
+#: templates/accounts/profile.html:113
+msgid "Current:"
+msgstr "Бягучы"
+
+#: templates/accounts/profile.html:116 templates/accounts/user_form.html:145
+msgid "PDF only"
+msgstr "Толькі PDF файлы"
+
+#: templates/accounts/profile.html:120 templates/accounts/user_form.html:150
+msgid "Current CV"
+msgstr "Бягучае CV"
+
+#: templates/accounts/profile.html:128 templates/companies/form.html:86
+#: templates/events/form.html:101 templates/vacancies/form.html:205
+msgid "Save Changes"
+msgstr "Захаваць змены"
+
+#: templates/accounts/user_confirm_delete.html:12
+#: templates/accounts/user_detail.html:26
+#: templates/companies/confirm_delete.html:14
+#: templates/companies/detail.html:23 templates/events/confirm_delete.html:14
+#: templates/events/detail.html:25 templates/people/confirm_delete.html:14
+#: templates/people/form.html:283 templates/vacancies/confirm_delete.html:14
+msgid "Delete"
+msgstr "Выдаліць"
+
+#: templates/accounts/user_confirm_delete.html:20
+#: templates/companies/confirm_delete.html:22
+#: templates/events/confirm_delete.html:22
+#: templates/people/confirm_delete.html:22
+#: templates/vacancies/confirm_delete.html:22
+msgid "Confirm Deletion"
+msgstr "Пацвердзіць выдаленне"
+
+#: templates/accounts/user_confirm_delete.html:35
+#: templates/companies/confirm_delete.html:34
+#: templates/people/confirm_delete.html:31
+#: templates/vacancies/confirm_delete.html:34
+msgid "Are you sure you want to permanently delete"
+msgstr "Ці вы ўпэненыя, што хочаце выдаліць назаўсёды"
+
+#: templates/accounts/user_confirm_delete.html:36
+#: templates/companies/confirm_delete.html:35
+#: templates/events/confirm_delete.html:37
+#: templates/people/confirm_delete.html:32
+#: templates/vacancies/confirm_delete.html:35
+msgid "This action"
+msgstr "Гэта дзеянне"
+
+#: templates/accounts/user_confirm_delete.html:36
+#: templates/companies/confirm_delete.html:35
+#: templates/events/confirm_delete.html:37
+#: templates/people/confirm_delete.html:32
+#: templates/vacancies/confirm_delete.html:35
+msgid "cannot be undone"
+msgstr "нельга будзе адмяніць"
+
+#: templates/accounts/user_confirm_delete.html:41
+#: templates/companies/confirm_delete.html:40 templates/companies/form.html:83
+#: templates/events/confirm_delete.html:42 templates/events/form.html:98
+#: templates/people/confirm_delete.html:37 templates/people/form.html:309
+#: templates/vacancies/confirm_delete.html:40 templates/vacancies/form.html:202
+msgid "Cancel"
+msgstr "Адмена"
+
+#: templates/accounts/user_confirm_delete.html:46
+#: templates/companies/confirm_delete.html:45
+#: templates/events/confirm_delete.html:47
+#: templates/people/confirm_delete.html:42
+#: templates/vacancies/confirm_delete.html:45
+msgid "Yes, Delete"
+msgstr "Так, выдаліць."
+
+#: templates/accounts/user_detail.html:63 templates/companies/detail.html:53
+#: templates/events/detail.html:59 templates/people/detail.html:107
+#: templates/vacancies/detail.html:94 templates/vacancies/form.html:184
+msgid "Details"
+msgstr "Дэталі"
+
+#: templates/accounts/user_detail.html:67 templates/accounts/user_form.html:36
+#: templates/accounts/user_form.html:54
+msgid "Username"
+msgstr "Імя карыстальніка (username)"
+
+#: templates/accounts/user_detail.html:77
+#: templates/accounts/user_detail.html:83 templates/vacancies/detail.html:129
+#: templates/vacancies/index.html:152
+msgid "Yes"
+msgstr "Да"
+
+#: templates/accounts/user_detail.html:77
+msgid "No"
+msgstr "Не"
+
+#: templates/accounts/user_detail.html:81 templates/accounts/user_form.html:170
+#: templates/accounts/user_list.html:87
+msgid "Staff"
+msgstr "Персанал"
+
+#: templates/accounts/user_detail.html:87
+msgid "Last Login"
+msgstr "Апошні ўваход"
+
+#: templates/accounts/user_detail.html:91
+msgid "Member Since"
+msgstr "Удзельнічае з"
+
+#: templates/accounts/user_form.html:32
+msgid "Account"
+msgstr "Рахунак"
+
+#: templates/accounts/user_form.html:46
+msgid "Confirm Password"
+msgstr "Пацвердзіце пароль"
+
+#: templates/accounts/user_form.html:103
+msgid "HR Role"
+msgstr "Роля HR"
+
+#: templates/accounts/user_form.html:122
+msgid "Avatar & CV"
+msgstr "Аватар & CV"
+
+#: templates/accounts/user_form.html:126
+msgid "max 3 MB"
+msgstr "найбольш 3 MB"
+
+#: templates/accounts/user_form.html:162
+msgid "Permissions"
+msgstr "Дазволы"
+
+#: templates/accounts/user_form.html:179
+msgid "Back"
+msgstr "Назад"
+
+#: templates/accounts/user_form.html:182
+msgid "Create User"
+msgstr "Стварыць карыстальніка"
+
+#: templates/accounts/user_list.html:17
+msgid "Add User"
+msgstr "Дадаць карыстальніка"
+
+#: templates/accounts/user_list.html:35
+msgid "All roles"
+msgstr "Усе ролі"
+
+#: templates/accounts/user_list.html:41
+msgid "All statuses"
+msgstr "Усе статусы"
+
+#: templates/accounts/user_list.html:46 templates/companies/index.html:36
+#: templates/events/index.html:36 templates/people/index.html:37
+#: templates/vacancies/index.html:36
+msgid "Filter"
+msgstr "Фільтр"
+
+#: templates/accounts/user_list.html:48 templates/companies/index.html:40
+#: templates/events/index.html:40 templates/people/index.html:41
+#: templates/vacancies/index.html:40
+msgid "Clear"
+msgstr "Скінуць"
+
+#: templates/accounts/user_list.html:57
+msgid "System Users"
+msgstr "Сістэмныя карыстальнікі"
+
+#: templates/accounts/user_list.html:71 templates/companies/index.html:90
+#: templates/events/index.html:122 templates/people/index.html:145
+#: templates/vacancies/index.html:131
+msgid "Actions"
+msgstr "Дзеянні"
+
+#: templates/accounts/user_list.html:140
+msgid "No users found"
+msgstr "Карыстальнікі не знойдзеныя"
+
+#: templates/base/base.html:7
+msgid "HR IT Platform — People & Company Management"
+msgstr "HR IT Платформа — Кандыдаты, Кампаніі, Вакансіі"
+
+#: templates/base/base.html:24
+msgid "Main navigation"
+msgstr "Асноўная навігацыя"
+
+#: templates/base/base.html:30
+msgid "IT People & Companies"
+msgstr "IT Людзі і кампаніі"
+
+#: templates/base/base.html:35
+msgid "Main"
+msgstr "Галоўнае"
+
+#: templates/base/base.html:39 templates/base/base.html:123
+#: templates/core/dashboard.html:5
+msgid "Dashboard"
+msgstr "Панэль кіравання"
+
+#: templates/base/base.html:42
+msgid "Administration"
+msgstr "Кіраванне"
+
+#: templates/base/base.html:78
+msgid "System"
+msgstr "Сістэма"
+
+#: templates/base/base.html:87
+msgid "Admin Panel"
+msgstr "Панэль адміністратара"
+
+#: templates/base/base.html:102
+msgid "Logout"
+msgstr "Выйсці"
+
+#: templates/base/base.html:117
+msgid "Toggle sidebar"
+msgstr "Схаваць/паказаць меню"
+
+#: templates/base/base.html:124
+msgid "Breadcrumb"
+msgstr "Навігацыйны ланцужок"
+
+#: templates/base/base.html:139
+msgid "Select language"
+msgstr "Выбраць мову"
+
+#: templates/base/base.html:162
+msgid "Close"
+msgstr "Закрыць"
+
+#: templates/companies/confirm_delete.html:5
+msgid "Delete Company"
+msgstr "Выдаліць кампанію"
+
+#: templates/companies/form.html:30
+msgid "Company Info"
+msgstr "Дадзеныя Кампаніі"
+
+#: templates/companies/form.html:55 templates/companies/index.html:87
+msgid "Payment"
+msgstr "Аплата"
+
+#: templates/companies/form.html:86
+msgid "Create Company"
+msgstr "Старыць кампанію"
+
+#: templates/companies/index.html:17 templates/companies/index.html:156
+msgid "Add Company"
+msgstr "Дадаць кампанію"
+
+#: templates/companies/index.html:75
+msgid "record"
+msgstr "запіс"
+
+#: templates/companies/index.html:85
+msgid "Contact"
+msgstr "Кантакт"
+
+#: templates/companies/index.html:153
+msgid "No companies found"
+msgstr "Кампаніі не знойдзеныя"
+
+#: templates/companies/index.html:154 templates/events/index.html:204
+#: templates/people/index.html:226 templates/vacancies/index.html:207
+msgid "Try different filters or clear them."
+msgstr "Паспрабуйце змяніць фільтры або скінуць іх."
+
+#: templates/companies/index.html:154
+msgid "Add the first company to get started."
+msgstr "Каб пачаць, дадайце першую кампанію"
+
+#: templates/core/dashboard.html:18
+msgid "Total People"
+msgstr "Усяго Людзей"
+
+#: templates/core/dashboard.html:26
+msgid "Total Vacancies"
+msgstr "Усяго Вакансій"
+
+#: templates/core/dashboard.html:34
+msgid "Total Companies"
+msgstr "Усяго Кампаній"
+
+#: templates/core/dashboard.html:46
+msgid "Recent People"
+msgstr "Нядаўнія людзі"
+
+#: templates/core/dashboard.html:47 templates/core/dashboard.html:102
+#: templates/core/dashboard.html:123
+msgid "View all"
+msgstr "Паглядзець усіх"
+
+#: templates/core/dashboard.html:88
+msgid "No people yet"
+msgstr "Пакуль нікога няма"
+
+#: templates/core/dashboard.html:89
+msgid "Add the first person"
+msgstr "Пачніце з дадання першага чалавека."
+
+#: templates/core/dashboard.html:101
+msgid "Recent Vacancies"
+msgstr "Нядаўнія вакансіі"
+
+#: templates/core/dashboard.html:113
+msgid "No vacancies yet"
+msgstr "Пакуль няма"
+
+#: templates/core/dashboard.html:122
+msgid "Recent Companies"
+msgstr "Нядаўнія Кампаніі"
+
+#: templates/core/dashboard.html:134
+msgid "No companies yet"
+msgstr "Пакуль няма"
+
+#: templates/events/confirm_delete.html:31
+msgid "Candidate:"
+msgstr "Кандыдат:"
+
+#: templates/events/confirm_delete.html:36
+msgid "Are you sure you want to permanently delete this event?"
+msgstr "Ці вы ўпэненыя, што хочаце назаўжды выдаліць гэтую падзею?"
+
+#: templates/events/detail.html:44 templates/people/detail.html:158
+msgid "Created"
+msgstr "Створаны"
+
+#: templates/events/detail.html:125
+msgid "Add another event for this candidate"
+msgstr "Дадаць іншую падзею для гэтага кандыдата"
+
+#: templates/events/detail.html:130
+msgid "All events for this candidate"
+msgstr "Усе падзеі для гэтага кандыдата"
+
+#: templates/events/form.html:30
+msgid "Event Info"
+msgstr "Дадзеныя а падзеі"
+
+#: templates/events/form.html:47
+msgid "Related Records"
+msgstr "Звязаныя запісы"
+
+#: templates/events/form.html:62
+msgid "Schedule"
+msgstr "Расклад"
+
+#: templates/events/form.html:78
+msgid "No users with role 'Supervisor' found."
+msgstr "Карыстальнікі з роляй 'Supervisor' не знойдзеныя"
+
+#: templates/events/form.html:79
+msgid "Manage users"
+msgstr "Кіраваць карыстальнікамі"
+
+#: templates/events/form.html:101
+msgid "Create Event"
+msgstr "Стварыць падзею"
+
+#: templates/events/index.html:17 templates/events/index.html:206
+msgid "Add Event"
+msgstr "Дадаць падзею"
+
+#: templates/events/index.html:60 templates/people/index.html:55
+msgid "Created on"
+msgstr "Дата стварэння"
+
+#: templates/events/index.html:120
+msgid "Date"
+msgstr "Дата"
+
+#: templates/events/index.html:183
+msgid "Showing"
+msgstr "Паказаныя"
+
+#: templates/events/index.html:183
+msgid "of"
+msgstr "з"
+
+#: templates/events/index.html:203
+msgid "No events found"
+msgstr "Падзеі не знойдзеныя"
+
+#: templates/events/index.html:204
+msgid "Add the first recruitment event.."
+msgstr "Пачніце з дадання першай падзеі..."
+
+#: templates/people/detail.html:69 templates/people/form.html:234
+msgid "Files"
+msgstr "Файлы"
+
+#: templates/people/detail.html:98
+msgid "No files attached."
+msgstr "Няма файлаў"
+
+#: templates/people/detail.html:130
+msgid "Experience"
+msgstr "Досвед"
+
+#: templates/people/detail.html:134 templates/people/index.html:71
+#: templates/vacancies/detail.html:108 templates/vacancies/form.html:118
+#: templates/vacancies/index.html:70 templates/vacancies/index.html:128
+msgid "Salary"
+msgstr "Зарплата"
+
+#: templates/people/form.html:89
+msgid "Identity"
+msgstr "Асоба"
+
+#: templates/people/form.html:114
+msgid "Professional"
+msgstr "Прафесійнае"
+
+#: templates/people/form.html:152
+msgid "Salary &amp; Location"
+msgstr "Зарплата і месца"
+
+#: templates/people/form.html:219
+msgid "Status &amp; Notes"
+msgstr "Статус і нататкі"
+
+#: templates/people/form.html:262
+msgid "Replace file:"
+msgstr "Замяніць файл:"
+
+#: templates/people/form.html:267
+msgid "Drag &amp; drop PDF here"
+msgstr "Перацягніце і кіньце файл сюды"
+
+#: templates/people/form.html:268
+msgid "or click to choose"
+msgstr "ці націсніце каб выбраць"
+
+#: templates/people/form.html:299
+msgid "Add file"
+msgstr "Дадаць файл"
+
+#: templates/people/form.html:312
+msgid "Create Person"
+msgstr "Стварыць кандыдата"
+
+#: templates/people/index.html:17 templates/people/index.html:233
+msgid "Add Person"
+msgstr "Дадаць кандыдата"
+
+#: templates/people/index.html:63
+msgid "Experience (yrs)"
+msgstr "Досвед (гадоў)"
+
+#: templates/people/index.html:126
+#, python-format
+msgid ""
+"\n"
+"          %(counter)s record\n"
+"        "
+msgid_plural ""
+"\n"
+"          %(counter)s records\n"
+"        "
+msgstr[0] ""
+"\n"
+"%(counter)s запіс"
+msgstr[1] ""
+"\n"
+"%(counter)s запісы"
+msgstr[2] ""
+"\n"
+"%(counter)s запісаў"
+
+#: templates/people/index.html:188
+#, python-format
+msgid ""
+"\n"
+"        Showing %(start)s–%(end)s of %(total)s\n"
+"      "
+msgstr ""
+"\n"
+"Паказана %(start)s–%(end)s з %(total)s"
+
+#: templates/people/index.html:223
+msgid "No people found"
+msgstr "Людзі не знойдзены"
+
+#: templates/people/index.html:228
+msgid "Get started by adding the first person."
+msgstr "Пачніце з дадання першага чалавека."
+
+#: templates/vacancies/detail.html:46
+msgid "in work"
+msgstr "у працы"
+
+#: templates/vacancies/detail.html:51 templates/vacancies/index.html:129
+msgid "Freelance"
+msgstr "Для фрылансераў"
+
+#: templates/vacancies/form.html:69
+msgid "Main Info"
+msgstr "Галоўная інфармацыя"
+
+#: templates/vacancies/form.html:90
+msgid "Requirements"
+msgstr "Патрабаванні"
+
+#: templates/vacancies/form.html:133
+msgid "Schedule &amp; Location"
+msgstr "Расклад і знаходжанне"
+
+#: templates/vacancies/form.html:175
+msgid "No users with role "
+msgstr "Няма карыстальнікаў з роляй "
+
+#: templates/vacancies/form.html:189
+msgid "Open for freelancers"
+msgstr "Таксама і для фрылансераў"
+
+#: templates/vacancies/form.html:205
+msgid "Create Vacancy"
+msgstr "Стварыць вакансію"
+
+#: templates/vacancies/index.html:17 templates/vacancies/index.html:210
+msgid "Add Vacancy"
+msgstr "Дадаць вакансію"
+
+#: templates/vacancies/index.html:157
+msgid "in progress"
+msgstr "У працы"
+
+#: templates/vacancies/index.html:159
+msgid "stop"
+msgstr "стоп"
+
+#: templates/vacancies/index.html:205
+msgid "No vacancies found"
+msgstr "Вакансіі не знойдзеныя"
+
+#: templates/vacancies/index.html:207
+msgid "Add the first vacancy to get started."
+msgstr "Дадайце першую вакансію каб пачаць"

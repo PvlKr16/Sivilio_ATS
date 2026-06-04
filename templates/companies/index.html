@@ -1,20 +1,20 @@
 {% extends "base/base.html" %}
-{% load static %}
+{% load static i18n %}
 {% load ui_tags %}
 
 {% block title %}Companies — HR Platform{% endblock %}
-{% block page_title %}Companies{% endblock %}
+{% block page_title %}{% trans "Companies" %}{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<span class="current">Companies</span>
+<span class="current">{% trans "Companies" %}</span>
 {% endblock %}
 
 {% block topbar_actions %}
 {% if perms.companies.add_company %}
 <a href="{% url 'companies:create' %}" class="btn btn-primary btn-sm">
-  <i class="fas fa-plus"></i> Add Company
+  <i class="fas fa-plus"></i> {% trans "Add Company" %}
 </a>
 {% endif %}
 {% endblock %}
@@ -33,11 +33,11 @@
           {{ search_form.q }}
         </div>
         <button type="submit" class="btn btn-outline-primary">
-          <i class="fas fa-filter"></i> Filter
+          <i class="fas fa-filter"></i> {% trans "Filter" %}
         </button>
         {% if has_filters %}
         <a href="{% url 'companies:index' %}" class="btn btn-outline-secondary">
-          <i class="fas fa-times"></i> Clear
+          <i class="fas fa-times"></i> {% trans "Clear" %}
         </a>
         {% endif %}
       </div>
@@ -71,8 +71,8 @@
 <div class="card">
   <div class="card-header">
     <h2 class="card-title">
-      Companies
-      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} record{{ total_count|pluralize }}</span>
+      {% trans "Companies" %}
+      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} {% trans "record" %}{{ total_count|pluralize }}</span>
     </h2>
   </div>
 
@@ -82,12 +82,12 @@
       <thead>
         <tr>
           <th data-sortable>Name</th>
-          <th>Contact</th>
-          <th>Contact Person</th>
-          <th>Payment</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th style="width:100px;">Actions</th>
+          <th>{% trans "Contact" %}</th>
+          <th>{% trans "Contact Person" %}</th>
+          <th>{% trans "Payment" %}</th>
+          <th>{% trans "Amount" %}</th>
+          <th>{% trans "Status" %}</th>
+          <th style="width:100px;">{% trans "Actions" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -114,10 +114,10 @@
           <td class="text-sm">{{ company.get_payment_options_display|default:"—" }}</td>
           <td class="text-sm">{% if company.amount %}{{ company.amount|floatformat:0 }}{% else %}—{% endif %}</td>
           <td>
-            {% if company.status == 'active' %}<span class="badge badge-success">Active</span>
-            {% elif company.status == 'lead' %}<span class="badge badge-primary">Lead</span>
-            {% elif company.status == 'paused' %}<span class="badge badge-warning">Paused</span>
-            {% else %}<span class="badge badge-secondary">Inactive</span>{% endif %}
+            {% if company.status == 'active' %}<span class="badge badge-success">{% trans "Active" %}</span>
+            {% elif company.status == 'lead' %}<span class="badge badge-primary">{% trans "Lead" %}</span>
+            {% elif company.status == 'paused' %}<span class="badge badge-warning">{% trans "Paused" %}</span>
+            {% else %}<span class="badge badge-secondary">{% trans "Inactive" %}</span>{% endif %}
           </td>
             {% url 'companies:edit' company.pk as eu %}
             {% url 'companies:delete' company.pk as du %}
@@ -150,10 +150,10 @@
   {% else %}
   <div class="empty-state">
     <div class="empty-state-icon"><i class="fas fa-building"></i></div>
-    <div class="empty-state-title">No companies found</div>
-    <div class="empty-state-text">{% if has_filters %}Try different filters or clear them.{% else %}Add the first company to get started.{% endif %}</div>
+    <div class="empty-state-title">{% trans "No companies found" %}</div>
+    <div class="empty-state-text">{% if has_filters %}{% trans "Try different filters or clear them." %}{% else %}{% trans "Add the first company to get started." %}{% endif %}</div>
     {% if perms.companies.add_company %}
-    <a href="{% url 'companies:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Company</a>
+    <a href="{% url 'companies:create' %}" class="btn btn-primary"><i class="fas fa-plus"></i>{% trans "Add Company" %}</a>
     {% endif %}
   </div>
   {% endif %}

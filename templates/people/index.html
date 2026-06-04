@@ -167,7 +167,6 @@
             {% endif %}
           </td>
           <td>
-            {# ИСПРАВЛЕНО: статусы через {% trans %} #}
             {% if person.status == 'active' %}
             <span class="badge badge-success">{% trans "Active" %}</span>
             {% else %}
@@ -176,7 +175,6 @@
           </td>
           {% url 'people:edit' person.pk as eu %}
           {% url 'people:delete' person.pk as du %}
-          {# ИСПРАВЛЕНО: confirm_msg через blocktrans невозможен в тегах — используем data-атрибут и JS #}
           {% action_buttons edit_url=eu delete_url=du edit_perm=perms.people.change_person delete_perm=perms.people.delete_person confirm_msg=person.full_name %}
         </tr>
         {% endfor %}

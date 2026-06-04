@@ -57,13 +57,8 @@ class PersonFileFormSetMixin:
         file_formset.instance = self.object
         file_formset.save()
 
-        # ИСПРАВЛЕНО: используем % форматирование — f-строки не работают с lazy translations
-        messages.success(
-            self.request,
-            _('Person "%(name)s" saved.') % {'name': self.object.full_name},
-        )
+        messages.success(self.request, _('Person "%(name)s" saved.') % {'name': self.object.full_name},)
         return HttpResponseRedirect(self.get_success_url())
-
 
 # ── List ──────────────────────────────────────────────────────────────────────
 
@@ -182,7 +177,6 @@ class PersonCreateView(
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        # ИСПРАВЛЕНО: строка контекста через _()
         ctx['action'] = _('Create')
         return ctx
 
@@ -202,7 +196,6 @@ class PersonUpdateView(
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        # ИСПРАВЛЕНО: строка контекста через _()
         ctx['action'] = _('Edit')
         return ctx
 

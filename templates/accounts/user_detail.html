@@ -1,12 +1,13 @@
 {% extends "base/base.html" %}
+{% load i18n %}
 
 {% block title %}{{ user_obj.display_name }} — HR Platform{% endblock %}
 {% block page_title %}User Profile{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'accounts:user_list' %}">Users</a>
+<a href="{% url 'accounts:user_list' %}">{% trans "Users" %}</a>
 <span class="sep">/</span>
 <span class="current">{{ user_obj.display_name }}</span>
 {% endblock %}
@@ -15,14 +16,14 @@
 <div class="btn-group">
   {% if perms.accounts.change_user %}
   <a href="{% url 'accounts:user_edit' user_obj.pk %}" class="btn btn-primary btn-sm">
-    <i class="fas fa-pen"></i> Edit
+    <i class="fas fa-pen"></i> {% trans "Edit" %}
   </a>
   {% endif %}
   {% if request.user.is_superuser or request.user.role.name == 'Superman' %}
   <a href="{% url 'accounts:user_delete' user_obj.pk %}"
      class="btn btn-outline-danger btn-sm"
      data-confirm="Delete user {{ user_obj.username }}? This cannot be undone.">
-    <i class="fas fa-trash"></i> Delete
+    <i class="fas fa-trash"></i> {% trans "Delete" %}
   </a>
   {% endif %}
 </div>
@@ -44,9 +45,9 @@
         {% if user_obj.role %}<span class="badge badge-primary">{{ user_obj.role_name }}</span>{% endif %}
       </div>
       {% if user_obj.status == 'working' %}
-      <span class="badge badge-success">Working</span>
+      <span class="badge badge-success">{% trans "Working" %}</span>
       {% else %}
-      <span class="badge badge-secondary">Sleeping</span>
+      <span class="badge badge-secondary">{% trans "Sleeping" %}</span>
       {% endif %}
     </div>
     <div class="card-footer" style="text-align:left;display:flex;flex-direction:column;gap:4px;">
@@ -59,35 +60,35 @@
   </div>
 
   <div class="card">
-    <div class="card-header"><h2 class="card-title">Details</h2></div>
+    <div class="card-header"><h2 class="card-title">{% trans "Details" %}</h2></div>
     <div class="card-body">
       <div class="info-grid">
         <div>
-          <div class="info-item-label">Username</div>
+          <div class="info-item-label">{% trans "Username" %}</div>
           <div class="info-item-value">{{ user_obj.username }}</div>
         </div>
         <div>
-          <div class="info-item-label">Works Since</div>
+          <div class="info-item-label">{% trans "Works Since" %}</div>
           <div class="info-item-value">{{ user_obj.works_since|date:"d M Y"|default:"—" }}</div>
         </div>
         <div>
           <div class="info-item-label">Active</div>
           <div class="info-item-value">
-            {% if user_obj.is_active %}<span class="badge badge-success">Yes</span>{% else %}<span class="badge badge-secondary">No</span>{% endif %}
+            {% if user_obj.is_active %}<span class="badge badge-success">{% trans "Yes" %}</span>{% else %}<span class="badge badge-secondary">{% trans "No" %}</span>{% endif %}
           </div>
         </div>
         <div>
-          <div class="info-item-label">Staff</div>
+          <div class="info-item-label">{% trans "Staff" %}</div>
           <div class="info-item-value">
-            {% if user_obj.is_staff %}<span class="badge badge-warning">Yes</span>{% else %}<span class="info-item-value empty">—</span>{% endif %}
+            {% if user_obj.is_staff %}<span class="badge badge-warning">{% trans "Yes" %}</span>{% else %}<span class="info-item-value empty">—</span>{% endif %}
           </div>
         </div>
         <div>
-          <div class="info-item-label">Last Login</div>
+          <div class="info-item-label">{% trans "Last Login" %}</div>
           <div class="info-item-value">{{ user_obj.last_login|date:"d M Y H:i"|default:"—" }}</div>
         </div>
         <div>
-          <div class="info-item-label">Member Since</div>
+          <div class="info-item-label">{% trans "Member Since" %}</div>
           <div class="info-item-value">{{ user_obj.date_joined|date:"d M Y" }}</div>
         </div>
       </div>

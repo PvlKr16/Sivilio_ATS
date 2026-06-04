@@ -6,15 +6,16 @@ Tracks recruitment pipeline events for candidates.
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 class EventType(models.TextChoices):
-    CANDIDATE_PROCESSED = 'candidate_processed', 'Candidate processed'
-    CV_REVIEW           = 'cv_review',           'CV review'
-    PHONE_INTERVIEW     = 'phone_interview',      'Phone interview'
-    INTERVIEW           = 'interview',            'Interview'
-    TEST_ASSIGNMENT     = 'test_assignment',      'Test assignment'
-    OFFER               = 'offer',                'Offer'
+    CANDIDATE_PROCESSED = 'candidate_processed', _('Candidate processed')
+    CV_REVIEW           = 'cv_review',           _('CV review')
+    PHONE_INTERVIEW     = 'phone_interview',      _('Phone interview')
+    INTERVIEW           = 'interview',            _('Interview')
+    TEST_ASSIGNMENT     = 'test_assignment',      _('Test assignment')
+    OFFER               = 'offer',                _('Offer')
 
 
 # Badge colour mapped to each event type — used in templates
@@ -34,7 +35,7 @@ class Event(models.Model):
     event_type = models.CharField(
         max_length=30,
         choices=EventType.choices,
-        verbose_name='Event Type',
+        verbose_name=_('Event Type'),
     )
     vacancy = models.ForeignKey(
         'vacancies.Vacancy',
@@ -42,7 +43,7 @@ class Event(models.Model):
         null=True,
         blank=True,
         related_name='events',
-        verbose_name='Vacancy',
+        verbose_name=_('Vacancy'),
     )
     company = models.ForeignKey(
         'companies.Company',
@@ -50,23 +51,23 @@ class Event(models.Model):
         null=True,
         blank=True,
         related_name='events',
-        verbose_name='Company',
+        verbose_name=_('Company'),
     )
     candidate = models.ForeignKey(
         'people.Person',
         on_delete=models.CASCADE,
         related_name='events',
-        verbose_name='Candidate',
+        verbose_name=_('Candidate'),
     )
     event_date = models.DateField(
         null=True,
         blank=True,
-        verbose_name='Event Date',
+        verbose_name=_('Event Date'),
     )
     event_time = models.TimeField(
         null=True,
         blank=True,
-        verbose_name='Event Time',
+        verbose_name=_('Event Time'),
     )
     supervisor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -75,14 +76,14 @@ class Event(models.Model):
         blank=True,
         related_name='supervised_events',
         limit_choices_to={'role__name': 'Supervisor'},
-        verbose_name='Supervisor',
+        verbose_name=_('Supervisor'),
     )
     notes = models.TextField(blank=True, verbose_name='Notes')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created At')
 
     class Meta:
-        verbose_name = 'Event'
-        verbose_name_plural = 'Events'
+        verbose_name = _('Event')
+        verbose_name_plural = _('Events')
         ordering = ['-event_date', '-event_time', '-created_at']
 
     def __str__(self):

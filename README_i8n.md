@@ -48,6 +48,8 @@ mkdir -p locale
 
 ```bash
 python manage.py compilemessages
+унутры докера:
+docker compose exec web python manage.py compilemessages
 ```
 
 Требуется утилита `msgfmt` (пакет `gettext`):
@@ -71,30 +73,21 @@ python manage.py runserver
 
 ## Добавление переводов для остальных приложений
 
-Файлы, которые ещё нужно обработать по аналогии:
-
-| Файл | Что сделать |
-|------|-------------|
-| `apps/companies/models.py` | добавить `gettext_lazy`, обернуть `verbose_name` |
-| `apps/companies/views.py` | `messages.success/error` через `_()` |
-| `apps/companies/forms.py` | `label`, `placeholder` через `_()` |
-| `apps/events/models.py` | то же |
-| `apps/events/views.py` | то же |
-| `apps/accounts/models.py` | то же |
-| `apps/accounts/views.py` | то же |
-| `templates/vacancies/index.html` | `{% trans %}` по аналогии с `people/index.html` |
-| `templates/companies/index.html` | то же |
-| `templates/events/index.html` | то же |
-| `templates/*/detail.html` | заголовки, метки полей |
-| `templates/*/form.html` | заголовки, кнопки Submit/Cancel |
-| `templates/*/confirm_delete.html` | тексты подтверждения |
-
 После каждого изменения запускайте:
 ```bash
 python manage.py makemessages -l ru -l be -l de -l pl -l uk
 # редактируете .po файлы, добавляете переводы
 python manage.py compilemessages
 ```
+унутры докера:
+# 1. Извлечь все строки из кода и шаблонов в .po файлы
+docker compose exec web python manage.py makemessages -l ru -l be -l de -l pl -l uk
+
+# 2. Открыть .po файлы, найти новые строки (msgstr "")
+# и вписать переводы вручную
+
+# 3. Скомпилировать
+docker compose exec web python manage.py compilemessages
 
 ---
 

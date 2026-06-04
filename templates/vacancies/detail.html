@@ -1,12 +1,13 @@
 {% extends "base/base.html" %}
+{% load i18n %}
 
 {% block title %}{{ vacancy.title }} — HR Platform{% endblock %}
 {% block page_title %}{{ vacancy.title }}{% endblock %}
 
 {% block breadcrumb %}
-<a href="{% url 'core:dashboard' %}">Home</a>
+<a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'vacancies:index' %}">Vacancies</a>
+<a href="{% url 'vacancies:index' %}">{% trans "Vacancies" %}</a>
 <span class="sep">/</span>
 <span class="current">{{ vacancy.title }}</span>
 {% endblock %}
@@ -14,7 +15,7 @@
 {% block topbar_actions %}
 <div class="btn-group">
   {% if perms.vacancies.change_vacancy %}
-  <a href="{% url 'vacancies:edit' vacancy.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i> Edit</a>
+  <a href="{% url 'vacancies:edit' vacancy.pk %}" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i> {% trans "Edit" %}</a>
   {% endif %}
   {% if perms.vacancies.delete_vacancy %}
   <a href="{% url 'vacancies:delete' vacancy.pk %}" class="btn btn-outline-danger btn-sm"
@@ -42,12 +43,12 @@
           </a>
         </div>
         {% if vacancy.status == 'in_progress' %}
-        <span class="badge badge-success">В работе</span>
+        <span class="badge badge-success">{% trans "in work" %}</span>
         {% else %}
-        <span class="badge badge-secondary">Стоп</span>
+        <span class="badge badge-secondary">{% trans "Stop" %}</span>
         {% endif %}
         {% if vacancy.for_freelancers %}
-        <span class="badge badge-info" style="margin-left:4px;">Freelance</span>
+        <span class="badge badge-info" style="margin-left:4px;">{% trans "Freelance" %}</span>
         {% endif %}
       </div>
       <div class="card-footer" style="font-size:var(--font-size-xs);color:var(--text-muted);text-align:left;display:flex;flex-direction:column;gap:4px;">
@@ -78,7 +79,7 @@
     <!-- Skills -->
     {% if vacancy.skills.all %}
     <div class="card">
-      <div class="card-header"><h3 class="card-title">Skills Required</h3></div>
+      <div class="card-header"><h3 class="card-title">{% trans "Skills Required" %}</h3></div>
       <div class="card-body" style="display:flex;flex-wrap:wrap;gap:var(--space-xs);">
         {% for skill in vacancy.skills.all %}
         <span class="badge badge-secondary">{{ skill }}</span>
@@ -90,42 +91,42 @@
 
   <!-- Right: details -->
   <div class="card">
-    <div class="card-header"><h2 class="card-title">Details</h2></div>
+    <div class="card-header"><h2 class="card-title">{% trans "Details" %}</h2></div>
     <div class="card-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg);">
 
         <div class="detail-fields">
           <div class="detail-field">
-            <span class="detail-label">Level</span>
+            <span class="detail-label">{% trans "Level" %}</span>
             <span class="detail-value">{{ vacancy.level|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">English</span>
+            <span class="detail-label">{% trans "English" %}</span>
             <span class="detail-value">{{ vacancy.english|default:"—" }}</span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Salary</span>
+            <span class="detail-label">{% trans "Salary" %}</span>
             <span class="detail-value">{{ vacancy.salary_display }}</span>
           </div>
         </div>
 
         <div class="detail-fields">
           <div class="detail-field">
-            <span class="detail-label">Working Hours</span>
+            <span class="detail-label">{% trans "Working Hours" %}</span>
             <span class="detail-value">
               {% for wh in vacancy.working_hours.all %}{{ wh }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
             </span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">Working Place</span>
+            <span class="detail-label">{% trans "Working Place" %}</span>
             <span class="detail-value">
               {% for wp in vacancy.working_place.all %}{{ wp }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
             </span>
           </div>
           <div class="detail-field">
-            <span class="detail-label">For Freelancers</span>
+            <span class="detail-label">{% trans "For Freelancers" %}</span>
             <span class="detail-value">
-              {% if vacancy.for_freelancers %}<span class="badge badge-info">Yes</span>
+              {% if vacancy.for_freelancers %}<span class="badge badge-info">{% trans "Yes" %}</span>
               {% else %}<span class="badge badge-secondary">No</span>{% endif %}
             </span>
           </div>
@@ -134,7 +135,7 @@
 
       {% if vacancy.screening %}
       <div style="margin-top:var(--space-lg);padding-top:var(--space-md);border-top:1px solid var(--border-color);">
-        <div class="detail-label" style="margin-bottom:var(--space-sm);">Screening</div>
+        <div class="detail-label" style="margin-bottom:var(--space-sm);">{% trans "Screening" %}</div>
         <p style="color:var(--text-secondary);font-size:var(--font-size-sm);white-space:pre-wrap;margin:0;">{{ vacancy.screening }}</p>
       </div>
       {% endif %}

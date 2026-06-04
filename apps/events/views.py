@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 
 from .models import Event
 from .forms import EventForm, EventSearchForm
@@ -98,13 +99,12 @@ class EventCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return initial
 
     def form_valid(self, form):
-        messages.success(self.request,
-                         f'Event "{form.instance.get_event_type_display()}" created.')
+        messages.success(self.request, _('Event "%(title)s" created.') %{'title':form.instance.get_event_type_display()},)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Create'
+        ctx['action'] = _('Create')
         return ctx
 
 
@@ -115,13 +115,12 @@ class EventUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = 'events.change_event'
 
     def form_valid(self, form):
-        messages.success(self.request,
-                         f'Event "{form.instance.get_event_type_display()}" updated.')
+        messages.success(self.request, _('Event "%(title)s" updated.') %{'title':form.instance.get_event_type_display()},)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Edit'
+        ctx['action'] = _('Edit')
         return ctx
 
 
@@ -133,5 +132,5 @@ class EventDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     context_object_name = 'event'
 
     def form_valid(self, form):
-        messages.success(self.request, 'Event deleted.')
+        messages.success(self.request, _('Event deleted.'))
         return super().form_valid(form)

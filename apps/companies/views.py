@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 
 from .models import Company
 from .forms import CompanyForm, CompanySearchForm
@@ -58,12 +59,12 @@ class CompanyCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     permission_required = 'companies.add_company'
 
     def form_valid(self, form):
-        messages.success(self.request, f'Company "{form.instance.name}" created.')
+        messages.success(self.request, _('Company "%(title}s" created.') % {'title': form.instance.name},)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Create'
+        ctx['action'] = _('Create')
         return ctx
 
 
@@ -74,12 +75,12 @@ class CompanyUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     permission_required = 'companies.change_company'
 
     def form_valid(self, form):
-        messages.success(self.request, f'Company "{form.instance.name}" updated.')
+        messages.success(self.request, _('Company "%(title}s" updated.') % {'title': form.instance.name},)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['action'] = 'Edit'
+        ctx['action'] = _('Edit')
         return ctx
 
 
@@ -91,5 +92,5 @@ class CompanyDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     context_object_name = 'company'
 
     def form_valid(self, form):
-        messages.success(self.request, 'Company deleted.')
+        messages.success(self.request, _('Company deleted.'))
         return super().form_valid(form)
