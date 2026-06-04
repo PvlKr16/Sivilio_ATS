@@ -1,13 +1,13 @@
 {% extends "base/base.html" %}
 {% load static i18n %}
 
-{% block title %}{{ person.full_name }} — HR Platform{% endblock %}
+{% block title %}{{ person.full_name }} — {% trans "HR Platform" %}{% endblock %}
 {% block page_title %}{{ person.full_name }}{% endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'people:index' %}">{% trans "People" %}</a>
+<a href="{% url 'people:index' %}">{% trans "Candidates" %}</a>
 <span class="sep">/</span>
 <span class="current">{{ person.full_name }}</span>
 {% endblock %}

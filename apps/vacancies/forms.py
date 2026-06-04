@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _   # ← ДОБАВЛЕНО
+from django.utils.translation import gettext_lazy as _
 from .models import Vacancy, VacancyStatus, CurrencyChoices
 from apps.people.models import Level, English, WorkingHours
 
@@ -51,7 +51,6 @@ class VacancyForm(forms.ModelForm):
 class VacancySearchForm(forms.Form):
     """Filter form for the vacancies list."""
 
-    # ИСПРАВЛЕНО: все label и placeholder через _()
     q = forms.CharField(
         required=False, label='',
         widget=forms.TextInput(attrs={

@@ -7,7 +7,7 @@
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<a href="{% url 'people:index' %}">{% trans "People" %}</a>
+<a href="{% url 'people:index' %}">{% trans "Candidates" %}</a>
 <span class="sep">/</span>
 <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a>
 <span class="sep">/</span>

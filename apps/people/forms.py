@@ -2,6 +2,7 @@
 
 from django import forms
 from django.forms import inlineformset_factory
+from django.utils.translation import gettext_lazy as _
 from .models import Person, PersonFile, Level, English, Skill, Region, WorkingHours
 
 
@@ -50,7 +51,6 @@ class PersonForm(forms.ModelForm):
             'region', 'working_hours', 'working_place',
             'email', 'phone', 'linkedin', 'telegram',
             'status', 'notes',
-            # 'cv' removed — files live in PersonFileFormSet
         ]
         widgets = {
             'birthdate':     forms.DateInput(attrs={'type': 'date'}),
@@ -82,7 +82,7 @@ class PersonSearchForm(forms.Form):
     q = forms.CharField(
         required=False, label='',
         widget=forms.TextInput(attrs={
-            'placeholder': 'Search by name, email, phone…',
+            'placeholder': _('Search by name, email, phone…'),
             'class': 'form-control',
         })
     )
@@ -103,13 +103,13 @@ class PersonSearchForm(forms.Form):
     exp_from = forms.IntegerField(
         required=False, label='Exp from', min_value=0,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'From', 'class': 'form-control', 'min': '0',
+            'placeholder': _('From'), 'class': 'form-control', 'min': '0',
         }),
     )
     exp_to = forms.IntegerField(
         required=False, label='Exp to', min_value=0,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'To', 'class': 'form-control', 'min': '0',
+            'placeholder': _('To'), 'class': 'form-control', 'min': '0',
         }),
     )
     salary_currency = forms.ChoiceField(
@@ -127,13 +127,13 @@ class PersonSearchForm(forms.Form):
     salary_from = forms.IntegerField(
         required=False, label='Salary from', min_value=0,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'From', 'class': 'form-control', 'min': '0',
+            'placeholder': _('From'), 'class': 'form-control', 'min': '0',
         }),
     )
     salary_to = forms.IntegerField(
         required=False, label='Salary to', min_value=0,
         widget=forms.NumberInput(attrs={
-            'placeholder': 'To', 'class': 'form-control', 'min': '0',
+            'placeholder': _('To'), 'class': 'form-control', 'min': '0',
         }),
     )
 

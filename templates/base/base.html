@@ -21,7 +21,7 @@
 <div class="app-wrapper">
 
   <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
-  <nav class="sidebar" id="sidebar" aria-label="{% trans "Main navigation" %}">
+  <nav class="sidebar" id="sidebar" aria-label="{% trans 'Main navigation' %}">
 
     <a class="sidebar-brand" href="{% url 'core:dashboard' %}">
       <div class="sidebar-brand-icon"><i class="fas fa-users-gear"></i></div>
@@ -43,7 +43,7 @@
 
       <a class="sidebar-link" href="{% url 'people:index' %}">
         <i class="fas fa-user-group"></i>
-        <span>{% trans "People" %}</span>
+        <span>{% trans "Candidates" %}</span>
         {% if nav_people_count %}
           <span class="sidebar-badge">{{ nav_people_count }}</span>
         {% endif %}
@@ -119,11 +119,10 @@
         </button>
 
         <div>
-          {# ИСПРАВЛЕНО: дефолтный заголовок через {% trans %} #}
           <h1 class="topbar-title">{% block page_title %}{% trans "Dashboard" %}{% endblock %}</h1>
           <nav class="topbar-breadcrumb" aria-label="{% trans "Breadcrumb" %}">
             {% block breadcrumb %}
-            <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
+<!--            <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>-->
             {% endblock %}
           </nav>
         </div>

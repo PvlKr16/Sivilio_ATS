@@ -1,10 +1,10 @@
 {% extends "base/base.html" %}
 {% load static i18n %}
 
-{% block title %}Dashboard — HR Platform{% endblock %}
+{% block title %}{% trans "Dashboard — HR Platform" %}{% endblock %}
 {% block page_title %}{% trans "Dashboard" %}{% endblock %}
 
-{% block breadcrumb %}<span class="current">Home</span>{% endblock %}
+{% block breadcrumb %}<span class="current">{% trans "Home" %}</span>{% endblock %}
 
 {% block content %}
 
@@ -15,7 +15,7 @@
     <div class="stat-icon blue"><i class="fas fa-user-group"></i></div>
     <div class="stat-body">
       <div class="stat-value">{{ total_people }}</div>
-      <div class="stat-label">{% trans "Total People" %}</div>
+      <div class="stat-label">{% trans "Total candidates" %}</div>
     </div>
   </a>
 
@@ -43,7 +43,7 @@
   <!-- Recent people -->
   <div class="card">
     <div class="card-header">
-      <h2 class="card-title"><i class="fas fa-user-group" style="color:var(--color-primary);margin-right:6px;"></i>{% trans "Recent People" %}</h2>
+      <h2 class="card-title"><i class="fas fa-user-group" style="color:var(--color-primary);margin-right:6px;"></i>{% trans "Recent candidates" %}</h2>
       <a href="{% url 'people:index' %}" class="btn btn-sm btn-outline-primary">{% trans "View all" %}</a>
     </div>
     {% if recent_people %}

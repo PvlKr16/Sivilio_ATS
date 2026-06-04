@@ -2,13 +2,13 @@
 {% load static i18n %}
 {% load ui_tags %}
 
-{% block title %}{% trans "People" %} — {% trans "HR Platform" %}{% endblock %}
-{% block page_title %}{% trans "People" %}{% endblock %}
+{% block title %}{% trans "Candidates" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{% trans "Candidates" %}{% endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
 <span class="sep">/</span>
-<span class="current">{% trans "People" %}</span>
+<span class="current">{% trans "Candidates" %}</span>
 {% endblock %}
 
 {% block topbar_actions %}
@@ -120,7 +120,7 @@
 <div class="card">
   <div class="card-header">
     <h2 class="card-title">
-      {% trans "People" %}
+      {% trans "Candidates" %}
       <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">
         {# ИСПРАВЛЕНО: pluralize не работает для ru/be/uk — используем blocktrans с count #}
         {% blocktrans count counter=total_count %}

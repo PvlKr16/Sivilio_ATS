@@ -2,6 +2,7 @@
 
 from django import forms
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 from .models import Event
 
 User = get_user_model()
@@ -63,7 +64,7 @@ class EventSearchForm(forms.Form):
     q = forms.CharField(
         required=False, label='',
         widget=forms.TextInput(attrs={
-            'placeholder': 'Search by candidate, vacancy...',
+            'placeholder': _('Search by candidate, vacancy...'),
             'class': 'form-control',
         })
     )
