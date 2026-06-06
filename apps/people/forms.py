@@ -115,7 +115,7 @@ class PersonSearchForm(forms.Form):
     salary_currency = forms.ChoiceField(
         required=False, label='Currency',
         choices=[
-            ('', 'Any'),
+            ('', _('Currency')),
             ('USD', 'USD ($)'),
             ('EUR', 'EUR (€)'),
             ('UAH', 'UAH (₴)'),

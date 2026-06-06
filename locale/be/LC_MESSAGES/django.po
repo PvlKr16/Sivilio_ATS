@@ -2,29 +2,24 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-04 23:06+0300\n"
+"POT-Creation-Date: 2026-06-06 16:23+0300\n"
 "Language: be\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: apps/accounts/models.py:23
-#: templates/accounts/profile.html:34
-#: templates/accounts/user_detail.html:48
-#: templates/accounts/user_list.html:101
+#: apps/accounts/models.py:23 templates/accounts/profile.html:34
+#: templates/accounts/user_detail.html:48 templates/accounts/user_list.html:101
 msgid "Working"
 msgstr "Працуе"
 
-#: apps/accounts/models.py:24
-#: templates/accounts/profile.html:36
-#: templates/accounts/user_detail.html:50
-#: templates/accounts/user_list.html:103
+#: apps/accounts/models.py:24 templates/accounts/profile.html:36
+#: templates/accounts/user_detail.html:50 templates/accounts/user_list.html:103
 msgid "Sleeping"
 msgstr "Спіць"
 
-#: apps/accounts/models.py:39
-#: templates/accounts/profile.html:108
+#: apps/accounts/models.py:39 templates/accounts/profile.html:108
 #: templates/accounts/user_form.html:126
 msgid "Avatar"
 msgstr "Аватар"
@@ -33,12 +28,9 @@ msgstr "Аватар"
 msgid "email address"
 msgstr "адрас e-mail"
 
-#: apps/accounts/models.py:43
-#: apps/companies/models.py:28
-#: apps/people/models.py:201
-#: templates/accounts/profile.html:81
-#: templates/accounts/user_form.html:87
-#: templates/companies/form.html:43
+#: apps/accounts/models.py:43 apps/companies/models.py:28
+#: apps/people/models.py:201 templates/accounts/profile.html:81
+#: templates/accounts/user_form.html:87 templates/companies/form.html:43
 #: templates/people/form.html:203
 msgid "Phone"
 msgstr "Тэлефон"
@@ -55,8 +47,7 @@ msgstr "нумар Viber ці спасылка"
 msgid "@username or phone number"
 msgstr "@карыстальнік ці нумар тэлефона"
 
-#: apps/accounts/models.py:58
-#: templates/accounts/user_form.html:106
+#: apps/accounts/models.py:58 templates/accounts/user_form.html:106
 #: templates/accounts/user_list.html:67
 msgid "Role"
 msgstr "Роля"
@@ -65,29 +56,20 @@ msgstr "Роля"
 msgid "Business role: Superman, Supervisor, Recruiter, Client, Intern"
 msgstr "Бізнес-роля: Superman, Supervisor, Recruiter, Client, Intern"
 
-#: apps/accounts/models.py:65
-#: apps/companies/models.py:56
-#: apps/people/models.py:210
-#: apps/vacancies/forms.py:67
-#: apps/vacancies/models.py:32
-#: templates/accounts/user_form.html:103
-#: templates/accounts/user_form.html:110
-#: templates/accounts/user_list.html:68
-#: templates/companies/detail.html:75
-#: templates/companies/form.html:66
-#: templates/companies/index.html:89
-#: templates/core/dashboard.html:57
-#: templates/people/form.html:222
-#: templates/people/index.html:144
-#: templates/vacancies/form.html:72
+#: apps/accounts/models.py:65 apps/companies/models.py:56
+#: apps/people/models.py:210 apps/vacancies/forms.py:67
+#: apps/vacancies/models.py:32 templates/accounts/user_form.html:103
+#: templates/accounts/user_form.html:110 templates/accounts/user_list.html:68
+#: templates/companies/detail.html:75 templates/companies/form.html:66
+#: templates/companies/index.html:50 templates/companies/index.html:89
+#: templates/core/dashboard.html:57 templates/people/form.html:222
+#: templates/people/index.html:144 templates/vacancies/form.html:72
 #: templates/vacancies/index.html:130
 msgid "Status"
 msgstr "Статус"
 
-#: apps/accounts/models.py:70
-#: templates/accounts/user_detail.html:71
-#: templates/accounts/user_form.html:114
-#: templates/accounts/user_list.html:69
+#: apps/accounts/models.py:70 templates/accounts/user_detail.html:71
+#: templates/accounts/user_form.html:114 templates/accounts/user_list.html:69
 msgid "Works Since"
 msgstr "Працуе з"
 
@@ -95,17 +77,13 @@ msgstr "Працуе з"
 msgid "Curriculum vitae, PDF format only"
 msgstr "CV, толькі pdf"
 
-#: apps/accounts/models.py:81
-#: templates/accounts/user_form.html:21
+#: apps/accounts/models.py:81 templates/accounts/user_form.html:21
 msgid "User"
 msgstr "Карыстальнік"
 
-#: apps/accounts/models.py:82
-#: templates/accounts/user_confirm_delete.html:10
-#: templates/accounts/user_detail.html:10
-#: templates/accounts/user_form.html:10
-#: templates/accounts/user_list.html:11
-#: templates/base/base.html:82
+#: apps/accounts/models.py:82 templates/accounts/user_confirm_delete.html:10
+#: templates/accounts/user_detail.html:10 templates/accounts/user_form.html:10
+#: templates/accounts/user_list.html:11 templates/base/base.html:82
 #: templates/vacancies/form.html:176
 msgid "Users"
 msgstr "Карыстальнікі"
@@ -115,13 +93,13 @@ msgid "Profile updated successfully."
 msgstr "профіль паспяхова адноўлены"
 
 #: apps/accounts/views.py:73
+#, fuzzy, python-format
+#| msgid "User \"%(username)s\" created."
 msgid "User \"%(username)s\" created."
 msgstr "Карыстальнік \"%(title)s\" створаны."
 
-#: apps/accounts/views.py:78
-#: apps/companies/views.py:67
-#: apps/events/views.py:107
-#: apps/people/views.py:180
+#: apps/accounts/views.py:78 apps/companies/views.py:67
+#: apps/events/views.py:107 apps/people/views.py:180
 #: apps/vacancies/views.py:112
 msgid "Create"
 msgstr "Стварыць"
@@ -130,16 +108,11 @@ msgstr "Стварыць"
 msgid "User \"% (title)s updated."
 msgstr "Карыстальнік \"%(title)s\" адноўлены."
 
-#: apps/accounts/views.py:96
-#: apps/companies/views.py:83
-#: apps/events/views.py:123
-#: apps/people/views.py:199
-#: apps/vacancies/views.py:132
-#: templates/accounts/user_detail.html:19
-#: templates/companies/detail.html:18
-#: templates/events/detail.html:19
-#: templates/people/detail.html:18
-#: templates/vacancies/detail.html:18
+#: apps/accounts/views.py:96 apps/companies/views.py:83
+#: apps/events/views.py:123 apps/people/views.py:199
+#: apps/vacancies/views.py:132 templates/accounts/user_detail.html:19
+#: templates/companies/detail.html:18 templates/events/detail.html:19
+#: templates/people/detail.html:18 templates/vacancies/detail.html:18
 msgid "Edit"
 msgstr "Рэдагаваць"
 
@@ -155,66 +128,46 @@ msgstr "Шукаць"
 msgid "Search by name, email..."
 msgstr "Пошук па імені, e-mail..."
 
-#: apps/companies/forms.py:41
-#: apps/companies/models.py:17
-#: apps/people/models.py:31
-#: templates/accounts/user_form.html:166
-#: templates/companies/detail.html:39
-#: templates/companies/index.html:117
-#: templates/core/dashboard.html:75
-#: templates/people/detail.html:40
+#: apps/companies/forms.py:41 apps/companies/models.py:17
+#: apps/people/models.py:31 templates/accounts/user_form.html:166
+#: templates/companies/detail.html:39 templates/companies/index.html:117
+#: templates/core/dashboard.html:75 templates/people/detail.html:40
 #: templates/people/index.html:171
 msgid "Active"
 msgstr "Актыўны"
 
-#: apps/companies/forms.py:42
-#: apps/companies/models.py:18
-#: apps/people/models.py:32
-#: templates/accounts/user_list.html:86
-#: templates/companies/detail.html:42
-#: templates/companies/index.html:120
-#: templates/core/dashboard.html:77
-#: templates/people/detail.html:41
+#: apps/companies/forms.py:42 apps/companies/models.py:18
+#: apps/people/models.py:32 templates/accounts/user_list.html:86
+#: templates/companies/detail.html:42 templates/companies/index.html:120
+#: templates/core/dashboard.html:77 templates/people/detail.html:41
 #: templates/people/index.html:173
 msgid "Inactive"
 msgstr "Неактыўны"
 
-#: apps/companies/forms.py:43
-#: apps/companies/models.py:19
-#: apps/people/models.py:58
-#: templates/companies/detail.html:40
+#: apps/companies/forms.py:43 apps/companies/models.py:19
+#: apps/people/models.py:58 templates/companies/detail.html:40
 #: templates/companies/index.html:118
 msgid "Lead"
 msgstr "Лід"
 
-#: apps/companies/forms.py:44
-#: apps/companies/models.py:20
-#: templates/companies/detail.html:41
-#: templates/companies/index.html:119
+#: apps/companies/forms.py:44 apps/companies/models.py:20
+#: templates/companies/detail.html:41 templates/companies/index.html:119
 msgid "Paused"
 msgstr "Паўза"
 
-#: apps/companies/forms.py:52
-#: apps/companies/models.py:12
+#: apps/companies/forms.py:52 apps/companies/models.py:12
 msgid "After"
 msgstr "Пасля"
 
-#: apps/companies/forms.py:53
-#: apps/companies/models.py:13
+#: apps/companies/forms.py:53 apps/companies/models.py:13
 msgid "Prepayment"
 msgstr "Перадаплата"
 
-#: apps/companies/models.py:26
-#: apps/people/models.py:41
-#: apps/people/models.py:76
-#: apps/people/models.py:88
-#: apps/people/models.py:100
-#: apps/people/models.py:112
-#: apps/people/models.py:134
-#: templates/accounts/user_list.html:65
-#: templates/companies/form.html:33
-#: templates/core/dashboard.html:54
-#: templates/people/index.html:140
+#: apps/companies/models.py:26 apps/people/models.py:41
+#: apps/people/models.py:76 apps/people/models.py:88 apps/people/models.py:100
+#: apps/people/models.py:112 apps/people/models.py:134
+#: templates/accounts/user_list.html:65 templates/companies/form.html:33
+#: templates/core/dashboard.html:54 templates/people/index.html:140
 msgid "Name"
 msgstr "Імя"
 
@@ -256,8 +209,8 @@ msgstr "Кампанія"
 #: apps/companies/models.py:63 templates/base/base.html:54
 #: templates/companies/confirm_delete.html:10
 #: templates/companies/detail.html:10 templates/companies/form.html:10
-#: templates/companies/index.html:6 templates/companies/index.html:11
-#: templates/companies/index.html:74
+#: templates/companies/index.html:5 templates/companies/index.html:6
+#: templates/companies/index.html:11 templates/companies/index.html:74
 msgid "Companies"
 msgstr "Кампаніі"
 
@@ -316,20 +269,16 @@ msgstr "Вакансія"
 msgid "Candidate"
 msgstr "Кандыдат"
 
-#: apps/events/models.py:65
-#: templates/events/form.html:65
+#: apps/events/models.py:65 templates/events/form.html:65
 msgid "Event Date"
 msgstr "Дата Падзеі"
 
-#: apps/events/models.py:70
-#: templates/events/form.html:69
+#: apps/events/models.py:70 templates/events/form.html:69
 msgid "Event Time"
 msgstr "Час Падзеі"
 
-#: apps/events/models.py:79
-#: apps/vacancies/forms.py:63
-#: templates/events/detail.html:99
-#: templates/events/form.html:73
+#: apps/events/models.py:79 apps/vacancies/forms.py:63
+#: templates/events/detail.html:99 templates/events/form.html:73
 #: templates/events/index.html:121
 msgid "Supervisor"
 msgstr "Супервайзар"
@@ -338,12 +287,9 @@ msgstr "Супервайзар"
 msgid "Event"
 msgstr "Падзея"
 
-#: apps/events/models.py:86
-#: templates/base/base.html:70
-#: templates/events/confirm_delete.html:10
-#: templates/events/detail.html:10
-#: templates/events/form.html:10
-#: templates/events/index.html:11
+#: apps/events/models.py:86 templates/base/base.html:70
+#: templates/events/confirm_delete.html:10 templates/events/detail.html:10
+#: templates/events/form.html:10 templates/events/index.html:11
 #: templates/events/index.html:106
 msgid "Events"
 msgstr "Падзеі"
@@ -366,22 +312,22 @@ msgstr "Падзея выдаленая."
 msgid "Search by name, email, phone…"
 msgstr "Пошук па імені, e-mail, тэлефоне..."
 
-#: apps/people/forms.py:106
-#: apps/people/forms.py:130
-#: apps/vacancies/forms.py:91
+#: apps/people/forms.py:106 apps/people/forms.py:130 apps/vacancies/forms.py:91
 msgid "From"
 msgstr "Ад"
 
-#: apps/people/forms.py:112
-#: apps/people/forms.py:136
-#: apps/vacancies/forms.py:97
+#: apps/people/forms.py:112 apps/people/forms.py:136 apps/vacancies/forms.py:97
 msgid "To"
 msgstr "Да"
 
-#: apps/people/models.py:44
-#: apps/people/models.py:159
-#: templates/people/detail.html:114
-#: templates/people/form.html:102
+#: apps/people/forms.py:118 apps/people/models.py:181
+#: apps/vacancies/forms.py:77 apps/vacancies/models.py:61
+#: templates/people/form.html:159 templates/vacancies/form.html:125
+msgid "Currency"
+msgstr "Валюта"
+
+#: apps/people/models.py:44 apps/people/models.py:159
+#: templates/people/detail.html:114 templates/people/form.html:102
 msgid "Gender"
 msgstr "Пол"
 
@@ -536,12 +482,6 @@ msgstr "Досьвед працы (гадоў)"
 #: apps/people/models.py:174 templates/people/form.html:155
 msgid "Salary Desired"
 msgstr "Жаданая зарплата"
-
-#: apps/people/models.py:181 apps/vacancies/forms.py:77
-#: apps/vacancies/models.py:61 templates/people/form.html:159
-#: templates/vacancies/form.html:125
-msgid "Currency"
-msgstr "Валюта"
 
 #: apps/people/models.py:200
 msgid "E-mail"
@@ -698,8 +638,8 @@ msgid "Sign In — HR Platform"
 msgstr "Увайсці - HR Платформа"
 
 #: templates/accounts/login.html:16 templates/base/base.html:8
-#: templates/base/base.html:29 templates/people/detail.html:4
-#: templates/people/index.html:5
+#: templates/base/base.html:29 templates/companies/index.html:5
+#: templates/people/detail.html:4 templates/people/index.html:5
 msgid "HR Platform"
 msgstr "HR Платформа"
 
@@ -1013,7 +953,8 @@ msgstr "Выдаліць кампанію"
 msgid "Company Info"
 msgstr "Дадзеныя Кампаніі"
 
-#: templates/companies/form.html:55 templates/companies/index.html:87
+#: templates/companies/form.html:55 templates/companies/index.html:55
+#: templates/companies/index.html:87
 msgid "Payment"
 msgstr "Аплата"
 

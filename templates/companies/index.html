@@ -2,7 +2,7 @@
 {% load static i18n %}
 {% load ui_tags %}
 
-{% block title %}Companies — HR Platform{% endblock %}
+{% block title %}{% trans "Companies" %} — {% trans "HR Platform" %}{% endblock %}
 {% block page_title %}{% trans "Companies" %}{% endblock %}
 
 {% block breadcrumb %}
@@ -47,12 +47,12 @@
 
         <div class="ms-wrap" id="ms-status"
              data-name="status"
-             data-placeholder="Status">
+             data-placeholder="{% trans 'Status' %}">
         </div>
 
         <div class="ms-wrap" id="ms-payment_options"
              data-name="payment_options"
-             data-placeholder="Payment">
+             data-placeholder="{% trans 'Payment' %}">
         </div>
 
       </div><!-- /row 1 -->
@@ -81,7 +81,7 @@
     <table class="data-table">
       <thead>
         <tr>
-          <th data-sortable>Name</th>
+          <th data-sortable>{% trans "Name" %}</th>
           <th>{% trans "Contact" %}</th>
           <th>{% trans "Contact Person" %}</th>
           <th>{% trans "Payment" %}</th>

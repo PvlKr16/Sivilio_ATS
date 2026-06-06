@@ -20,7 +20,7 @@
   {% if perms.people.delete_person %}
   <a href="{% url 'people:delete' person.pk %}" class="btn btn-outline-danger btn-sm"
      data-confirm="Delete {{ person.full_name }}? This cannot be undone.">
-    <i class="fas fa-trash"></i> Delete
+    <i class="fas fa-trash"></i> {% trans "Delete" %}
   </a>
   {% endif %}
 </div>
