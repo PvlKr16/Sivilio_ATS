@@ -30,7 +30,7 @@
           <div class="form-section-title">{% trans "Company Info" %}</div>
           <div class="form-row form-row-2">
             <div class="form-group" style="grid-column:span 2;">
-              <label class="form-label">{% trans "Name" %}<span class="required">*</span></label>
+              <label class="form-label">{% trans "Title" %}<span class="required">*</span></label>
               {{ form.name }}
               {% for e in form.name.errors %}<div class="invalid-feedback" style="display:block;">{{ e }}</div>{% endfor %}
             </div>

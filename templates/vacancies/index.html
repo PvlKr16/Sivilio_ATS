@@ -2,8 +2,8 @@
 {% load static i18n%}
 {% load ui_tags %}
 
-{% block title %}Vacancies — HR Platform{% endblock %}
-{% block page_title %}Vacancies{% endblock %}
+{% block title %}{% trans "Vacancies" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{% trans "Vacancies" %} endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
@@ -47,17 +47,17 @@
 
         <div class="ms-wrap" id="ms-supervisors"
              data-name="supervisors"
-             data-placeholder="Supervisor">
+             data-placeholder="{% trans 'Supervisor' %}">
         </div>
 
         <div class="ms-wrap" id="ms-status"
              data-name="status"
-             data-placeholder="Status">
+             data-placeholder="{% trans 'Status' %}">
         </div>
 
         <div class="ms-wrap" id="ms-company"
              data-name="company"
-             data-placeholder="Company">
+             data-placeholder="{% trans 'Company' %}">
         </div>
 
       </div><!-- /row 1 -->
@@ -77,17 +77,17 @@
 
         <div class="ms-wrap" id="ms-level"
              data-name="level"
-             data-placeholder="Level">
+             data-placeholder="{% trans 'Level' %}">
         </div>
 
         <div class="ms-wrap" id="ms-english"
              data-name="english"
-             data-placeholder="English">
+             data-placeholder="{% trans 'English' %}">
         </div>
 
         <div class="ms-wrap" id="ms-working_hours"
              data-name="working_hours"
-             data-placeholder="Working Hours">
+             data-placeholder="{% trans 'Working Hours' %}">
         </div>
 
       </div><!-- /row 2 -->

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 16:23+0300\n"
+"POT-Creation-Date: 2026-06-06 16:55+0300\n"
 "Language: be\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -163,13 +163,11 @@ msgstr "Пасля"
 msgid "Prepayment"
 msgstr "Перадаплата"
 
-#: apps/companies/models.py:26 apps/people/models.py:41
-#: apps/people/models.py:76 apps/people/models.py:88 apps/people/models.py:100
-#: apps/people/models.py:112 apps/people/models.py:134
-#: templates/accounts/user_list.html:65 templates/companies/form.html:33
-#: templates/core/dashboard.html:54 templates/people/index.html:140
-msgid "Name"
-msgstr "Імя"
+#: apps/companies/models.py:26 apps/vacancies/models.py:40
+#: templates/companies/form.html:33 templates/companies/index.html:84
+#: templates/vacancies/form.html:81 templates/vacancies/index.html:125
+msgid "Title"
+msgstr "Назва"
 
 #: apps/companies/models.py:35 templates/companies/detail.html:57
 #: templates/companies/form.html:47 templates/companies/index.html:86
@@ -215,11 +213,15 @@ msgid "Companies"
 msgstr "Кампаніі"
 
 #: apps/companies/views.py:62
-msgid "Company \"%(title}s\" created."
+#, fuzzy, python-format
+#| msgid "Company \"%(title}s\" created."
+msgid "Company \"%(title)s\" created."
 msgstr "Кампанія \"%(title)s\" створаная."
 
 #: apps/companies/views.py:78
-msgid "Company \"%(title}s\" updated."
+#, fuzzy, python-format
+#| msgid "Company \"%(title}s\" updated."
+msgid "Company \"%(title)s\" updated."
 msgstr "Кампанія \"%(title)s\" адноўленая."
 
 #: apps/companies/views.py:95
@@ -325,6 +327,13 @@ msgstr "Да"
 #: templates/people/form.html:159 templates/vacancies/form.html:125
 msgid "Currency"
 msgstr "Валюта"
+
+#: apps/people/models.py:41 apps/people/models.py:76 apps/people/models.py:88
+#: apps/people/models.py:100 apps/people/models.py:112
+#: apps/people/models.py:134 templates/accounts/user_list.html:65
+#: templates/core/dashboard.html:54 templates/people/index.html:140
+msgid "Name"
+msgstr "Імя"
 
 #: apps/people/models.py:44 apps/people/models.py:159
 #: templates/people/detail.html:114 templates/people/form.html:102
@@ -557,11 +566,6 @@ msgstr "У рабоце"
 msgid "Stop"
 msgstr "Стоп"
 
-#: apps/vacancies/models.py:40 templates/vacancies/form.html:81
-#: templates/vacancies/index.html:125
-msgid "Title"
-msgstr "Назва"
-
 #: apps/vacancies/models.py:46 templates/vacancies/detail.html:82
 #: templates/vacancies/form.html:104
 msgid "Skills Required"
@@ -730,7 +734,8 @@ msgstr "Захаваць змены"
 #: templates/companies/confirm_delete.html:14
 #: templates/companies/detail.html:23 templates/events/confirm_delete.html:14
 #: templates/events/detail.html:25 templates/people/confirm_delete.html:14
-#: templates/people/form.html:283 templates/vacancies/confirm_delete.html:14
+#: templates/people/detail.html:23 templates/people/form.html:283
+#: templates/vacancies/confirm_delete.html:14
 msgid "Delete"
 msgstr "Выдаліць"
 

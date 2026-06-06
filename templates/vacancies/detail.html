@@ -20,7 +20,7 @@
   {% if perms.vacancies.delete_vacancy %}
   <a href="{% url 'vacancies:delete' vacancy.pk %}" class="btn btn-outline-danger btn-sm"
      data-confirm="Delete &quot;{{ vacancy.title }}&quot;? This cannot be undone.">
-    <i class="fas fa-trash"></i> Delete
+    <i class="fas fa-trash"></i> {% trans "Delete" %}
   </a>
   {% endif %}
 </div>

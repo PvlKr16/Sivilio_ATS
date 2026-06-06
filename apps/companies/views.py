@@ -59,7 +59,7 @@ class CompanyCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     permission_required = 'companies.add_company'
 
     def form_valid(self, form):
-        messages.success(self.request, _('Company "%(title}s" created.') % {'title': form.instance.name},)
+        messages.success(self.request, _('Company "%(title)s" created.') % {'title': form.instance.name})
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -75,7 +75,7 @@ class CompanyUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     permission_required = 'companies.change_company'
 
     def form_valid(self, form):
-        messages.success(self.request, _('Company "%(title}s" updated.') % {'title': form.instance.name},)
+        messages.success(self.request, _('Company "%(title)s" updated.') % {'title': form.instance.name})
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

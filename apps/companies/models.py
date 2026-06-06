@@ -23,7 +23,7 @@ class CompanyStatus(models.TextChoices):
 class Company(models.Model):
     """Client / partner company record."""
 
-    name = models.CharField(max_length=255, unique=True, verbose_name=_('Name'))
+    name = models.CharField(max_length=255, unique=True, verbose_name=_('Title'))
     email = models.EmailField(blank=True, null=True, verbose_name='E-mail')
     phone = models.CharField(max_length=50, blank=True, null=True, verbose_name=_('Phone'))
 

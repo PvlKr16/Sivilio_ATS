@@ -76,7 +76,7 @@ class VacancySearchForm(forms.Form):
     salary_currency = forms.ChoiceField(
         required=False, label=_('Currency'),
         choices=[
-            ('',    _('Any')),
+            ('',    _('Currency')),
             ('USD', 'USD ($)'),
             ('EUR', 'EUR (€)'),
             ('UAH', 'UAH (₴)'),
