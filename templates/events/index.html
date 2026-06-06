@@ -2,8 +2,8 @@
 {% load ui_tags %}
 {% load i18n %}
 
-{% block title %}Events — HR Platform{% endblock %}
-{% block page_title %}Events{% endblock %}
+{% block title %}{% trans "Events" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{% trans "Events" %}{% endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
@@ -47,12 +47,12 @@
 
         <div class="ms-wrap" id="ms-supervisor"
              data-name="supervisor"
-             data-placeholder="Supervisor">
+             data-placeholder="{% trans 'Supervisor' %}">
         </div>
 
         <div class="ms-wrap" id="ms-vacancy"
              data-name="vacancy"
-             data-placeholder="Vacancy">
+             data-placeholder="{% trans 'Vacancy' %}">
         </div>
 
         <!-- Date range -->
@@ -71,17 +71,17 @@
 
         <div class="ms-wrap" id="ms-company"
              data-name="company"
-             data-placeholder="Company">
+             data-placeholder="{% trans 'Company' %}">
         </div>
 
         <div class="ms-wrap" id="ms-event_type"
              data-name="event_type"
-             data-placeholder="Event type">
+             data-placeholder="{% trans 'Event type' %}">
         </div>
 
         <div class="ms-wrap" id="ms-candidate"
              data-name="candidate"
-             data-placeholder="Candidate">
+             data-placeholder="{% trans 'Candidate' %}">
         </div>
 
       </div><!-- /row 2 -->
@@ -104,7 +104,9 @@
   <div class="card-header">
     <h2 class="card-title">
       {% trans "Events" %}
-      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">{{ total_count }} record{{ total_count|pluralize }}</span>
+      <span style="font-size:var(--font-size-sm);font-weight:400;color:var(--text-muted);margin-left:6px;">
+          {{ total_count }} {% trans "record" %}{{ total_count|pluralize }}
+      </span>
     </h2>
   </div>
 

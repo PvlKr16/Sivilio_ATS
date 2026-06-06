@@ -1,8 +1,8 @@
 {% extends "base/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ action }} Event — HR Platform{% endblock %}
-{% block page_title %}{{ action }} Event{% endblock %}
+{% block title %}{{ action }}{% trans "Event" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{{ action }}{% trans "Event" %}{% endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
@@ -18,7 +18,7 @@
   <form method="post" data-submit-once>
     {% csrf_token %}
     <div class="card">
-      <div class="card-header"><h2 class="card-title">{{ action }} Event</h2></div>
+      <div class="card-header"><h2 class="card-title">{{ action }}Event</h2></div>
       <div class="card-body">
 
         {% if form.non_field_errors %}

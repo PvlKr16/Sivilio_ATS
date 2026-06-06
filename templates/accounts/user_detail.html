@@ -72,7 +72,7 @@
           <div class="info-item-value">{{ user_obj.works_since|date:"d M Y"|default:"—" }}</div>
         </div>
         <div>
-          <div class="info-item-label">Active</div>
+          <div class="info-item-label">>{% trans "Active" %}</div>
           <div class="info-item-value">
             {% if user_obj.is_active %}<span class="badge badge-success">{% trans "Yes" %}</span>{% else %}<span class="badge badge-secondary">{% trans "No" %}</span>{% endif %}
           </div>

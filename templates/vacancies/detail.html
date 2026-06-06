@@ -19,7 +19,7 @@
   {% endif %}
   {% if perms.vacancies.delete_vacancy %}
   <a href="{% url 'vacancies:delete' vacancy.pk %}" class="btn btn-outline-danger btn-sm"
-     data-confirm="Delete &quot;{{ vacancy.title }}&quot;? This cannot be undone.">
+   data-confirm="{% blocktrans with title=vacancy.title %}Delete &quot;{{ title }}&quot;? This cannot be undone.{% endblocktrans %}">
     <i class="fas fa-trash"></i> {% trans "Delete" %}
   </a>
   {% endif %}
