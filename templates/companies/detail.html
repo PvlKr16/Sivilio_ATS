@@ -1,7 +1,7 @@
 {% extends "base/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ company.name }} — HR Platform{% endblock %}
+{% block title %}{{ company.name }} — {% trans "HR Platform" %}{% endblock %}
 {% block page_title %}{{ company.name }}{% endblock %}
 
 {% block breadcrumb %}
@@ -19,7 +19,7 @@
   {% endif %}
   {% if perms.companies.delete_company %}
   <a href="{% url 'companies:delete' company.pk %}" class="btn btn-outline-danger btn-sm"
-     data-confirm="Delete {{ company.name }}? This cannot be undone.">
+     data-confirm="{% blocktrans with title=company.name %}Delete &quot;{{ title }}&quot;? This cannot be undone.{% endblocktrans %}">
     <i class="fas fa-trash"></i> {% trans "Delete" %}
   </a>
   {% endif %}

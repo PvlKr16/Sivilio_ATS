@@ -21,7 +21,8 @@
   {% endif %}
   {% if perms.events.delete_event %}
   <a href="{% url 'events:delete' event.pk %}" class="btn btn-outline-danger btn-sm"
-     data-confirm="Delete this event? This cannot be undone.">
+     data-confirm="{% blocktrans %}Delete this event? This cannot be undone. {% endblocktrans %}">
+
     <i class="fas fa-trash"></i> {% trans "Delete" %}
   </a>
   {% endif %}
