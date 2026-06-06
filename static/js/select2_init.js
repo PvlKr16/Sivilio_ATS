@@ -20,9 +20,9 @@
 
   // Skills — multi-select with search
   $('#id_skills_select2').select2($.extend({}, commonConfig, {
-    placeholder: 'Search and select skills...',
-    closeOnSelect: false,
-    dropdownParent: $('#id_skills_select2').closest('.form-group'),
+  placeholder: $('#id_skills_select2').data('placeholder'),
+  closeOnSelect: false,
+  dropdownParent: $('#id_skills_select2').closest('.form-group'),
   }));
 
   // Working Hours — multi, no search (short list)

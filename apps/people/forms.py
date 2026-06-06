@@ -139,7 +139,7 @@ class PersonSearchForm(forms.Form):
 
     # ── Row 2 ─────────────────────────────────────────────────────────────
     skills = forms.ModelMultipleChoiceField(
-        queryset=None, required=False, label='Skills',
+        queryset=None, required=False, label=_('Skills'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
     )
     level = forms.ModelMultipleChoiceField(

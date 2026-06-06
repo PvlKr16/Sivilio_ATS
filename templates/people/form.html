@@ -135,8 +135,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Skills</label>
-            <select name="skills" id="id_skills_select2" multiple style="width:100%;">
+            <label class="form-label">{% trans "Skills" %}</label>
+            <select name="skills" id="id_skills_select2" multiple style="width:100%;"
+                data-placeholder="{% trans 'Search and select skills...' %}">
               {% for skill in form.skills.field.queryset %}
               <option value="{{ skill.pk }}"
                 {% if skill in form.instance.skills.all %}selected{% endif %}>
