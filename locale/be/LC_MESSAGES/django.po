@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 14:00+0300\n"
+"POT-Creation-Date: 2026-06-07 18:32+0300\n"
 "Language: be\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -85,7 +85,7 @@ msgstr "Карыстальнік"
 #: apps/accounts/models.py:82 templates/accounts/user_confirm_delete.html:10
 #: templates/accounts/user_detail.html:10 templates/accounts/user_form.html:10
 #: templates/accounts/user_list.html:11 templates/base/base.html:82
-#: templates/vacancies/form.html:176
+#: templates/vacancies/form.html:180
 msgid "Users"
 msgstr "Карыстальнікі"
 
@@ -328,7 +328,7 @@ msgstr "Да"
 #: apps/people/forms.py:118 apps/people/models.py:181
 #: apps/vacancies/forms.py:77 apps/vacancies/forms.py:79
 #: apps/vacancies/models.py:61 templates/people/form.html:160
-#: templates/vacancies/form.html:125
+#: templates/vacancies/form.html:126
 msgid "Currency"
 msgstr "Валюта"
 
@@ -399,7 +399,7 @@ msgstr "Навык"
 #: apps/vacancies/forms.py:109 apps/vacancies/models.py:86
 #: templates/people/detail.html:146 templates/people/form.html:170
 #: templates/people/index.html:101 templates/vacancies/detail.html:115
-#: templates/vacancies/form.html:136 templates/vacancies/index.html:90
+#: templates/vacancies/form.html:137 templates/vacancies/index.html:90
 msgid "Working Hours"
 msgstr "Гадзіны працы"
 
@@ -416,7 +416,7 @@ msgstr "Рэгіёны"
 #: apps/people/models.py:115 apps/people/models.py:195
 #: apps/vacancies/models.py:81 templates/people/detail.html:152
 #: templates/people/form.html:182 templates/vacancies/detail.html:121
-#: templates/vacancies/form.html:147
+#: templates/vacancies/form.html:149
 msgid "Working Place"
 msgstr "Месца працы"
 
@@ -510,7 +510,6 @@ msgid "Telegram"
 msgstr "Telegram"
 
 #: apps/people/models.py:216 apps/people/models.py:262
-#: templates/people/form.html:80
 msgid "Person"
 msgstr "Кандыдат"
 
@@ -572,12 +571,12 @@ msgstr "Стоп"
 msgid "Skills Required"
 msgstr "Патрабаваныя навыкі"
 
-#: apps/vacancies/models.py:54 templates/vacancies/form.html:121
+#: apps/vacancies/models.py:54 templates/vacancies/form.html:122
 msgid "Salary Offered"
 msgstr "Прапанаваная зарплата"
 
 #: apps/vacancies/models.py:91 templates/vacancies/detail.html:138
-#: templates/vacancies/form.html:194
+#: templates/vacancies/form.html:198
 msgid "Screening"
 msgstr "Скрынінг"
 
@@ -589,7 +588,7 @@ msgstr "Пытанні для інтэрв'ю, крытэрыі скрынінг
 msgid "For Freelancers"
 msgstr "Для фрылансераў"
 
-#: apps/vacancies/models.py:103 templates/vacancies/form.html:162
+#: apps/vacancies/models.py:103 templates/vacancies/form.html:165
 msgid "Supervisors"
 msgstr "Супервайзары"
 
@@ -648,7 +647,8 @@ msgstr "Увайсці - HR Платформа"
 #: templates/companies/detail.html:4 templates/companies/index.html:5
 #: templates/events/form.html:4 templates/events/index.html:5
 #: templates/people/detail.html:4 templates/people/form.html:4
-#: templates/people/index.html:5 templates/vacancies/index.html:5
+#: templates/people/index.html:5 templates/vacancies/form.html:4
+#: templates/vacancies/index.html:5
 msgid "HR Platform"
 msgstr "HR Платформа"
 
@@ -731,7 +731,7 @@ msgid "Current CV"
 msgstr "Бягучае CV"
 
 #: templates/accounts/profile.html:128 templates/companies/form.html:86
-#: templates/events/form.html:101 templates/vacancies/form.html:205
+#: templates/events/form.html:101 templates/vacancies/form.html:209
 msgid "Save Changes"
 msgstr "Захаваць змены"
 
@@ -781,7 +781,7 @@ msgstr "нельга будзе адмяніць"
 #: templates/companies/confirm_delete.html:40 templates/companies/form.html:83
 #: templates/events/confirm_delete.html:42 templates/events/form.html:98
 #: templates/people/confirm_delete.html:37 templates/people/form.html:312
-#: templates/vacancies/confirm_delete.html:40 templates/vacancies/form.html:202
+#: templates/vacancies/confirm_delete.html:40 templates/vacancies/form.html:206
 msgid "Cancel"
 msgstr "Адмена"
 
@@ -795,7 +795,7 @@ msgstr "Так, выдаліць."
 
 #: templates/accounts/user_detail.html:63 templates/companies/detail.html:53
 #: templates/events/detail.html:60 templates/people/detail.html:107
-#: templates/vacancies/detail.html:94 templates/vacancies/form.html:184
+#: templates/vacancies/detail.html:94 templates/vacancies/form.html:188
 msgid "Details"
 msgstr "Дэталі"
 
@@ -1147,12 +1147,13 @@ msgid "Experience"
 msgstr "Досвед"
 
 #: templates/people/detail.html:134 templates/people/index.html:71
-#: templates/vacancies/detail.html:108 templates/vacancies/form.html:118
+#: templates/vacancies/detail.html:108 templates/vacancies/form.html:119
 #: templates/vacancies/index.html:70 templates/vacancies/index.html:128
 msgid "Salary"
 msgstr "Зарплата"
 
 #: templates/people/form.html:4 templates/people/form.html:5
+#: templates/people/form.html:80
 msgid "a Person"
 msgstr "Кандыдата"
 
@@ -1164,7 +1165,7 @@ msgstr "Асоба"
 msgid "Professional"
 msgstr "Прафесійнае"
 
-#: templates/people/form.html:140
+#: templates/people/form.html:140 templates/vacancies/form.html:106
 msgid "Search and select skills..."
 msgstr "Пошук і выбар па навыках"
 
@@ -1172,11 +1173,11 @@ msgstr "Пошук і выбар па навыках"
 msgid "Salary &amp; Location"
 msgstr "Зарплата і месца"
 
-#: templates/people/form.html:172
+#: templates/people/form.html:172 templates/vacancies/form.html:139
 msgid "Select working hours..."
 msgstr "Выберыце гадзіны працы"
 
-#: templates/people/form.html:184
+#: templates/people/form.html:184 templates/vacancies/form.html:151
 msgid "Select working place..."
 msgstr "Выберыце месца працы"
 
@@ -1258,6 +1259,10 @@ msgstr "у працы"
 msgid "Freelance"
 msgstr "Для фрылансераў"
 
+#: templates/vacancies/form.html:4 templates/vacancies/form.html:5
+msgid "a Vacancy"
+msgstr "Вакансію"
+
 #: templates/vacancies/form.html:69
 msgid "Main Info"
 msgstr "Галоўная інфармацыя"
@@ -1266,19 +1271,23 @@ msgstr "Галоўная інфармацыя"
 msgid "Requirements"
 msgstr "Патрабаванні"
 
-#: templates/vacancies/form.html:133
+#: templates/vacancies/form.html:134
 msgid "Schedule &amp; Location"
 msgstr "Расклад і знаходжанне"
 
-#: templates/vacancies/form.html:175
-msgid "No users with role "
-msgstr "Няма карыстальнікаў з роляй "
+#: templates/vacancies/form.html:168
+msgid "Select supervisors..."
+msgstr "Выберыце супервайзараў"
 
-#: templates/vacancies/form.html:189
+#: templates/vacancies/form.html:179
+msgid "No users with role 'Supervisor' found. Add supervisors in"
+msgstr "Карыстальнікі з роляй 'Supervisor' не знойдзеныя. Дадайце Supervisor"
+
+#: templates/vacancies/form.html:193
 msgid "Open for freelancers"
 msgstr "Таксама і для фрылансераў"
 
-#: templates/vacancies/form.html:205
+#: templates/vacancies/form.html:209
 msgid "Create Vacancy"
 msgstr "Стварыць вакансію"
 

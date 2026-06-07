@@ -14,14 +14,14 @@
 
   // Skills — multi with search
   $('#id_vacancy_skills').select2($.extend({}, common, {
-    placeholder: 'Search and select skills...',
+    placeholder: $('#id_vacancy_skills').data('placeholder'),
     closeOnSelect: false,
     dropdownParent: $('#id_vacancy_skills').closest('.form-group'),
   }));
 
   // Working Hours — multi, no search
   $('#id_vacancy_working_hours').select2($.extend({}, common, {
-    placeholder: 'Select working hours...',
+    placeholder: $('#id_vacancy_working_hours').data('placeholder'),
     closeOnSelect: false,
     minimumResultsForSearch: Infinity,
     dropdownParent: $('#id_vacancy_working_hours').closest('.form-group'),
@@ -29,7 +29,7 @@
 
   // Working Place — multi, no search
   $('#id_vacancy_working_place').select2($.extend({}, common, {
-    placeholder: 'Select working place...',
+    placeholder: $('#id_vacancy_working_place').data('placeholder'),
     closeOnSelect: false,
     minimumResultsForSearch: Infinity,
     dropdownParent: $('#id_vacancy_working_place').closest('.form-group'),
@@ -37,7 +37,7 @@
 
   // Supervisors — multi with search
   $('#id_vacancy_supervisors').select2($.extend({}, common, {
-    placeholder: 'Select supervisors...',
+    placeholder: $('#id_vacancy_supervisors').data('placeholder'),
     closeOnSelect: false,
     dropdownParent: $('#id_vacancy_supervisors').closest('.form-group'),
   }));

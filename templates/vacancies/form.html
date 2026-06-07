@@ -1,8 +1,8 @@
 {% extends "base/base.html" %}
 {% load static i18n%}
 
-{% block title %}{{ action }} Vacancy — HR Platform{% endblock %}
-{% block page_title %}{{ action }} Vacancy{% endblock %}
+{% block title %}{{ action }} {% trans "a Vacancy" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{{ action }} {% trans "a Vacancy" %}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
@@ -102,7 +102,8 @@
           <!-- Skills Select2 -->
           <div class="form-group">
             <label class="form-label">{% trans "Skills Required" %}</label>
-            <select name="skills" id="id_vacancy_skills" multiple style="width:100%;">
+            <select name="skills" id="id_vacancy_skills" multiple style="width:100%;"
+                data-placeholder="{% trans 'Search and select skills...' %}">
               {% for skill in form.skills.field.queryset %}
               <option value="{{ skill.pk }}"
                 {% if skill in form.instance.skills.all %}selected{% endif %}>
@@ -134,7 +135,8 @@
           <div class="form-row form-row-2">
             <div class="form-group">
               <label class="form-label">{% trans "Working Hours" %}</label>
-              <select name="working_hours" id="id_vacancy_working_hours" multiple style="width:100%;">
+              <select name="working_hours" id="id_vacancy_working_hours" multiple style="width:100%;"
+                      data-placeholder="{% trans 'Select working hours...' %}">
                 {% for wh in form.working_hours.field.queryset %}
                 <option value="{{ wh.pk }}"
                   {% if wh in form.instance.working_hours.all %}selected{% endif %}>
@@ -145,7 +147,8 @@
             </div>
             <div class="form-group">
               <label class="form-label">{% trans "Working Place" %}</label>
-              <select name="working_place" id="id_vacancy_working_place" multiple style="width:100%;">
+              <select name="working_place" id="id_vacancy_working_place" multiple style="width:100%;"
+                data-placeholder="{% trans 'Select working place...' %}">
                 {% for wp in form.working_place.field.queryset %}
                 <option value="{{ wp.pk }}"
                   {% if wp in form.instance.working_place.all %}selected{% endif %}>
@@ -161,7 +164,8 @@
         <div class="form-section">
           <div class="form-section-title">{% trans "Supervisors" %}</div>
           <div class="form-group">
-            <select name="supervisors" id="id_vacancy_supervisors" multiple style="width:100%;">
+            <select name="supervisors" id="id_vacancy_supervisors" multiple style="width:100%;"
+                data-placeholder="{% trans 'Select supervisors...' %}">
               {% for sup in form.supervisors.field.queryset %}
               <option value="{{ sup.pk }}"
                 {% if sup in form.instance.supervisors.all %}selected{% endif %}>
@@ -172,7 +176,7 @@
             {% if not form.supervisors.field.queryset %}
             <div class="form-text" style="color:var(--color-warning);">
               <i class="fas fa-triangle-exclamation"></i>
-              {% trans "No users with role "Supervisor" found. Add supervisors in" %}
+              {% trans "No users with role 'Supervisor' found. Add supervisors in" %}
               <a href="{% url 'accounts:user_list' %}">{% trans "Users" %}</a>.
             </div>
             {% endif %}
