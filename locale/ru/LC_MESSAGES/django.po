@@ -1164,7 +1164,7 @@ msgstr "Кандидата"
 
 #: templates/people/form.html:89
 msgid "Identity"
-msgstr "Личность"
+msgstr "Персональные данные"
 
 #: templates/people/form.html:114
 msgid "Professional"
