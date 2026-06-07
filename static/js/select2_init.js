@@ -26,7 +26,7 @@
   }));
 
   // Working Hours — multi, no search (short list)
-  $("id_working_hours_select2").select2($.extend({}, commonConfig, {
+  $("#id_working_hours_select2").select2($.extend({}, commonConfig, {
     placeholder: $("#id_working_hours_select2").data('placeholder'),
     closeOnSelect: false,
     minimumResultsForSearch: Infinity,
