@@ -26,8 +26,8 @@
   }));
 
   // Working Hours — multi, no search (short list)
-  $('#id_working_hours_select2').select2($.extend({}, commonConfig, {
-    placeholder: 'Select working hours...',
+  $("id_working_hours_select2").select2($.extend({}, commonConfig, {
+    placeholder: $("#id_working_hours_select2").data('placeholder'),
     closeOnSelect: false,
     minimumResultsForSearch: Infinity,
     dropdownParent: $('#id_working_hours_select2').closest('.form-group'),
@@ -35,7 +35,7 @@
 
   // Working Place — multi, no search (short list)
   $('#id_working_place_select2').select2($.extend({}, commonConfig, {
-    placeholder: 'Select working place...',
+    placeholder: $('#id_working_place_select2').data('placeholder'),
     closeOnSelect: false,
     minimumResultsForSearch: Infinity,
     dropdownParent: $('#id_working_place_select2').closest('.form-group'),
