@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 00:13+0300\n"
+"POT-Creation-Date: 2026-06-07 12:49+0300\n"
 "Language: be\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -512,7 +512,7 @@ msgid "Telegram"
 msgstr "Telegram"
 
 #: apps/people/models.py:216 apps/people/models.py:262
-#: templates/people/form.html:80
+#: templates/people/form.html:5 templates/people/form.html:80
 msgid "Person"
 msgstr "Кандыдат"
 
@@ -649,8 +649,8 @@ msgstr "Увайсці - HR Платформа"
 #: templates/base/base.html:8 templates/base/base.html:29
 #: templates/companies/detail.html:4 templates/companies/index.html:5
 #: templates/events/form.html:4 templates/events/index.html:5
-#: templates/people/detail.html:4 templates/people/index.html:5
-#: templates/vacancies/index.html:5
+#: templates/people/detail.html:4 templates/people/form.html:4
+#: templates/people/index.html:5 templates/vacancies/index.html:5
 msgid "HR Platform"
 msgstr "HR Платформа"
 
@@ -1155,6 +1155,10 @@ msgstr "Досвед"
 #: templates/vacancies/index.html:70 templates/vacancies/index.html:128
 msgid "Salary"
 msgstr "Зарплата"
+
+#: templates/people/form.html:4
+msgid "a Person"
+msgstr "Кандыдата"
 
 #: templates/people/form.html:89
 msgid "Identity"

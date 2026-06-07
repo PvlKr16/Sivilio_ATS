@@ -186,57 +186,75 @@
 }
 
 // ── CV drag & drop zone ───────────────────────────────────────────────────
-function initCvDropZone() {
-  var zone    = document.getElementById('cvDropZone');
-  var input   = document.getElementById('cvFileInput');
-  var label   = document.getElementById('cvDropFilename');
-  if (!zone || !input) return;
+// Initialises a single [data-drop-zone] element.
+// The zone must contain a .cv-drop-input-wrap > input[type="file"] subtree.
+// After init the real <input> is moved to be a direct child of the zone so it
+// covers the whole clickable/droppable area via position:absolute styling.
+function initDropZone(zone) {
+  // Input may be nested inside an extra .ef-file span that Django renders,
+  // so search anywhere inside the zone rather than only in .cv-drop-input-wrap
+  var input = zone.querySelector('input[type="file"]');
+  if (!input) return;
 
-  // Validate and apply selected file
-  function applyFile(file) {
-    if (!file) return;
-    if (!file.name.toLowerCase().endsWith('.pdf')) {
-      zone.classList.remove('has-file', 'dragover');
-      label.style.display = 'none';
-      showFieldError(input, 'CV must be a PDF file.');
-      return;
+  // Relocate the real input directly into zone so it covers the whole area
+  input.classList.add('cv-drop-input');
+  zone.appendChild(input);
+
+  var textEl     = zone.querySelector('.cv-drop-text');
+  var hintEl     = zone.querySelector('.cv-drop-hint');
+  var iconEl     = zone.querySelector('.cv-drop-icon');
+  var filenameEl = zone.querySelector('.cv-drop-filename');
+
+  function setFile(name) {
+    if (name) {
+      zone.classList.add('has-file');
+      if (filenameEl) { filenameEl.textContent = name; filenameEl.style.display = ''; }
+      if (textEl) textEl.style.display = 'none';
+      if (hintEl) hintEl.style.display = 'none';
+      if (iconEl) iconEl.className = 'fas fa-check cv-drop-icon';
+    } else {
+      zone.classList.remove('has-file');
+      if (filenameEl) filenameEl.style.display = 'none';
+      if (textEl) textEl.style.display = '';
+      if (hintEl) hintEl.style.display = '';
+      if (iconEl) iconEl.className = 'fas fa-file-arrow-up cv-drop-icon';
     }
-    zone.classList.add('has-file');
-    zone.classList.remove('dragover');
-    label.textContent = file.name;
-    label.style.display = 'block';
-    zone.querySelector('.cv-drop-icon').className = 'fas fa-check-circle cv-drop-icon';
   }
 
-  // File chosen via click
   input.addEventListener('change', function () {
-    applyFile(this.files[0]);
+    setFile(this.files[0] ? this.files[0].name : '');
   });
 
-  // Drag events
   zone.addEventListener('dragover', function (e) {
     e.preventDefault();
     zone.classList.add('dragover');
   });
-  zone.addEventListener('dragleave', function (e) {
-    // Only remove if leaving the zone entirely
-    if (!zone.contains(e.relatedTarget)) {
-      zone.classList.remove('dragover');
-    }
+  zone.addEventListener('dragleave', function () {
+    zone.classList.remove('dragover');
   });
   zone.addEventListener('drop', function (e) {
     e.preventDefault();
     zone.classList.remove('dragover');
-    var file = e.dataTransfer.files[0];
-    if (file) {
-      // Assign to the hidden file input via DataTransfer
-      var dt = new DataTransfer();
-      dt.items.add(file);
-      input.files = dt.files;
-      applyFile(file);
+    if (e.dataTransfer.files.length) {
+      try {
+        var dt = new DataTransfer();
+        dt.items.add(e.dataTransfer.files[0]);
+        input.files = dt.files;
+        setFile(e.dataTransfer.files[0].name);
+      } catch (_) { /* Safari fallback: DataTransfer assignment not supported */ }
     }
   });
 }
+
+// Initialise all drop zones already present in the DOM on page load.
+// Newly added formset rows must call initDropZone() themselves after insertion.
+function initCvDropZone() {
+  document.querySelectorAll('[data-drop-zone]').forEach(initDropZone);
+}
+
+// Expose initDropZone so people_form.js can call it for dynamically added rows
+window.HRForms = window.HRForms || {};
+window.HRForms.initDropZone = initDropZone;
 
   // ── Init ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
