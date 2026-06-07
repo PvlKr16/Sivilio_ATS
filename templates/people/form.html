@@ -1,8 +1,8 @@
 {% extends "base/base.html" %}
 {% load static i18n %}
 
-{% block title %}{{ action }} Person — HR Platform{% endblock %}
-{% block page_title %}{{ action }} Person{% endblock %}
+{% block title %}{{ action }} {% trans "a Person" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{{ action }}{% trans "Person" %}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
