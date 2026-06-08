@@ -6,61 +6,6 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
-<style>
-/* ── Drag & drop zone ────────────────────────────────────────────────────── */
-.cv-drop-zone {
-  position: relative;
-  border: 2px dashed var(--color-border, #ced4da);
-  border-radius: var(--radius, 6px);
-  padding: 18px 16px 14px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color .2s, background .2s;
-  background: var(--color-bg-subtle, #f8f9fa);
-  min-height: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-.cv-drop-zone:hover,
-.cv-drop-zone.dragover { border-color: var(--color-primary, #0d6efd); background: var(--color-primary-subtle, #e8f0fe); }
-.cv-drop-zone.has-file  { border-color: var(--color-success, #198754); background: var(--color-success-subtle, #d1e7dd); }
-
-.cv-drop-icon  { font-size: 1.6rem; color: var(--color-text-muted, #6c757d); line-height: 1; }
-.cv-drop-text  { font-size: var(--font-size-sm, .875rem); color: var(--color-text-muted, #6c757d); }
-.cv-drop-hint  { font-size: var(--font-size-xs, .8rem);  color: var(--color-text-muted, #6c757d); }
-.cv-drop-filename {
-  font-size: var(--font-size-sm, .875rem);
-  font-weight: 600;
-  color: var(--color-text, #212529);
-  word-break: break-all;
-}
-/* The real <input> is invisible but covers the whole zone */
-.cv-drop-input {
-  position: absolute; inset: 0;
-  opacity: 0; cursor: pointer;
-  width: 100%; height: 100%;
-}
-
-/* ── File formset table ──────────────────────────────────────────────────── */
-#files-table { font-size: var(--font-size-sm, .875rem); }
-#files-table th { font-weight: 600; white-space: nowrap; }
-#files-table .file-row td { vertical-align: middle; }
-
-.file-row.to-delete td { opacity: .45; text-decoration: line-through; }
-
-.delete-check-wrap { display: flex; justify-content: center; }
-.delete-check-wrap input[type="checkbox"] { width: 1.1em; height: 1.1em; cursor: pointer; }
-
-/* Mobile: hide drop zone, show plain input */
-.cv-mobile-input { display: none; }
-@media (max-width: 576px) {
-  .cv-drop-zone    { display: none; }
-  .cv-mobile-input { display: block; }
-}
-</style>
 {% endblock %}
 
 {% block breadcrumb %}
