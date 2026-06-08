@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 00:19+0300\n"
+"POT-Creation-Date: 2026-06-08 11:58+0300\n"
 "Language: pl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -94,6 +94,7 @@ msgid "Profile updated successfully."
 msgstr "Profil został pomyślnie zaktualizowany."
 
 #: apps/accounts/views.py:73
+#, python-format
 msgid "User \"%(username)s\" created."
 msgstr "Użytkownik \"%(username)s\" został utworzony."
 
@@ -213,10 +214,12 @@ msgid "Companies"
 msgstr "Firmy"
 
 #: apps/companies/views.py:62
+#, python-format
 msgid "Company \"%(title)s\" created."
 msgstr "Firma \"%(title)s\" została utworzona."
 
 #: apps/companies/views.py:78
+#, python-format
 msgid "Company \"%(title)s\" updated."
 msgstr "Firma \"%(title)s\" została zaktualizowana."
 
@@ -259,7 +262,6 @@ msgstr "Typ zdarzenia"
 #: apps/events/models.py:46 apps/vacancies/models.py:111
 #: templates/events/detail.html:82 templates/events/form.html:50
 #: templates/events/index.html:55 templates/events/index.html:120
-#: templates/vacancies/form.html:60
 msgid "Vacancy"
 msgstr "Oferta pracy"
 
@@ -298,10 +300,12 @@ msgid "Events"
 msgstr "Zdarzenia"
 
 #: apps/events/views.py:102
+#, python-format
 msgid "Event \"%(title)s\" created."
 msgstr "Zdarzenie \"%(title)s\" zostało utworzone."
 
 #: apps/events/views.py:118
+#, python-format
 msgid "Event \"%(title)s\" updated."
 msgstr "Zdarzenie \"%(title)s\" zostało zaktualizowane."
 
@@ -1210,6 +1214,7 @@ msgid "Experience (yrs)"
 msgstr "Doświadczenie (lata)"
 
 #: templates/people/index.html:126
+#, python-format
 msgid ""
 "\n"
 "          %(counter)s record\n"
@@ -1218,16 +1223,25 @@ msgid_plural ""
 "\n"
 "          %(counter)s records\n"
 "        "
-msgstr[0] "\n%(counter)s rekord"
-msgstr[1] "\n%(counter)s rekordy"
-msgstr[2] "\n%(counter)s rekordów"
+msgstr[0] ""
+"\n"
+"%(counter)s rekord"
+msgstr[1] ""
+"\n"
+"%(counter)s rekordy"
+msgstr[2] ""
+"\n"
+"%(counter)s rekordów"
 
 #: templates/people/index.html:188
+#, python-format
 msgid ""
 "\n"
 "        Showing %(start)s–%(end)s of %(total)s\n"
 "      "
-msgstr "\nWyświetlono %(start)s–%(end)s z %(total)s"
+msgstr ""
+"\n"
+"Wyświetlono %(start)s–%(end)s z %(total)s"
 
 #: templates/people/index.html:223
 msgid "No people found"
@@ -1246,6 +1260,7 @@ msgid "Freelance"
 msgstr "Dla freelancerów"
 
 #: templates/vacancies/form.html:4 templates/vacancies/form.html:5
+#: templates/vacancies/form.html:60
 msgid "a Vacancy"
 msgstr "Oferta pracy"
 
@@ -1296,3 +1311,8 @@ msgstr "Oferty pracy"
 #: templates/vacancies/index.html:207
 msgid "Add the first vacancy to get started."
 msgstr "Dodaj pierwszą ofertę pracy, aby zacząć."
+
+#, fuzzy
+#~| msgid "a Vacancy"
+#~ msgid " a Vacancy"
+#~ msgstr "Oferta pracy"

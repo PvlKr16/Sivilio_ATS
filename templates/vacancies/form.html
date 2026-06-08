@@ -57,7 +57,7 @@
   <form method="post" data-submit-once>
     {% csrf_token %}
     <div class="card">
-      <div class="card-header"><h2 class="card-title">{{ action }}{% trans "Vacancy" %}</h2></div>
+      <div class="card-header"><h2 class="card-title">{{ action }} {% trans "a Vacancy" %}</h2></div>
       <div class="card-body">
 
         {% if form.non_field_errors %}
