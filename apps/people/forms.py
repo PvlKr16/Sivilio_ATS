@@ -9,7 +9,7 @@ from .models import Person, PersonFile, Level, English, Skill, Region, WorkingHo
 def validate_pdf(f):
     """Enforce PDF-only uploads."""
     if f and hasattr(f, 'name') and not f.name.lower().endswith('.pdf'):
-        raise forms.ValidationError('Only PDF files are allowed.')
+        raise forms.ValidationError(_('Only PDF files are allowed.'))
     return f
 
 
@@ -24,14 +24,13 @@ class PersonFileForm(forms.ModelForm):
         return validate_pdf(self.cleaned_data.get('file'))
 
 
-# Inline formset: Person → PersonFile
-# extra=1  → always show one empty row for new uploads
-# can_delete=True → renders DELETE checkbox so existing files can be removed
+# One CV file max: max_num=1, extra=1 (always show the upload row if none saved yet)
 PersonFileFormSet = inlineformset_factory(
     Person,
     PersonFile,
     form=PersonFileForm,
     extra=1,
+    max_num=1,
     can_delete=True,
 )
 
@@ -53,17 +52,17 @@ class PersonForm(forms.ModelForm):
             'status', 'notes',
         ]
         widgets = {
-            'birthdate':     forms.DateInput(attrs={'type': 'date'}),
-            'gender':        forms.Select(attrs={'class': 'form-select'}),
-            'level':         forms.Select(attrs={'class': 'form-select'}),
-            'skills':        forms.CheckboxSelectMultiple(),
-            'english':       forms.Select(attrs={'class': 'form-select'}),
-            'region':        forms.Select(attrs={'class': 'form-select'}),
-            'working_hours': forms.CheckboxSelectMultiple(),
-            'working_place': forms.CheckboxSelectMultiple(),
+            'birthdate':       forms.DateInput(attrs={'type': 'date'}),
+            'gender':          forms.Select(attrs={'class': 'form-select'}),
+            'level':           forms.Select(attrs={'class': 'form-select'}),
+            'skills':          forms.CheckboxSelectMultiple(),
+            'english':         forms.Select(attrs={'class': 'form-select'}),
+            'region':          forms.Select(attrs={'class': 'form-select'}),
+            'working_hours':   forms.CheckboxSelectMultiple(),
+            'working_place':   forms.CheckboxSelectMultiple(),
             'salary_currency': forms.Select(attrs={'class': 'form-select'}),
-            'status':        forms.Select(attrs={'class': 'form-select'}),
-            'notes':         forms.Textarea(attrs={'rows': 3}),
+            'status':          forms.Select(attrs={'class': 'form-select'}),
+            'notes':           forms.Textarea(attrs={'rows': 3}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -78,7 +77,6 @@ class PersonForm(forms.ModelForm):
 class PersonSearchForm(forms.Form):
     """Filter form for the people list."""
 
-    # ── Row 0: search bar ─────────────────────────────────────────────────
     q = forms.CharField(
         required=False, label='',
         widget=forms.TextInput(attrs={
@@ -87,7 +85,6 @@ class PersonSearchForm(forms.Form):
         })
     )
 
-    # ── Row 1 ─────────────────────────────────────────────────────────────
     english = forms.ModelMultipleChoiceField(
         queryset=None, required=False, label='English',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),
@@ -137,7 +134,6 @@ class PersonSearchForm(forms.Form):
         }),
     )
 
-    # ── Row 2 ─────────────────────────────────────────────────────────────
     skills = forms.ModelMultipleChoiceField(
         queryset=None, required=False, label=_('Skills'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'multi-check-list'}),

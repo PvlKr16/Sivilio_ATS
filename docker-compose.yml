@@ -24,6 +24,9 @@ services:
     container_name: hr_web
     restart: unless-stopped
     env_file: .env
+    environment:
+      # Anthropic key can also be set directly here if not using .env
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
     volumes:
       - .:/app
       - static_volume:/app/staticfiles

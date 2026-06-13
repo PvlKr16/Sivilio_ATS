@@ -6,6 +6,90 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+<style>
+  /* ── CV upload widget ───────────────────────────────────────────── */
+  .cv-upload-area {
+    border: 2px dashed var(--color-border, #dee2e6);
+    border-radius: var(--border-radius, 0.375rem);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--color-bg-subtle, #f8f9fa);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .cv-upload-area:hover,
+  .cv-upload-area.drag-over {
+    border-color: var(--color-primary, #0d6efd);
+    background: var(--color-primary-subtle, #e7f1ff);
+  }
+  .cv-upload-area .cv-icon { font-size: 1.6rem; color: var(--color-text-muted, #6c757d); }
+  .cv-upload-area .cv-hint { font-size: var(--font-size-xs, 0.78rem); color: var(--color-text-muted, #6c757d); }
+
+  /* ── Pending preview (chosen but not saved) ─────────────────────── */
+  .cv-preview-row {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--color-border, #dee2e6);
+    border-radius: var(--border-radius, 0.375rem);
+    background: var(--color-bg-subtle, #f8f9fa);
+  }
+  .cv-preview-row .cv-filename {
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Existing saved file row ────────────────────────────────────── */
+  .cv-existing-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--color-border, #dee2e6);
+    border-radius: var(--border-radius, 0.375rem);
+    background: var(--color-bg-subtle, #f8f9fa);
+    margin-bottom: 0.5rem;
+  }
+  .cv-existing-row a { font-size: 0.875rem; font-weight: 500; }
+
+  /* ── Status bar ─────────────────────────────────────────────────── */
+  .cv-fill-status {
+    display: none;
+    margin-top: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--border-radius, 0.375rem);
+    font-size: 0.85rem;
+  }
+  .cv-fill-status--loading { background: #e8f4fd; color: #0c63a4; }
+  .cv-fill-status--success { background: #d1e7dd; color: #0a3622; }
+  .cv-fill-status--error   { background: #f8d7da; color: #58151c; }
+
+  /* ── Autofill colour hints ──────────────────────────────────────── */
+  .cv-autofilled { color: var(--color-text, #212529) !important; }
+  .cv-unfilled   { color: var(--color-text-muted, #6c757d) !important; }
+
+  /* ── Spinner inside status ──────────────────────────────────────── */
+  .cv-spinner {
+    display: inline-block;
+    width: 0.85rem; height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: cv-spin 0.7s linear infinite;
+    vertical-align: -2px;
+    margin-right: 0.3rem;
+  }
+  @keyframes cv-spin { to { transform: rotate(360deg); } }
+</style>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -19,8 +103,11 @@
 
 {% block content %}
 <div style="max-width:860px;">
-  <form method="post" enctype="multipart/form-data" data-submit-once>
+  <form method="post" enctype="multipart/form-data" data-submit-once
+        data-parse-cv-url="{% url 'people:parse_cv' %}">
     {% csrf_token %}
+    {{ file_formset.management_form }}
+
     <div class="card">
       <div class="card-header"><h2 class="card-title">{{ action }} {% trans "a Person" %}</h2></div>
       <div class="card-body">
@@ -28,6 +115,82 @@
         {% if form.non_field_errors %}
         <div class="alert alert-danger"><i class="fas fa-circle-exclamation"></i> {{ form.non_field_errors }}</div>
         {% endif %}
+
+        <!-- ════════════════════════════════════
+             CV UPLOAD + AUTOFILL
+        ════════════════════════════════════ -->
+        <div class="form-section">
+          <div class="form-section-title">{% trans "CV File" %}</div>
+
+          {# Hidden formset fields for the single file row #}
+          {% with ff=file_formset.forms.0 %}
+            {% for hidden in ff.hidden_fields %}{{ hidden }}{% endfor %}
+
+            {# ── If editing and a file already exists ── #}
+            {% if ff.instance.pk %}
+            <div class="cv-existing-row" id="cv-existing">
+              <i class="fas fa-file-pdf" style="color:var(--color-danger);font-size:1.2rem;"></i>
+              <a href="{{ ff.instance.file.url }}" target="_blank"
+                 class="text-decoration-none" title="{{ ff.instance.filename }}">
+                {{ ff.instance.filename }}
+              </a>
+              <span class="text-muted small">· {{ ff.instance.uploaded_at|date:"d M Y" }}</span>
+              <div class="ms-auto d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="cv-replace-btn">
+                  <i class="fas fa-arrows-rotate"></i> {% trans "Replace" %}
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger" id="cv-delete-saved-btn">
+                  <i class="fas fa-trash"></i> {% trans "Delete" %}
+                </button>
+              </div>
+            </div>
+            {# Hidden DELETE checkbox for formset — checked by JS to remove saved file #}
+            <div style="display:none;">{{ ff.DELETE }}</div>
+            {% endif %}
+
+            {# ── Drop zone (shown when no file chosen yet, or after delete) ── #}
+            <div id="cv-drop-zone"
+                 class="cv-upload-area"
+                 {% if ff.instance.pk %}style="display:none;"{% endif %}>
+              <i class="fas fa-file-arrow-up cv-icon"></i>
+              <div style="font-size:0.9rem;font-weight:500;">{% trans "Drag &amp; drop PDF here" %}</div>
+              <div class="cv-hint">{% trans "or click to browse" %} · PDF only</div>
+            </div>
+
+            {# Real file input — always hidden, triggered by drop-zone click or replace btn #}
+            <div style="display:none;">
+              {# Rename the formset input so it maps to the right field #}
+              {{ ff.file }}
+            </div>
+
+            {# We also keep a "clean" hidden input that JS populates via DataTransfer #}
+            {# Actually we reuse the formset input directly via fileInput id below #}
+
+          {% endwith %}
+
+          {# ── Pending preview (file chosen, not yet saved) ── #}
+          <div class="cv-preview-row mt-2" id="cv-preview">
+            <i class="fas fa-file-pdf" style="color:var(--color-danger);font-size:1.2rem;"></i>
+            <span class="cv-filename" id="cv-preview-name"></span>
+            <button type="button" class="btn btn-sm btn-outline-danger ms-auto" id="cv-remove-btn"
+                    title="{% trans 'Remove' %}">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          {% if file_formset.non_form_errors %}
+          <div class="alert alert-danger mt-2">{{ file_formset.non_form_errors }}</div>
+          {% endif %}
+          {% with ff=file_formset.forms.0 %}
+            {% if ff.file.errors %}
+            <div class="invalid-feedback d-block mt-1">{{ ff.file.errors }}</div>
+            {% endif %}
+          {% endwith %}
+
+          {# ── Status / progress bar ── #}
+          <div id="cv-fill-status" class="cv-fill-status"></div>
+        </div>
+        {# /CV section #}
 
         <!-- Identity -->
         <div class="form-section">
@@ -114,7 +277,7 @@
             <div class="form-group">
               <label class="form-label">{% trans "Working Hours" %}</label>
               <select name="working_hours" id="id_working_hours_select2" multiple style="width:100%;"
-                      data-placeholder="{% trans 'Select working hours...' %}" >
+                      data-placeholder="{% trans 'Select working hours...' %}">
                 {% for wh in form.working_hours.field.queryset %}
                 <option value="{{ wh.pk }}"
                   {% if wh in form.instance.working_hours.all %}selected{% endif %}>
@@ -177,78 +340,6 @@
           </div>
         </div>
 
-        <!-- Files -->
-        <div class="form-section">
-          <div class="form-section-title">{% trans "Files" %}</div>
-
-          {{ file_formset.management_form }}
-
-          {% if file_formset.non_form_errors %}
-          <div class="alert alert-danger">{{ file_formset.non_form_errors }}</div>
-          {% endif %}
-
-          <div id="files-rows">
-
-            {% for ff in file_formset %}
-              {% for hidden in ff.hidden_fields %}{{ hidden }}{% endfor %}
-
-              <div class="file-row mb-3 p-3 border rounded{% if ff.instance.pk %} existing{% endif %}"
-                   style="background:var(--color-bg-subtle,#f8f9fa);">
-                <div class="d-flex gap-3 align-items-center flex-wrap">
-
-                  {# ── File picker (drop zone or existing link) ── #}
-                  <div style="flex:1;min-width:220px;">
-                    {% if ff.instance.pk %}
-                      <div class="mb-2 d-flex align-items-center gap-2">
-                        <i class="fas fa-file-pdf" style="color:var(--color-danger);"></i>
-                        <a href="{{ ff.instance.file.url }}" target="_blank"
-                           class="text-decoration-none small fw-semibold" title="{{ ff.instance.filename }}">
-                          {{ ff.instance.filename }}
-                        </a>
-                        <span class="text-muted small">· {{ ff.instance.uploaded_at|date:"d M Y" }}</span>
-                      </div>
-                      <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);" class="mb-1">{% trans "Replace file:" %}</div>
-                    {% endif %}
-
-                    <div class="cv-drop-zone" data-drop-zone>
-                      <i class="fas fa-file-arrow-up cv-drop-icon"></i>
-                      <div class="cv-drop-text">{% trans "Drag &amp; drop PDF here" %}</div>
-                      <div class="cv-drop-hint">{% trans "or click to choose" %}</div>
-                      <div class="cv-drop-filename" style="display:none;"></div>
-                      <span class="cv-drop-input-wrap">{{ ff.file }}</span>
-                    </div>
-                    <div class="cv-mobile-input mt-1">{{ ff.file }}</div>
-
-                    {% if ff.file.errors %}<div class="invalid-feedback d-block mt-1">{{ ff.file.errors }}</div>{% endif %}
-                  </div>
-
-                  {# ── Remove / Delete ── #}
-                  <div>
-                    {% if ff.instance.pk %}
-                      <label class="d-flex align-items-center gap-1 text-danger"
-                             style="font-size:var(--font-size-xs);cursor:pointer;" title="Mark for deletion">
-                        {{ ff.DELETE }}
-                        <span>{% trans "Delete" %}</span>
-                      </label>
-                    {% else %}
-                      <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove">
-                        <i class="fas fa-times"></i>
-                      </button>
-                    {% endif %}
-                  </div>
-
-                </div>
-              </div>
-            {% endfor %}
-
-          </div>{# /files-rows #}
-
-          <button type="button" class="btn btn-outline-secondary btn-sm mt-1" id="add-file-row">
-            <i class="fas fa-plus"></i> {% trans "Add file" %}
-          </button>
-
-        </div>{# /form-section Files #}
-
       </div>{# /card-body #}
 
       <div class="card-footer" style="display:flex;justify-content:space-between;">
@@ -257,19 +348,12 @@
           <i class="fas fa-times"></i> {% trans "Cancel" %}
         </a>
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-check"></i> {% if object %}Save Changes{% else %}{% trans "Create Person" %}{% endif %}
+          <i class="fas fa-check"></i>
+          {% if object %}{% trans "Save Changes" %}{% else %}{% trans "Create Person" %}{% endif %}
         </button>
       </div>
     </div>
   </form>
-</div>
-
-{# ── Hidden source for the empty formset row — JS clones & patches __prefix__ #}
-<div id="empty-form-source" style="display:none;" aria-hidden="true">
-  {% with ff=file_formset.empty_form %}
-  {% for hidden in ff.hidden_fields %}{{ hidden }}{% endfor %}
-  <span class="ef-file">{{ ff.file }}</span>
-  {% endwith %}
 </div>
 {% endblock %}
 
@@ -278,4 +362,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="{% static 'js/select2_init.js' %}"></script>
 <script src="{% static 'js/people_form.js' %}"></script>
+<script src="{% static 'js/cv_autofill.js' %}"></script>
 {% endblock %}

@@ -141,3 +141,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Pagination
 PAGE_SIZE = 15
+
+# ── Cloudflare Worker proxy (CV autofill via Anthropic) ──────────────────────
+# Set these in .env
+CF_WORKER_URL    = config('CF_WORKER_URL', default='')      # https://hr-anthropic-proxy.YOUR-SUBDOMAIN.workers.dev
+CF_WORKER_SECRET = config('CF_WORKER_SECRET', default='')   # shared secret between Django and Worker
