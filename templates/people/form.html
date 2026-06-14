@@ -178,6 +178,23 @@
             </button>
           </div>
 
+          {# ── Action choice: analyse or just save ── #}
+          <div id="cv-action-choice" style="display:none; margin-top:0.75rem;">
+            <div style="font-size:0.85rem; color:var(--color-text-muted,#6c757d); margin-bottom:0.5rem;">
+              {% trans "What would you like to do with this CV?" %}
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button type="button" class="btn btn-primary btn-sm" id="cv-btn-analyse">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                {% trans "Analyse CV and fill the form" %}
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="cv-btn-save-only">
+                <i class="fas fa-floppy-disk"></i>
+                {% trans "Just save the file" %}
+              </button>
+            </div>
+          </div>
+
           {% if file_formset.non_form_errors %}
           <div class="alert alert-danger mt-2">{{ file_formset.non_form_errors }}</div>
           {% endif %}

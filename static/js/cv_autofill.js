@@ -41,6 +41,9 @@
   const fillStatus   = document.getElementById('cv-fill-status');
   const existingWrap = document.getElementById('cv-existing');
   const deleteChk    = document.getElementById('cv-delete-checkbox');  // hidden formset DELETE checkbox
+  const actionChoice = document.getElementById('cv-action-choice');
+  const btnAnalyse   = document.getElementById('cv-btn-analyse');
+  const btnSaveOnly  = document.getElementById('cv-btn-save-only');
 
   if (!dropZone && !fileInput) return;  // page doesn't have the CV widget
 
@@ -59,6 +62,19 @@
     pendingFile   = file;
     pendingRemove = false;
 
+    // ── Assign file to the real <input> so browser submits it on form POST ──
+    // For drag&drop, fileInput.files is read-only — use DataTransfer to set it
+    if (fileInput) {
+      try {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+      } catch (e) {
+        // DataTransfer not supported (very old browsers) — file won't be submitted
+        console.warn('DataTransfer not supported:', e);
+      }
+    }
+
     // If there was a saved file, mark it for deletion so formset replaces it
     if (deleteChk) deleteChk.checked = true;
 
@@ -70,8 +86,8 @@
 
     clearStatus();
 
-    // Automatically start analysis
-    analyzeCV(file);
+    // Show action choice buttons instead of auto-analysing
+    if (actionChoice) actionChoice.style.display = 'block';
   }
 
   /* ── Input click ────────────────────────────────────────────────────────── */
@@ -102,6 +118,22 @@
     });
   }
 
+  /* ── Action choice buttons ──────────────────────────────────────────────── */
+
+  if (btnAnalyse) {
+    btnAnalyse.addEventListener('click', () => {
+      if (actionChoice) actionChoice.style.display = 'none';
+      if (pendingFile) analyzeCV(pendingFile);
+    });
+  }
+
+  if (btnSaveOnly) {
+    btnSaveOnly.addEventListener('click', () => {
+      if (actionChoice) actionChoice.style.display = 'none';
+      clearStatus();
+    });
+  }
+
   /* ── Remove / replace before save ──────────────────────────────────────── */
 
   if (removeBtn) {
@@ -109,6 +141,7 @@
       pendingFile = null;
 
       previewWrap.style.display = 'none';
+      if (actionChoice) actionChoice.style.display = 'none';
       clearStatus();
 
       if (existingWrap) {
@@ -121,7 +154,12 @@
       }
 
       // Reset the real file input so the browser doesn't re-submit the old choice
-      if (fileInput) fileInput.value = '';
+      if (fileInput) {
+        fileInput.value = '';
+        try {
+          fileInput.files = new DataTransfer().files;
+        } catch (e) { /* ignore */ }
+      }
     });
   }
 
