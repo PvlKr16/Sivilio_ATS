@@ -76,6 +76,7 @@
   /* ── Autofill colour hints ──────────────────────────────────────── */
   .cv-autofilled { color: var(--color-text, #212529) !important; }
   .cv-unfilled   { color: var(--color-text-muted, #6c757d) !important; }
+  .cv-changed-edit { color: var(--color-danger, #dc3545) !important; }
 
   /* ── Spinner inside status ──────────────────────────────────────── */
   .cv-spinner {
@@ -104,7 +105,8 @@
 {% block content %}
 <div style="max-width:860px;">
   <form method="post" enctype="multipart/form-data" data-submit-once
-        data-parse-cv-url="{% url 'people:parse_cv' %}">
+        data-parse-cv-url="{% url 'people:parse_cv' %}"
+        data-edit-mode="{% if object %}true{% else %}false{% endif %}">
     {% csrf_token %}
     {{ file_formset.management_form }}
 

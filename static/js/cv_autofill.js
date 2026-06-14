@@ -20,8 +20,13 @@
   const CSRF_TOKEN  = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
 
   // Colour tokens matching your CSS variables
-  const COLOR_FILLED  = 'var(--color-text, #212529)';
-  const COLOR_EMPTY   = 'var(--color-text-muted, #6c757d)';
+  const COLOR_FILLED   = 'var(--color-text, #212529)';
+  const COLOR_EMPTY    = 'var(--color-text-muted, #6c757d)';
+  const COLOR_CHANGED  = 'var(--color-danger, #dc3545)';  // red — changed in edit mode
+
+  // Edit mode: true if we're editing an existing Person (object has a pk)
+  const isEditMode = document.querySelector('form[data-parse-cv-url]')
+                       ?.dataset?.editMode === 'true';
 
   /* ── State ──────────────────────────────────────────────────────────────── */
 
@@ -145,8 +150,9 @@
       clearStatus();
 
       if (existingWrap) {
-        // Editing: restore the saved-file row, uncheck DELETE
+        // Editing: restore the saved-file row, uncheck DELETE, hide drop zone
         existingWrap.style.display = 'block';
+        if (dropZone) dropZone.style.display = 'none';
         if (deleteChk) deleteChk.checked = false;
       } else {
         // Creating: show drop zone again
@@ -168,7 +174,9 @@
   const replaceBtn = document.getElementById('cv-replace-btn');
   if (replaceBtn) {
     replaceBtn.addEventListener('click', () => {
-      if (fileInput) fileInput.click();
+      // Hide the existing file row, show drop zone so user can drag&drop or click
+      if (existingWrap) existingWrap.style.display = 'none';
+      if (dropZone)     dropZone.style.display = 'flex';
     });
   }
 
@@ -233,34 +241,63 @@
      FORM FILL
   ═══════════════════════════════════════════════════════════════════════════ */
 
+  function getFieldValue(el) {
+    if (!el) return '';
+    if (el.tagName === 'SELECT' && el.multiple) {
+      return Array.from(el.selectedOptions).map(o => o.value).sort().join(',');
+    }
+    return el.value ?? '';
+  }
+
+  function snapshotFields(fieldNames, selectDefs, skillsSelectId) {
+    const snap = {};
+    fieldNames.forEach((name) => {
+      const el = document.querySelector(`[name="${name}"]`);
+      snap[name] = getFieldValue(el);
+    });
+    selectDefs.forEach(({ name }) => {
+      const el = document.getElementById(`id_${name}`) ||
+                 document.querySelector(`[name="${name}"]`);
+      snap[name] = getFieldValue(el);
+    });
+    const skillsEl = document.getElementById(skillsSelectId);
+    snap['skills'] = getFieldValue(skillsEl);
+    return snap;
+  }
+
   function fillForm(data) {
-    // ── Simple text / number inputs ────────────────────────────────────────
     const textFields = [
       'first_name', 'last_name', 'email', 'phone',
       'telegram', 'linkedin', 'profession', 'education',
       'work_experience', 'salary_desired',
     ];
+    const selectFields = [
+      { name: 'level',           key: 'level_id' },
+      { name: 'english',         key: 'english_id' },
+      { name: 'region',          key: 'region_id' },
+      { name: 'salary_currency', key: 'salary_currency' },
+    ];
 
+    // ── Snapshot values before we change anything (edit mode only) ────────
+    const before = isEditMode
+      ? snapshotFields(textFields, selectFields, 'id_skills_select2')
+      : null;
+
+    // ── Simple text / number inputs ────────────────────────────────────────
     textFields.forEach((name) => {
       const el = document.querySelector(`[name="${name}"]`);
       if (!el) return;
       const val = data[name];
       if (val !== null && val !== undefined && val !== '') {
         el.value = String(val);
-        markChanged(el);
+        const changed = before && String(val) !== before[name];
+        changed ? markChangedEdit(el) : markChanged(el);
       } else {
         markUnchanged(el);
       }
     });
 
     // ── Select fields ──────────────────────────────────────────────────────
-    const selectFields = [
-      { name: 'level',    key: 'level_id' },
-      { name: 'english',  key: 'english_id' },
-      { name: 'region',   key: 'region_id' },
-      { name: 'salary_currency', key: 'salary_currency' },
-    ];
-
     selectFields.forEach(({ name, key }) => {
       const el = document.getElementById(`id_${name}`) ||
                  document.querySelector(`[name="${name}"]`);
@@ -269,8 +306,8 @@
       if (val !== null && val !== undefined && val !== '') {
         el.value = String(val);
         if (el.value === String(val)) {
-          markChanged(el);
-          // Trigger Select2 refresh if present
+          const changed = before && String(val) !== before[name];
+          changed ? markChangedEdit(el) : markChanged(el);
           if (window.$ && $(el).data('select2')) {
             $(el).trigger('change.select2');
           }
@@ -291,7 +328,9 @@
       if (window.$ && $(skillsSelect).data('select2')) {
         $(skillsSelect).trigger('change.select2');
       }
-      markChanged(skillsSelect);
+      const newVal = strIds.sort().join(',');
+      const changed = before && newVal !== before['skills'];
+      changed ? markChangedEdit(skillsSelect) : markChanged(skillsSelect);
     }
   }
 
@@ -300,30 +339,39 @@
   ═══════════════════════════════════════════════════════════════════════════ */
 
   function markChanged(el) {
-    el.style.color = COLOR_FILLED;
+    el.style.color = '';
     el.classList.add('cv-autofilled');
+    el.classList.remove('cv-unfilled', 'cv-changed-edit');
+  }
+
+  function markChangedEdit(el) {
+    el.style.color = '';
+    el.classList.add('cv-autofilled', 'cv-changed-edit');
     el.classList.remove('cv-unfilled');
   }
 
   function markUnchanged(el) {
-    // Only apply grey hint if the field is actually empty
     if (!el.value || el.value === '' || el.value === '0') {
-      el.style.color = COLOR_EMPTY;
+      el.style.color = '';
       el.classList.add('cv-unfilled');
-      el.classList.remove('cv-autofilled');
+      el.classList.remove('cv-autofilled', 'cv-changed-edit');
     }
   }
 
-  // When the user manually edits a grey field, restore black text
+  // When the user manually edits a field — restore normal black text
   document.addEventListener('input', (e) => {
     const el = e.target;
     if (el.classList.contains('cv-unfilled') && el.value) {
+      markChanged(el);
+    } else if (el.classList.contains('cv-changed-edit')) {
       markChanged(el);
     }
   });
   document.addEventListener('change', (e) => {
     const el = e.target;
     if (el.classList.contains('cv-unfilled') && el.value) {
+      markChanged(el);
+    } else if (el.classList.contains('cv-changed-edit')) {
       markChanged(el);
     }
   });
