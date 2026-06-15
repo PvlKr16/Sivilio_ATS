@@ -114,6 +114,8 @@
   // Replaces the invisible browser bubble with a visible .invalid-feedback div
   function initRequiredValidation() {
     document.querySelectorAll('form').forEach(function (form) {
+      // Skip the language switcher form — it must never be intercepted.
+      if (form.querySelector('[name="language"]')) return;
 
       // Suppress all native browser validation UI
       form.setAttribute('novalidate', '');
@@ -256,6 +258,162 @@ function initCvDropZone() {
 window.HRForms = window.HRForms || {};
 window.HRForms.initDropZone = initDropZone;
 
+  // ── Form state persistence across language switches ───────────────────────
+  //
+  // Django's set_language view redirects back to the same URL, wiping unsaved
+  // form data.  We intercept the language <select> change, snapshot every
+  // serialisable field into sessionStorage, then restore on the next load.
+  //
+  // The language switcher uses onchange="this.form.submit()" in the HTML, so
+  // we intercept at the form's submit event (which fires after onchange) and
+  // also listen directly on the select's change event — whichever fires first.
+  //
+  // Restore runs after a short delay so Select2 (loaded in extra_js block,
+  // after this file) has time to initialise before we trigger its .val().
+
+  var FORM_STATE_KEY_PREFIX = 'hr_form_state:';
+
+  function _formStateKey() {
+    // Strip the language prefix (e.g. /be/, /de/, /ru/) so the key stays the
+    // same regardless of which language the user switches to.
+    var path = window.location.pathname.replace(/^\/[a-z]{2}\//, '/');
+    return FORM_STATE_KEY_PREFIX + path;
+  }
+
+  // Is this the language-switcher form?
+  function _isLangForm(form) {
+    return !!form.querySelector('[name="language"]');
+  }
+
+  // Collect serialisable values from all non-language forms on the page.
+  function _collectFormState() {
+    var state = { _fields: {}, _selects: {} };
+
+    document.querySelectorAll('form').forEach(function (form) {
+      if (_isLangForm(form)) return;
+
+      form.querySelectorAll('input, textarea').forEach(function (el) {
+        if (!el.name || el.name === 'csrfmiddlewaretoken') return;
+        if (el.type === 'file') return;
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          state._fields[el.name + '::' + el.value] = el.checked;
+        } else {
+          state._fields[el.name] = el.value;
+        }
+      });
+
+      form.querySelectorAll('select').forEach(function (el) {
+        if (!el.name) return;
+        var vals = [];
+        Array.prototype.forEach.call(el.options, function (opt) {
+          if (opt.selected) vals.push(opt.value);
+        });
+        state._selects[el.name] = vals;
+      });
+    });
+
+    return state;
+  }
+
+  // Write state to sessionStorage before language redirect.
+  function _saveFormState() {
+    var state = _collectFormState();
+    var hasData = Object.keys(state._fields).length > 0 ||
+                  Object.keys(state._selects).length > 0;
+    if (!hasData) return;
+    try {
+      sessionStorage.setItem(_formStateKey(), JSON.stringify(state));
+    } catch (e) {
+      // sessionStorage unavailable (private browsing, quota exceeded, etc.)
+    }
+  }
+
+  // Apply saved state back onto the page.  Called twice: once immediately and
+  // once after a delay so Select2 is ready for multi-selects.
+  function _applyFormState(state) {
+    document.querySelectorAll('form').forEach(function (form) {
+      if (_isLangForm(form)) return;
+
+      form.querySelectorAll('input, textarea').forEach(function (el) {
+        if (!el.name || el.name === 'csrfmiddlewaretoken') return;
+        if (el.type === 'file') return;
+
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          var key = el.name + '::' + el.value;
+          if (key in state._fields) {
+            el.checked = state._fields[key];
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        } else if (el.name in state._fields) {
+          el.value = state._fields[el.name];
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+
+      form.querySelectorAll('select').forEach(function (el) {
+        if (!el.name || !(el.name in state._selects)) return;
+        var saved = state._selects[el.name];
+        Array.prototype.forEach.call(el.options, function (opt) {
+          opt.selected = saved.indexOf(opt.value) !== -1;
+        });
+        // Notify Select2 if it is wrapping this element.
+        if (typeof $ !== 'undefined' && $.fn.select2 && $(el).data('select2')) {
+          $(el).trigger('change.select2');
+        } else {
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    });
+  }
+
+  function initFormStatePersistence() {
+    // form.submit() called from onchange does NOT fire the submit event in browsers.
+    // We must intercept the change event on the select itself, save state,
+    // then let the existing onchange="this.form.submit()" proceed normally.
+    // To do that we replace the inline onchange with our own handler that
+    // saves first, then submits.
+    var langSelect = document.getElementById('lang-switcher');
+    if (!langSelect) return;
+    var langForm = langSelect.closest('form');
+    if (!langForm) return;
+
+    // Remove the inline onchange so our handler is the only one.
+    langSelect.removeAttribute('onchange');
+
+    langSelect.addEventListener('change', function () {
+      try { _saveFormState(); } catch (e) { /* never block language switch */ }
+      // Submit via the button-click path so Django CSRF token is included.
+      // form.requestSubmit() fires the submit event; fall back to submit().
+      if (typeof langForm.requestSubmit === 'function') {
+        langForm.requestSubmit();
+      } else {
+        langForm.submit();
+      }
+    });
+  }
+
+  function restoreFormState() {
+    var key = _formStateKey();
+    var raw;
+    try { raw = sessionStorage.getItem(key); } catch (e) { return; }
+    if (!raw) return;
+
+    // Remove immediately so a normal reload does not re-apply stale data.
+    try { sessionStorage.removeItem(key); } catch (e) { /* ignore */ }
+
+    var state;
+    try { state = JSON.parse(raw); } catch (e) { return; }
+    if (!state || !state._fields) return;
+
+    // First pass: restore plain inputs/textareas right away.
+    _applyFormState(state);
+
+    // Second pass (delayed): restore selects after Select2 has initialised.
+    // Select2 is loaded in the extra_js block which runs after DOMContentLoaded,
+    // so we need to wait for it.
+    setTimeout(function () { _applyFormState(state); }, 300);
+  }
+
   // ── Init ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     initImagePreview();
@@ -265,6 +423,8 @@ window.HRForms.initDropZone = initDropZone;
     initRequiredValidation(); // must come before initSubmitGuard
     initSubmitGuard();
     initCvDropZone();
+    initFormStatePersistence();
+    restoreFormState();
   });
 
 })();

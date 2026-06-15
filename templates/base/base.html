@@ -135,12 +135,18 @@
         <form action="{% url 'set_language' %}" method="post">
           {% csrf_token %}
           <input name="next" type="hidden" value="{{ request.path }}">
-          <select name="language" onchange="this.form.submit()" class="form-select form-select-sm" aria-label="{% trans "Select language" %}">
+          <select name="language" onchange="this.form.submit()" id="lang-switcher" class="form-select form-select-sm" aria-label="{% trans "Select language" %}">
             {% get_current_language as LANGUAGE_CODE %}
             {% get_available_languages as LANGUAGES %}
             {% for code, name in LANGUAGES %}
               <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>
-                {{ name }}
+                {% if code == "be" %}Беларуская
+                {% elif code == "de" %}Deutsch
+                {% elif code == "en" %}English
+                {% elif code == "pl" %}Polski
+                {% elif code == "ru" %}Русский
+                {% elif code == "uk" %}Українська
+                {% else %}{{ name }}{% endif %}
               </option>
             {% endfor %}
           </select>
