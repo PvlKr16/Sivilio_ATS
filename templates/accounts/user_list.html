@@ -2,8 +2,8 @@
 {% load i18n %}
 {% load ui_tags %}
 
-{% block title %}Users — HR Platform{% endblock %}
-{% block page_title %}Users{% endblock %}
+{% block title %}{% trans "Users" %} — {% trans "HR Platform" %}{% endblock %}
+{% block page_title %}{% trans "Users" %}{% endblock %}
 
 {% block breadcrumb %}
 <a href="{% url 'core:dashboard' %}">{% trans "Home" %}</a>
@@ -25,28 +25,30 @@
 <div class="card" style="margin-bottom:var(--space-lg);">
   <div class="card-body" style="padding:var(--space-md);">
     <form method="get">
-      <div class="filter-bar">
+      <div class="filter-search-row" style="margin-bottom:var(--space-sm);">
         <div class="input-group" style="flex:1;min-width:200px;">
           <span class="input-group-icon"><i class="fas fa-search"></i></span>
           <input type="text" name="q" value="{{ request.GET.q }}"
                  class="form-control" placeholder="Search by name, email...">
         </div>
-        <select name="role" class="form-select" style="min-width:140px;">
+        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i> {% trans "Filter" %}</button>
+        {% if request.GET.q or request.GET.role or request.GET.status %}
+        <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i> {% trans "Clear" %}</a>
+        {% endif %}
+      </div>
+      <div class="filter-row">
+        <select name="role" class="form-select filter-select">
           <option value="">{% trans "All roles" %}</option>
           {% for role in roles %}
           <option value="{{ role.pk }}" {% if request.GET.role == role.pk|stringformat:"s" %}selected{% endif %}>{{ role.name }}</option>
           {% endfor %}
         </select>
-        <select name="status" class="form-select" style="min-width:130px;">
+        <select name="status" class="form-select filter-select">
           <option value="">{% trans "All statuses" %}</option>
           {% for val, label in status_choices %}
           <option value="{{ val }}" {% if request.GET.status == val %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
-        <button type="submit" class="btn btn-outline-primary"><i class="fas fa-filter"></i>{% trans "Filter" %}</button>
-        {% if request.GET.q or request.GET.role or request.GET.status %}
-        <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary"><i class="fas fa-times"></i>{% trans "Clear" %}</a>
-        {% endif %}
       </div>
     </form>
   </div>
