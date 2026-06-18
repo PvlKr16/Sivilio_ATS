@@ -5,21 +5,13 @@ Models for the Vacancies module.
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _   # ← ДОБАВЛЕНО
+from django.utils.translation import gettext_lazy as _
+from ..core.choices import CurrencyChoices
 
 
 class VacancyStatus(models.TextChoices):
-    # ИСПРАВЛЕНО: ключи БД — обычные строки, labels через _()
     IN_PROGRESS = 'in_progress', _('In Progress')
     STOP        = 'stop',        _('Stop')
-
-
-class CurrencyChoices(models.TextChoices):
-    USD = 'USD', 'USD ($)'
-    EUR = 'EUR', 'EUR (€)'
-    UAH = 'UAH', 'UAH (₴)'
-    RUB = 'RUB', 'RUB (₽)'
-    GBP = 'GBP', 'GBP (£)'
 
 
 class Vacancy(models.Model):

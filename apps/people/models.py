@@ -9,25 +9,14 @@ Person-specific:
 """
 
 from django.db import models
-from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
-
-# ── Currency choices for salary ───────────────────────────────────────────────
-
-class CurrencyChoices(models.TextChoices):
-    USD = 'USD', 'USD ($)'
-    EUR = 'EUR', 'EUR (€)'
-    UAH = 'UAH', 'UAH (₴)'
-    RUB = 'RUB', 'RUB (₽)'
-    GBP = 'GBP', 'GBP (£)'
+from ..core.choices import CurrencyChoices
 
 
 # ── Person status ─────────────────────────────────────────────────────────────
 
 class PersonStatus(models.TextChoices):
-    # ИСПРАВЛЕНО: ключи (значения БД) — обычные строки, только label через _()
     ACTIVE   = 'active',   _('Active')
     INACTIVE = 'inactive', _('Inactive')
 
@@ -37,7 +26,6 @@ class PersonStatus(models.TextChoices):
 # ════════════════════════════════════════════════════════════════════════════════
 
 class Gender(models.Model):
-    # ИСПРАВЛЕНО: verbose_name поля через _()
     name = models.CharField(max_length=50, unique=True, verbose_name=_('Name'))
 
     class Meta:
@@ -50,7 +38,6 @@ class Gender(models.Model):
 
 
 class Level(models.Model):
-    # ИСПРАВЛЕНО: labels в choices через _()
     LEVEL_CHOICES = [
         ('junior',    _('Junior')),
         ('middle',    _('Middle')),
