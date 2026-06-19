@@ -183,7 +183,6 @@ class Person(models.Model):
     )
 
     # ── Contacts ──────────────────────────────────────────────────────────────
-    # ИСПРАВЛЕНО: добавлены _() для email, linkedin, telegram
     email    = models.EmailField(unique=True, null=True, blank=True, verbose_name=_('E-mail'))
     phone    = models.CharField(max_length=50, blank=True, verbose_name=_('Phone'))
     linkedin = models.URLField(blank=True, verbose_name=_('LinkedIn'))
@@ -248,7 +247,6 @@ class PersonFile(models.Model):
         related_name='files',
         verbose_name=_('Person'),
     )
-    # ИСПРАВЛЕНО: verbose_name и help_text через _()
     file = models.FileField(
         upload_to=person_file_upload_to,
         verbose_name=_('CV (PDF)'),

@@ -45,7 +45,8 @@
   const fillBtn      = document.getElementById('cv-fill-btn');
   const fillStatus   = document.getElementById('cv-fill-status');
   const existingWrap = document.getElementById('cv-existing');
-  const deleteChk    = document.getElementById('cv-delete-checkbox');  // hidden formset DELETE checkbox
+  const deleteChk    = document.getElementById('id_files-0-DELETE') ||
+                       document.querySelector('input[name="files-0-DELETE"]');
   const actionChoice = document.getElementById('cv-action-choice');
   const btnAnalyse   = document.getElementById('cv-btn-analyse');
   const btnSaveOnly  = document.getElementById('cv-btn-save-only');
@@ -129,12 +130,14 @@
     btnAnalyse.addEventListener('click', () => {
       if (actionChoice) actionChoice.style.display = 'none';
       if (pendingFile) analyzeCV(pendingFile);
+      // File is already in fileInput via DataTransfer — it will be saved on submit
     });
   }
 
   if (btnSaveOnly) {
     btnSaveOnly.addEventListener('click', () => {
       if (actionChoice) actionChoice.style.display = 'none';
+      // File is already in fileInput via DataTransfer — it will be saved on submit
       clearStatus();
     });
   }
